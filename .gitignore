@@ -93,3 +93,4 @@ client/assets/TMP.csv
 /client/etc/libs/izitoast
 .DS_Store
 
+/server/dist
