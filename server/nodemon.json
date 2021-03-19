@@ -1,0 +1,16 @@
+{
+	"watch": [
+		"./app/dist/*.js",
+		"./app/dist/**/*.js"
+	],
+	"ignore": [
+		".git",
+		".idea",
+		"node_modules",
+		"test",
+		"*.map",
+		"*.ts"
+	],
+	"verbose": true,
+	"exec": "npm run start"
+}

@@ -1,0 +1,10 @@
+{
+	"currency": {
+		"style": "currency",
+		"currency": "USD"
+	},
+	"decimal": {
+		"style": "decimal",
+		"minimumFractionDigits": 1
+	}
+}

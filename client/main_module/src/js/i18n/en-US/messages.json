@@ -1,0 +1,17 @@
+{
+	"global": {
+		"filters": "filter applied | filters applied",
+		"refreshData": "Update data",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"discard": "Discard",
+		"remove": "Remove",
+		"events": "{eventAmount} event | {eventAmount} events",
+		"parameters": "one parameter | {n} parameters",
+		"rows": "one row | {n} rows",
+		"removeFilter": "Remove filter | Remove filters",
+		"morning": "Good morning {name}",
+		"afternoon": "Good afternoon {name}",
+		"night": "Good night"
+	}
+}

@@ -3,11 +3,16 @@
 		"allowUnknownTags": true
 	},
 	"opts": {
-		"destination": "./docs/js"
+		"destination": "../docs/js/"
 	},
 	"plugins": [
 		"plugins/markdown"
 	],
+	"source": {
+		"include": [
+			"."
+		]
+	},
 	"templates": {
 		"cleverLinks": false,
 		"monospaceLinks": false,

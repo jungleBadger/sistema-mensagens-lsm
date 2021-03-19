@@ -1,0 +1,80 @@
+{
+
+	"extends": ["eslint:recommended"],
+	"overrides": [
+		{
+			"extends": ["standard-with-typescript", "eslint:recommended"],
+			"files": ["*.ts"],
+			"parserOptions": {
+				"project": "./tsconfig.json"
+			},
+			"rules": {
+				"quotes": ["error", "double"],
+				"@typescript-eslint/quotes": ["error", "double"],
+				"@typescript-eslint/semi": ["error", "always"],
+				"@typescript-eslint/indent": [
+					"error",
+					"tab",
+					{
+						"outerIIFEBody": 1
+					}
+				],
+				"@typescript-eslint/strict-boolean-expressions": "off",
+				"@typescript-eslint/explicit-function-return-type": "off",
+				"@typescript-eslint/no-floating-promises": [
+					"error",
+					{
+						"ignoreIIFE": true
+					}
+				],
+				"@typescript-eslint/consistent-type-assertions": [
+					"error",
+					{
+						"assertionStyle": "as",
+						"objectLiteralTypeAssertions": "allow"
+					}
+				],
+				"@typescript-eslint/no-unused-expressions": "off",
+				"@typescript-eslint/prefer-nullish-coalescing": "off",
+				"object-curly-spacing": ["error", "always"],
+				"quote-props":["error", "always"],
+				"no-console": "warn",
+				"comma-dangle": "warn",
+				"no-alert": "warn",
+				"no-tabs":  [
+					"error",
+					{
+						"allowIndentationTabs": true
+					}
+				],
+				"no-confusing-arrow": "error",
+				"no-new": "error",
+				"no-new-func": "error",
+				"no-new-wrappers": "error",
+				"no-param-reassign": "error",
+				"no-script-url": "error",
+				"no-self-compare": "error",
+				"no-caller": "error",
+				"array-callback-return": "error",
+				"no-empty-function": "error",
+				"default-case": "error",
+				"indent": [
+					"error",
+					"tab",
+					{
+						"outerIIFEBody": 1
+					}
+				],
+				"keyword-spacing": [
+					"error",
+					{
+						"before": true,
+						"after": true
+					}
+				],
+				"guard-for-in": "error"
+			}
+		}
+	]
+
+}

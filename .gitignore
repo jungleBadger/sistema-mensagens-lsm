@@ -58,6 +58,8 @@ typings/
 # dotenv environment variables file
 .env
 /submodules_dev/**/.env
+/server/.env
+/client/.env
 
 # Bluemix deploy manifest
 manifest.yml

@@ -1,0 +1,41 @@
+{
+	"short": {
+		"year": "numeric",
+		"month": "short",
+		"day": "numeric"
+	},
+	"long": {
+		"year": "numeric",
+		"month": "short",
+		"day": "numeric",
+		"weekday": "short",
+		"hour": "numeric",
+		"minute": "numeric",
+		"hourCycle": "h23"
+	},
+	"year": {
+		"year": "numeric",
+		"month": "short",
+		"day": "numeric"
+	},
+	"week": {
+		"year": "numeric",
+		"month": "short",
+		"day": "numeric"
+	},
+	"month": {
+		"year": "numeric",
+		"month": "long",
+		"day": "numeric"
+	},
+	"day": {
+		"weekday": "short",
+		"day": "numeric"
+	},
+	"hour": {
+		"weekday": "short",
+		"hour": "numeric",
+		"minute": "numeric",
+		"hourCycle": "h23"
+	}
+}

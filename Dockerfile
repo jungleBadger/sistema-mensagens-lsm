@@ -12,8 +12,9 @@ RUN echo @fortawesome:registry=https://npm.fontawesome.com/ >> .npmrc
 RUN echo //npm.greensock.com/:_authToken=${GSAP_KEY} >> .npmrc
 RUN echo @gsap:registry=https://npm.greensock.com >> .npmrc
 
-RUN npm install
+RUN cd server && npm install
+RUN cd server && npm run build
 
-EXPOSE 8080
+EXPOSE 3030
 
-CMD [ "npm", "server:start" ]
+CMD [ "server", "npm", "server:start" ]
