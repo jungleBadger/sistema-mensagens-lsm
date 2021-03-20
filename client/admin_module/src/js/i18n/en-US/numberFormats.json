@@ -1,0 +1,13 @@
+{
+	"currency": {
+		"style": "currency",
+		"currency": "USD"
+	},
+	"decimal": {
+		"style": "decimal",
+		"minimumFractionDigits": 2
+	},
+	"phone": {
+		"style": "decimal"
+	}
+}

@@ -1,6 +1,10 @@
 
 
+### App stack
 
+1. Node.js v14.16.0+
+2. ESLint
+3. Gulp.js
 
 ### Building the app
 
@@ -14,4 +18,3 @@ npm install
 ```
 
 
-#### 2. Build typescript

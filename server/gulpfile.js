@@ -29,7 +29,7 @@
 
 	gulp.task("generate-js-doc", function (cb) {
 		let config = require("./jsdoc-config.json");
-		gulp.src(["README.md", "app/src/**/*.ts", "app/src/*.ts"], {read: false})
+		gulp.src(["README.md", "app/**/*.js"], {read: false})
 			.pipe(jsdoc(config, cb));
 	});
 
@@ -51,20 +51,6 @@
 			log(colors.blue("Swagger: API docs built and placed successfully"));
 			done();
 		});
-	});
-
-	gulp.task("lint:server", function () {
-		return gulp.src(["./app/src/*.js", "./app/src/**/*.ts"])
-			.pipe(eslint(
-				{
-					"fix": true
-				})
-			)
-			.pipe(eslint.format())
-			.pipe(eslint.failAfterError())
-			.on("error", function (error) {
-				methods.errorHandler("lint:server", error, "Check the logs to see where it fails");
-			})
 	});
 
 	process.on("exit", function (code) {

@@ -92,6 +92,7 @@ client/assets/TMP.csv
 /root/certificates/local/localhost-privkey.pem
 /root/certificates/local/localhost-cert.pem
 .npmrc
+/client/.npmrc
 /client/etc/libs/izitoast
 .DS_Store
 
