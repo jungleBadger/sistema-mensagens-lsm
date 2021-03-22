@@ -15,7 +15,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint -c .eslintrc.json 'app/**.js' --fix",
     "documentation:swagger": "gulp generate-swagger-doc",
-    "documentation:js": "gulp generate-js-doc"
+    "documentation:js": "gulp generate-js-doc",
+    "db:create:test": "cross-env NODE_ENV=test db-migrate up",
+    "db:destroy:test": "cross-env NODE_ENV=test db-migrate reset",
+    "db:create:dev": "cross-env NODE_ENV=dev db-migrate up",
+    "db:destroy:dev": "cross-env NODE_ENV=dev db-migrate reset"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -26,13 +30,13 @@
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
     "cross-env": "^7.0.3",
-    "db-migrate": "^0.11.12",
     "db-migrate-pg": "^1.2.2",
     "debug": "^4.3.1",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "express": "^5.0.0-alpha.8",
     "helmet": "^4.4.1",
+    "ibm_db": "^2.7.3",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
@@ -42,6 +46,7 @@
   },
   "devDependencies": {
     "ansi-colors": "^4.1.1",
+    "db-migrate": "^0.11.12",
     "eslint": "^7.22.0",
     "faker": "^5.4.0",
     "fancy-log": "^1.3.3",
