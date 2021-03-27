@@ -9,8 +9,8 @@ jobs:
     steps:
       - checkout
       - run:
-          - command: ls
-          - name: TEST
+          command: ls
+          name: TEST
       - node/install-packages:
           app-dir: "/backend"
       - run:
