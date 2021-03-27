@@ -13,7 +13,7 @@ jobs:
       - run:
           command: npm run test
           name: Run NPM tests
-          working_directory: "/server"
+          working_directory: "~/project/server"
 
 workflows:
   test_my_app:
