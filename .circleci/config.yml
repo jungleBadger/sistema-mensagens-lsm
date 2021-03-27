@@ -10,7 +10,6 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: "~/project/server"
-          version: 14.16.0
       - run:
           command: npm run test
           name: Run NPM tests
