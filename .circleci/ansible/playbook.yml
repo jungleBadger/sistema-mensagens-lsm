@@ -4,10 +4,10 @@
   user: dcerag
   gather_facts: false
   vars:
-    - ANSIBLE_HOST_KEY_CHECKING: false
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
     - ansible_port: '56024'
+    - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
   pre_tasks:
     - setup:
