@@ -28,7 +28,10 @@ jobs:
           name: Install dependencies
           no_output_timeout: 30m
           command: |
-            apk add --update ansible
+            apt update
+            apt install software-properties-common
+            apt-add-repository --yes --update ppa:ansible/ansible
+            apt install ansible
       - run:
           name: Configure server
           no_output_timeout: 30m
