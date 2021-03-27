@@ -1,10 +1,10 @@
 ---
 - name: "install dependencies."
   become: true
-  apt:
-    name: ["nodejs", "npm"]
+  yum:
+    name: ["nodejs14"]
     state: latest
-    update_cache: yes
+    update_cache: false
 
 - name: "install pm2"
   become: true
