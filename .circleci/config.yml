@@ -4,16 +4,16 @@ orbs:
 
 jobs:
   test:
-    working_directory: "~/project/server"
     executor:
       name: node/default
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          app-dir: "~/project/server"
       - run:
           command: npm run test
           name: Run NPM tests
-
+          working_directory: "~/project/server"
   deploy_backend:
     docker:
       - image: cimg/base:2020.01
@@ -37,9 +37,10 @@ jobs:
             ls
             cat server/.env
             exit 0
-
-
 workflows:
   test_my_app:
     jobs:
       - test
+      - deploy_backend:
+          requires:
+            - test
