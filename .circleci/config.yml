@@ -8,6 +8,9 @@ jobs:
       name: node/default
     steps:
       - checkout
+      - run:
+          - command: ls
+          - name: TEST
       - node/install-packages:
           app-dir: "/backend"
       - run:
