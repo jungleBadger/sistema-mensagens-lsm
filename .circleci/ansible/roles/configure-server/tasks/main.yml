@@ -14,9 +14,8 @@
 - name: "Install nodejs."
   become: true
   dnf:
-    name: ["nodejs:14"]
+    name: ["@nodejs:14"]
     state: latest
-    update_cache: false
 
 - name: "Install pm2"
   become: true
