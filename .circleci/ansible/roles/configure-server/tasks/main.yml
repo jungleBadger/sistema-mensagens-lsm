@@ -2,10 +2,9 @@
 - name: "install dependencies."
   become: true
   dnf:
-
-    name: ["nodejs"]
+    name: "nodejs"
     state: latest
-    autoremove: yes
+    releasever: 14
     update_cache: false
 
 - name: "install pm2"
