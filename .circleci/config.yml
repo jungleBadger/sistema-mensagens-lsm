@@ -8,15 +8,12 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - run:
-          command: ls
-          name: TEST
       - node/install-packages:
-          app-dir: "/backend"
+          app-dir: "/server"
       - run:
           command: npm run test
           name: Run NPM tests
-          working_directory: "/backend"
+          working_directory: "/server"
 
 workflows:
   test_my_app:
