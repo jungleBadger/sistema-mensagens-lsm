@@ -8,7 +8,7 @@
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
     - ansible_port: '56024'
-    - ansible_ssh_common_args: '-o ProxyCommand="ssh -o StrictHostKeyChecking=no -W %h:%p -q dcerag@server.igrejaemsumare.com.br"'
+    - ansible_ssh_common_args: '-o ProxyCommand="ssh -o StrictHostKeyChecking=no -W %h:%p -q dcerag@server.igrejaemsumare.com.br:56024"'
 
 
   pre_tasks:
