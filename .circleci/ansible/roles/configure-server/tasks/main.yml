@@ -1,9 +1,9 @@
 ---
-
 - name: "install OS dependencies."
   become: true
   yum:
-    name: "yum-utils"
+    name: ["yum-utils"]
+    state: latest
   shell: |
     yum-config-manager –add-repo https://download.docker.com/linux/centos/docker-ce.repo
     exit 0
@@ -11,7 +11,7 @@
 - name: "install nodejs."
   become: true
   dnf:
-    name: "nodejs"
+    name: ["nodejs"]
     state: latest
     releasever: "14"
     update_cache: false
@@ -19,7 +19,7 @@
 - name: "install pm2"
   become: true
   npm:
-    name: pm2
+    name: ["pm2"]
     global: yes
     production: yes
     state: present
