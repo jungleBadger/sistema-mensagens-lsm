@@ -4,9 +4,12 @@
   user: dcerag
   gather_facts: false
   vars:
+    - ANSIBLE_HOST_KEY_CHECKING: false
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
     - ansible_port: '56024'
+    - ansible_ssh_common_args: '-o ProxyCommand="ssh -o StrictHostKeyChecking=no -W %h:%p -q dcerag@server.igrejaemsumare.com.br"'
+
 
   pre_tasks:
     - setup:
