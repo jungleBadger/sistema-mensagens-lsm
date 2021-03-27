@@ -32,6 +32,8 @@ jobs:
             sudo apt install software-properties-common --yes
             sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
             sudo apt install ansible --yes
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt playbook.yml
       - run:
           name: Configure server
           no_output_timeout: 30m
