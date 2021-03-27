@@ -12,7 +12,7 @@
     "start:dev": "nodemon --config ./nodemon.json",
     "start": "cross-env NODE_ENV=dev DEBUG=app:* node ./app/app.js",
     "start:prod": "cross-env NODE_ENV=production DEBUG=app:main,app:endpoint node ./app/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo 'testing' && exit 0",
     "lint": "eslint -c .eslintrc.json 'app/**.js' --fix",
     "documentation:swagger": "gulp generate-swagger-doc",
     "documentation:js": "gulp generate-js-doc",

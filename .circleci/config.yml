@@ -1,0 +1,21 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.2.0
+
+jobs:
+  test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: "/backend"
+      - run:
+          command: npm run test
+          name: Run NPM tests
+          working_directory: "/backend"
+
+workflows:
+  test_my_app:
+    jobs:
+      - test
