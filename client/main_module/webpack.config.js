@@ -5,7 +5,6 @@ const webpack = require("webpack");
 const CleanWebpackPlugin = require("clean-webpack-plugin").CleanWebpackPlugin;
 const {VueLoaderPlugin} = require("vue-loader");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 
 module.exports = env => {
 	return {
@@ -84,9 +83,6 @@ module.exports = env => {
 				"filename": path.join(__dirname, "dist", "index.html"),
 				"template": path.join(__dirname, "src", "index.ejs"),
 				"inject": "body"
-			}),
-			new ScriptExtHtmlWebpackPlugin({
-				"defaultAttribute": "async"
 			})
 		],
 		"entry": {
