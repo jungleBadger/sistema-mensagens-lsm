@@ -8,8 +8,6 @@ import storeHandler from "./store/index.js";
 import i18nHandler from "./i18n/index.js";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-console.log(11)
-
 export default createApp(
 	MainComponent
 ).use(
@@ -18,4 +16,4 @@ export default createApp(
 	storeHandler
 ).use(
 	i18nHandler
-).component("FontAwesomeIcon", FontAwesomeIcon).mount("#slm-app");
+).component("FontAwesomeIcon", FontAwesomeIcon).mount("#lsm-app");
