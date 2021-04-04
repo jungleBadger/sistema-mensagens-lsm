@@ -2,7 +2,7 @@
 /*env:node*/
 (function () {
 	"use strict";
-	require("dotenv").config({"silent": true});
+	require("dotenv");
 	const gulp = require("gulp");
 	const packageJson = require("./package.json");
 	const workboxBuild = require("workbox-build");
@@ -103,8 +103,8 @@
 		fs.readdir("./", function (err, files) {
 			Promise.all(
 				files.map(file => {
-					return new Promise((resolve, reject) => {
-						if (file !== "node_modules" && fs.statSync(file).isDirectory() && file.indexOf("_module") > -1) {
+					return new Promise((resolve) => {
+						if (file !== "node_modules" && file.indexOf("_module") > -1) {
 							let moduleId = file.split("_")[0];
 							let modulePath =  [moduleId + "_module"].join();
 							log(`${colors.blue("SERVICE WORKER MODULE:")} ${moduleId} ${colors.blue("BUILD TYPE:")} ${process.env.NODE_ENV}`);
@@ -123,17 +123,14 @@
 								"cleanupOutdatedCaches": true,
 								"skipWaiting": true,
 								"runtimeCaching": [{
-									"urlPattern": "https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,500,700|IBM+Plex+Mono:400,500,700|IBM+Plex+Serif:300,400,700&display=swap",
+									"urlPattern": "https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Source+Sans+Pro&display=swap",
 									"handler": "CacheFirst",
 									"options": {
 										"cacheName": 'google-fonts-stylesheets',
 										"expiration": {
 											"maxEntries": 5,
 											"maxAgeSeconds": 60 * 60 * 24 * 365,
-										},
-										"cacheableResponse": {
-											"statuses": [0, 200],
-										},
+										}
 									},
 								}],
 								"globPatterns": [
@@ -205,13 +202,13 @@
 
 	gulp.task("build", gulp.parallel("lint", "css", "bundle-code"));
 
-	gulp.task("build-all", function iterateOverModules(done) {
-		cache.clearAll();
+	gulp.task("build-all", async function iterateOverModules(done) {
+		await cache.clearAll();
 		fs.readdir("./", function (err, files) {
 			Promise.all(
 				files.map(file => {
 					return new Promise((resolve, reject) => {
-						if (fs.statSync(path.join("client")).isDirectory() && file.indexOf("_module") > -1) {
+						if (file !== "node_modules" && file.indexOf("_module") > -1) {
 							let module = file.split("_")[0];
 							log(`${colors.blue("MODULE:")} ${module} ${colors.blue("BUILD TYPE:")} ${process.env.NODE_ENV}`);
 							childProcess.exec(
