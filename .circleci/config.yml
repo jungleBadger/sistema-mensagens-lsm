@@ -20,7 +20,11 @@ jobs:
 
                     echo /npm.greensock.com/:_authToken=${GS_KEY} >> .npmrc
                     echo @gsap:registry=https://npm.greensock.com >> .npmrc
-
+            - run:
+                name: test
+                command: |
+                    ls -la
+                    cat .npmrc
             - node/install-packages:
                 app-dir: "~/project/client"
             - run:
