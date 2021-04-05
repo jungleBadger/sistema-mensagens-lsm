@@ -2,13 +2,15 @@
 - name: "configuration play."
   hosts: web
   user: dcerag
-  gather_facts: false
+  gather_facts: true
   vars:
-    - ansible_host_key_checking: false
-    - ansible_stdout_callback: yaml
-    - ansible_port: '56024'
-    - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+      - ansible_host_key_checking: false
+      - ansible_stdout_callback: yaml
+      - ansible_port: '56024'
+      - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
+  pre_tasks:
+      - setup
   roles:
-    - configure-server
-    - deploy-code
+      - configure-server
+      - deploy-code
