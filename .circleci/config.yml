@@ -9,6 +9,7 @@ jobs:
         working_directory: "~/project"
         executor:
             name: node/default
+            tag: "14.16.0"
         steps:
             - checkout
             - run:
@@ -28,6 +29,7 @@ jobs:
             - node/install-packages:
                 app-dir: "~/project/client"
                 override-ci-command: npm install
+                cache-version: v2
             - run:
                   name: Run NPM tests
                   command: ls
