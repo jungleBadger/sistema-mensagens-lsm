@@ -9,7 +9,6 @@
     - ansible_port: '56024'
     - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
-  pre_tasks:
-    - setup:
   roles:
     - configure-server
+    - deploy-code
