@@ -12,14 +12,10 @@ jobs:
         steps:
             - checkout
             - node/install-packages:
-                app-dir: "~/client"
+                app-dir: "~/project/client"
             - run:
                 command: ls
                 name: Run NPM tests
-            - persist_to_workspace:
-                root: ~/project/
-                paths:
-                    - .
 
 
     build-backend:
