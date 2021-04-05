@@ -1,15 +1,15 @@
 ---
+- name: "Set Docker repository."
+  become: true
+  shell: |
+      yum-config-manager –add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      exit 0
+
 - name: "Install OS dependencies."
   become: true
   yum:
     name: ["yum-utils"]
     state: latest
-
-- name: "Set Docker repository."
-  become: true
-  shell: |
-    yum-config-manager –add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    exit 0
 
 - name: "Install nodejs."
   become: true
