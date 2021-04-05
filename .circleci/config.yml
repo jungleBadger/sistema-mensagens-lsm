@@ -86,9 +86,9 @@ jobs:
     deploy-app:
         working_directory: "~/project"
         docker:
-            - image: cimg/base:2020.01
+            -  image: python:3.7-alpine3.11
+        shell: /bin/sh -leo pipefail
         steps:
-            - checkout
             - attach_workspace:
                   at: ~/project
             - add_ssh_keys:
@@ -102,11 +102,7 @@ jobs:
                   name: Deploy the application
                   no_output_timeout: 30m
                   command: |
-                      sudo apt update --yes
-                      sudo apt install software-properties-common --yes
-                      sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
-                      sudo apt install ansible --yes
-                      ls -la
+                      apk add --update ansible
                       cd .circleci/ansible
                       ansible-playbook -i inventory.txt playbook.yml
 
