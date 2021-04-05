@@ -6,7 +6,7 @@ jobs:
 
 
     build-frontend:
-        working_directory: "./client"
+        working_directory: "~/project/client"
         executor:
             name: node/default
         steps:
@@ -19,7 +19,7 @@ jobs:
 
 
     build-backend:
-        working_directory: "./backend"
+        working_directory: "~/project/backend"
         executor:
             name: node/default
         steps:
