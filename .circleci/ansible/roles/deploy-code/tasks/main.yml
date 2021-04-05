@@ -6,6 +6,6 @@
 
 - name: Copying files from CircleCI to VM
   copy:
-      src: /root/
+      src: /
       remote_src: true
       dest: /home/dcerag/app
