@@ -27,7 +27,7 @@ jobs:
                   name: Run NPM tests
                   command: ls
             - persist_to_workspace:
-                  root: ~/project/build/
+                  root: ~/project/
                   paths:
                       - client
 
@@ -61,6 +61,8 @@ jobs:
         docker:
             - image: cimg/base:2020.01
         steps:
+            - attach_workspace:
+                  at: ~/project
             - add_ssh_keys:
                   fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
             - run:
