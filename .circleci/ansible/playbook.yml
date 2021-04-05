@@ -3,8 +3,7 @@
   hosts: devapp01
   user: dcerag
   become: yes
-  become_user: dcerag
-  gather_facts: true
+  gather_facts: false
   vars:
       - ansible_host_key_checking: false
       - ansible_stdout_callback: yaml
