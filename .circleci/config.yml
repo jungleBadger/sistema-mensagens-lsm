@@ -6,9 +6,8 @@ jobs:
 
 
   build-frontend:
-    executor:
-      name: node/default
-      working_directory: "~/project/client"
+    working_directory: "~/project/client"
+    name: node/default
     steps:
       - checkout
       - node/install-packages
@@ -18,9 +17,9 @@ jobs:
 
 
   build-backend:
+    working_directory: "~/project/server"
     executor:
       name: node/default
-      working_directory: "~/project/server"
     steps:
       - checkout
       - run:
