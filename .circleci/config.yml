@@ -28,23 +28,23 @@ jobs:
                   command: ls
             - persist_to_workspace:
                   root: ~/project/
-                  paths:
-                      - client
 
 
     build-backend:
         working_directory: "~/project"
         executor:
             name: node/default
+            tag: "14.16.0"
         steps:
             - checkout
             - run:
                   name: Attach environment variables
                   command: |
+                      cat client/.npmrc
                       cd server
                       echo ENVIRONMENT=production > ".env"
             - node/install-packages:
-                  app-dir: "~/project/backend"
+                  app-dir: "~/project/server"
                   override-ci-command: npm install
             - run:
                   command: ls
