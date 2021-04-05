@@ -15,6 +15,7 @@ jobs:
             - run:
                 name: Create .npmrc file
                 command: |
+                    cd client
                     touch .npmrc
                     echo //npm.fontawesome.com/:_authToken=${FA_KEY} >> .npmrc
                     echo @fortawesome:registry=https://npm.fontawesome.com/ >> .npmrc
@@ -24,6 +25,7 @@ jobs:
             - run:
                 name: test
                 command: |
+                    cd client
                     ls -la
                     cat .npmrc
             - node/install-packages:
