@@ -51,7 +51,7 @@ jobs:
                   command: ls
                   name: Run NPM tests
             -  persist_to_workspace:
-                   root: ~/project/build/
+                   root: ~/project/
                    paths:
                        - server
 
