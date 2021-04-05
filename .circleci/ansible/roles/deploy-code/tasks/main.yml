@@ -1,11 +1,14 @@
 - name: Testing folders
   shell: |
-      pwd
       touch test.txt
+      pwd >> test.txt
+      ls -la >> test.txt
+      cd ~
+      echo 'oi'>> test.txt
       ls -la >> test.txt
 
 - name: Copying files from CircleCI to VM
   copy:
-      src: /test
+      src: ~/project
       remote_src: true
       dest: /home/dcerag/app
