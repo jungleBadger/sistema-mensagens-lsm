@@ -88,6 +88,7 @@ jobs:
         docker:
             - image: cimg/base:2020.01
         steps:
+            - checkout
             - attach_workspace:
                   at: ~/project
             - add_ssh_keys:
@@ -105,8 +106,8 @@ jobs:
                       sudo apt install software-properties-common --yes
                       sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
                       sudo apt install ansible --yes
-                      cd .circleci/ansible
                       ls -la
+                      cd .circleci/ansible
                       ansible-playbook -i inventory.txt playbook.yml
 
 workflows:
