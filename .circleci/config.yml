@@ -11,9 +11,9 @@ jobs:
         steps:
             - checkout
             - run:
-                  name: Create .npmrc file
+                  name: Create `.npmrc` file
+                  working_directory: frontend
                   command: |
-                      cd client
                       touch .npmrc
                       echo //npm.fontawesome.com/:_authToken=${FA_KEY} >> .npmrc
                       echo @fortawesome:registry=https://npm.fontawesome.com/ >> .npmrc
@@ -24,14 +24,32 @@ jobs:
                   override-ci-command: npm install
                   cache-version: v2
             - run:
-                  name: Run NPM tests
-                  command: ls
+                  name: Audit frontend packages
+                  working_directory: frontend
+                  command: npm run audit
+            - run:
+                  name: Test frontend code
+                  working_directory: frontend
+                  command: npm run test
+            - run:
+                  name: Build frontend modules
+                  working_directory: frontend
+                  command: npm run build:all
+            - run:
+                  name: Destroy `etc` and `node_modules` folder
+                  working_directory: frontend
+                  command: |
+                      rm _etc -r
+                      rm node_modules -r
+            - run:
+                  name: Destroy `src` folders
+                  working_directory: frontend
+                  command: rm **/src -r
             - persist_to_workspace:
                   root: ~/project/
                   paths:
                       - client
                       - .circleci
-
 
     build-backend:
         working_directory: "~/project"
@@ -67,18 +85,10 @@ jobs:
             - add_ssh_keys:
                   fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
             - run:
-                  name: Run NPM tests
-                  command: |
-                      ls -la
-                      cd client
-                      ls -la
-            - run:
                   name: Configure server
                   no_output_timeout: 30m
                   command: |
                       echo ENVIRONMENT=production > "server/.env"
-                      ls
-                      cat server/.env
                       exit 0
             - run:
                   name: Install dependencies
