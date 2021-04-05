@@ -5,7 +5,7 @@ orbs:
 jobs:
 
 
-  build_frontend:
+  build-frontend:
     executor:
       name: node/default
       working_directory: "~/project/client"
