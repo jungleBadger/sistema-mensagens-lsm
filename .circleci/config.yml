@@ -12,7 +12,7 @@ jobs:
         steps:
             - checkout
             - node/install-packages:
-                app-dir: "~/project/client"
+                app-dir: "~/client"
             - run:
                 command: ls
                 name: Run NPM tests
