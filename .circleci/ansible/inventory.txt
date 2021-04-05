@@ -1,2 +1,2 @@
-[web]
+[devapp01]
 server.igrejaemsumare.com.br

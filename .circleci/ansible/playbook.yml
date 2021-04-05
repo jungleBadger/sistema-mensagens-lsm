@@ -1,6 +1,6 @@
 ---
 - name: "configuration play."
-  hosts: web
+  hosts: devapp01
   user: dcerag
   become: yes
   gather_facts: true
