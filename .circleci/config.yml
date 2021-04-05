@@ -6,19 +6,20 @@ jobs:
 
 
     build-frontend:
-        working_directory: "~/project/client"
+        working_directory: "./client"
         executor:
             name: node/default
         steps:
             - checkout
-            - node/install-packages
+            - node/install-packages:
+                app-dir: "~/project/client"
             - run:
-                  command: npm run test
+                  command: ls
                   name: Run NPM tests
 
 
     build-backend:
-        working_directory: "~/project/server"
+        working_directory: "./backend"
         executor:
             name: node/default
         steps:
@@ -26,17 +27,17 @@ jobs:
             - run:
                   name: Attach environment variables
                   command: |
-                      echo ENVIRONMENT=production > ".env"
-            - node/install-packages
+                      echo ENVIRONMENT=production > "backend/.env"
+            - node/install-packages:
+                app-dir: "~/project/backend"
             - run:
-                  command: npm run test
+                  command: ls
                   name: Run NPM tests
 
 
     deploy-app:
         docker:
             - image: cimg/base:2020.01
-        working_directory: ~/project
         steps:
             - checkout
             - attach_workspace:
