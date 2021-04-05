@@ -3,18 +3,37 @@ orbs:
   node: circleci/node@4.2.0
 
 jobs:
-  test:
+
+
+  build_frontend:
     executor:
       name: node/default
+      working_directory: "~/project/client"
     steps:
       - checkout
-      - node/install-packages:
-          app-dir: "~/project/server"
+      - node/install-packages
       - run:
           command: npm run test
           name: Run NPM tests
-          working_directory: "~/project/server"
-  deploy_backend:
+
+
+  build-backend:
+    executor:
+      name: node/default
+      working_directory: "~/project/server"
+    steps:
+      - checkout
+      - run:
+          name: Attach environment variables
+          command: |
+              echo ENVIRONMENT=production > ".env"
+      - node/install-packages
+      - run:
+          command: npm run test
+          name: Run NPM tests
+
+
+  deploy-app:
     docker:
       - image: cimg/base:2020.01
     working_directory: ~/project
@@ -42,10 +61,9 @@ jobs:
             ls
             cat server/.env
             exit 0
+
 workflows:
   test_my_app:
     jobs:
-      - test
-      - deploy_backend:
-          requires:
-            - test
+      - build-frontend
+      - build-backend
