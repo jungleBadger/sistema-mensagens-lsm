@@ -46,7 +46,7 @@ jobs:
                   working_directory: client
                   command: rm **/src -rf
             - persist_to_workspace:
-                  root: ~/project/
+                  root: /test
                   paths:
                       - client
                       - .circleci
@@ -79,7 +79,7 @@ jobs:
                   working_directory: server
                   command: rm node_modules -rf
             -  persist_to_workspace:
-                   root: ~/project/
+                   root: /test
                    paths:
                        - server
 
@@ -89,12 +89,11 @@ jobs:
             - image: cimg/base:2020.01
         steps:
             - attach_workspace:
-                  at: ~/project
+                  at: /test
             - add_ssh_keys:
                   fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
             - run:
                   name: Configure environment file
-                  no_output_timeout: 30m
                   command: |
                       echo ENVIRONMENT=production > "server/.env"
                       exit 0
