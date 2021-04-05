@@ -1,4 +1,9 @@
+- name: Testing folders
+  shell: |
+      pwd
+      ls -la
+
 - name: Copying files from CircleCI to VM
   copy:
-      src: /root/project/
+      src: /root/project
       dest: /home/dcerag/app
