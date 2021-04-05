@@ -16,10 +16,10 @@ jobs:
                 command: |
                     touch .npmrc
                     echo //npm.fontawesome.com/:_authToken=${FA_KEY} >> .npmrc
-                    echo @fortawesome:registry=https://npm.fontawesome.com/
+                    echo @fortawesome:registry=https://npm.fontawesome.com/ >> .npmrc
 
                     echo /npm.greensock.com/:_authToken=${GS_KEY} >> .npmrc
-                    echo @gsap:registry=https://npm.greensock.com
+                    echo @gsap:registry=https://npm.greensock.com >> .npmrc
 
             - node/install-packages:
                 app-dir: "~/project/client"
