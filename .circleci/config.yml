@@ -3,8 +3,6 @@ orbs:
     node: circleci/node@4.2.0
 
 jobs:
-
-
     build-frontend:
         working_directory: "~/project"
         executor:
@@ -13,28 +11,25 @@ jobs:
         steps:
             - checkout
             - run:
-                name: Create .npmrc file
-                command: |
-                    cd client
-                    touch .npmrc
-                    echo //npm.fontawesome.com/:_authToken=${FA_KEY} >> .npmrc
-                    echo @fortawesome:registry=https://npm.fontawesome.com/ >> .npmrc
-
-                    echo /npm.greensock.com/:_authToken=${GS_KEY} >> .npmrc
-                    echo @gsap:registry=https://npm.greensock.com >> .npmrc
-            - run:
-                name: test
-                command: |
-                    cd client
-                    ls -la
-                    cat .npmrc
+                  name: Create .npmrc file
+                  command: |
+                      cd client
+                      touch .npmrc
+                      echo //npm.fontawesome.com/:_authToken=${FA_KEY} >> .npmrc
+                      echo @fortawesome:registry=https://npm.fontawesome.com/ >> .npmrc
+                      echo /npm.greensock.com/:_authToken=${GS_KEY} >> .npmrc
+                      echo @gsap:registry=https://npm.greensock.com >> .npmrc
             - node/install-packages:
-                app-dir: "~/project/client"
-                override-ci-command: npm install
-                cache-version: v2
+                  app-dir: "~/project/client"
+                  override-ci-command: npm install
+                  cache-version: v2
             - run:
                   name: Run NPM tests
                   command: ls
+            - persist_to_workspace:
+                  root: ~/project/
+                  paths:
+                      - client
 
 
     build-backend:
@@ -46,9 +41,11 @@ jobs:
             - run:
                   name: Attach environment variables
                   command: |
-                      echo ENVIRONMENT=production > "backend/.env"
+                      cd backend
+                      echo ENVIRONMENT=production > ".env"
             - node/install-packages:
-                app-dir: "~/project/backend"
+                  app-dir: "~/project/backend"
+                  override-ci-command: npm install
             - run:
                   command: ls
                   name: Run NPM tests
@@ -61,6 +58,11 @@ jobs:
         steps:
             - add_ssh_keys:
                   fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
+            - run:
+                  command: |
+                      cd client
+                      ls -la
+                  name: Run NPM tests
             - run:
                   name: Install dependencies
                   no_output_timeout: 30m
