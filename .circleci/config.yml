@@ -12,7 +12,7 @@ jobs:
             - checkout
             - run:
                   name: Create `.npmrc` file
-                  working_directory: frontend
+                  working_directory: client
                   command: |
                       touch .npmrc
                       echo //npm.fontawesome.com/:_authToken=${FA_KEY} >> .npmrc
@@ -25,25 +25,25 @@ jobs:
                   cache-version: v2
             - run:
                   name: Audit frontend packages
-                  working_directory: frontend
+                  working_directory: client
                   command: npm run audit
             - run:
                   name: Test frontend code
-                  working_directory: frontend
+                  working_directory: client
                   command: npm run test
             - run:
                   name: Build frontend modules
-                  working_directory: frontend
+                  working_directory: client
                   command: npm run build:all
             - run:
                   name: Destroy `etc` and `node_modules` folder
-                  working_directory: frontend
+                  working_directory: client
                   command: |
                       rm _etc -r
                       rm node_modules -r
             - run:
                   name: Destroy `src` folders
-                  working_directory: frontend
+                  working_directory: client
                   command: rm **/src -r
             - persist_to_workspace:
                   root: ~/project/
