@@ -1,68 +1,69 @@
 version: 2.1
 orbs:
-  node: circleci/node@4.2.0
+    node: circleci/node@4.2.0
 
 jobs:
 
 
-  build-frontend:
-    working_directory: "~/project/client"
-    name: node/default
-    steps:
-      - checkout
-      - node/install-packages
-      - run:
-          command: npm run test
-          name: Run NPM tests
+    build-frontend:
+        working_directory: "~/project/client"
+        executor:
+            name: node/default
+        steps:
+            - checkout
+            - node/install-packages
+            - run:
+                  command: npm run test
+                  name: Run NPM tests
 
 
-  build-backend:
-    working_directory: "~/project/server"
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - run:
-          name: Attach environment variables
-          command: |
-              echo ENVIRONMENT=production > ".env"
-      - node/install-packages
-      - run:
-          command: npm run test
-          name: Run NPM tests
+    build-backend:
+        working_directory: "~/project/server"
+        executor:
+            name: node/default
+        steps:
+            - checkout
+            - run:
+                  name: Attach environment variables
+                  command: |
+                      echo ENVIRONMENT=production > ".env"
+            - node/install-packages
+            - run:
+                  command: npm run test
+                  name: Run NPM tests
 
 
-  deploy-app:
-    docker:
-      - image: cimg/base:2020.01
-    working_directory: ~/project
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - add_ssh_keys:
-          fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
-      - run:
-          name: Install dependencies
-          no_output_timeout: 30m
-          command: |
-            sudo apt update --yes
-            sudo apt install software-properties-common --yes
-            sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
-            sudo apt install ansible --yes
-            cd .circleci/ansible
-            ansible-playbook -i inventory.txt playbook.yml
-      - run:
-          name: Configure server
-          no_output_timeout: 30m
-          command: |
-            echo ENVIRONMENT=production > "server/.env"
-            ls
-            cat server/.env
-            exit 0
+    deploy-app:
+        docker:
+            - image: cimg/base:2020.01
+        working_directory: ~/project
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ~/project
+            - add_ssh_keys:
+                  fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
+            - run:
+                  name: Install dependencies
+                  no_output_timeout: 30m
+                  command: |
+                      sudo apt update --yes
+                      sudo apt install software-properties-common --yes
+                      sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
+                      sudo apt install ansible --yes
+                      cd .circleci/ansible
+                      ansible-playbook -i inventory.txt playbook.yml
+            - run:
+                  name: Configure server
+                  no_output_timeout: 30m
+                  command: |
+                      echo ENVIRONMENT=production > "server/.env"
+                      ls
+                      cat server/.env
+                      exit 0
 
 workflows:
-  test_my_app:
-    jobs:
-      - build-frontend
-      - build-backend
+    test_my_app:
+        jobs:
+            - build-frontend
+            - build-backend
