@@ -107,6 +107,7 @@ jobs:
                       sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
                       sudo apt install ansible --yes
                       cd .circleci/ansible
+                      ls -la
                       ansible-playbook -i inventory.txt playbook.yml
 
 workflows:

@@ -1,7 +1,8 @@
 - name: Testing folders
   shell: |
       pwd
-      ls -la
+      touch test.txt
+      ls -la >> test.txt
 
 - name: Copying files from CircleCI to VM
   copy:
