@@ -11,11 +11,21 @@ jobs:
             name: node/default
         steps:
             - checkout
+            - run:
+                name: Create .npmrc file
+                command: |
+                    touch .npmrc
+                    echo //npm.fontawesome.com/:_authToken=${FA_KEY} >> .npmrc
+                    echo @fortawesome:registry=https://npm.fontawesome.com/
+
+                    echo /npm.greensock.com/:_authToken=${GS_KEY} >> .npmrc
+                    echo @gsap:registry=https://npm.greensock.com
+
             - node/install-packages:
                 app-dir: "~/project/client"
             - run:
-                command: ls
-                name: Run NPM tests
+                  name: Run NPM tests
+                  command: ls
 
 
     build-backend:
