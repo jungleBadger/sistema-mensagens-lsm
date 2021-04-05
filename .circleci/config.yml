@@ -40,11 +40,11 @@ jobs:
                   working_directory: client
                   command: |
                       rm _etc -r
-                      rm node_modules -r
+                      rm node_modules -rf
             - run:
                   name: Destroy `src` folders
                   working_directory: client
-                  command: rm **/src -r
+                  command: rm **/src -rf
             - persist_to_workspace:
                   root: ~/project/
                   paths:
@@ -77,7 +77,7 @@ jobs:
             - run:
                   name: Destroy `node_modules` folder
                   working_directory: server
-                  command: rm node_modules -r
+                  command: rm node_modules -rf
             -  persist_to_workspace:
                    root: ~/project/
                    paths:
