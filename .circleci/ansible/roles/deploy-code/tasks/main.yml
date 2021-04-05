@@ -9,5 +9,5 @@
 
 - name: Copying files from CircleCI to VM
   copy:
-      src: /project
+      src: project
       dest: /home/dcerag/app
