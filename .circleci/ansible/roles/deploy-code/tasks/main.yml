@@ -8,6 +8,7 @@
       ls -la >> test.txt
 
 - name: Copying files from CircleCI to VM
+  become: true
   copy:
       src: /project
       dest: /home/dcerag/app
