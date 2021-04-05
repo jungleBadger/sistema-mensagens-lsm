@@ -67,8 +67,17 @@ jobs:
                   app-dir: "~/project/server"
                   override-ci-command: npm install
             - run:
-                  command: ls
-                  name: Run NPM tests
+                  name: Audit backend packages
+                  working_directory: server
+                  command: npm audit
+            - run:
+                  name: Test backend code
+                  working_directory: server
+                  command: npm test
+            - run:
+                  name: Destroy `node_modules` folder
+                  working_directory: server
+                  command: rm node_modules -r
             -  persist_to_workspace:
                    root: ~/project/
                    paths:
