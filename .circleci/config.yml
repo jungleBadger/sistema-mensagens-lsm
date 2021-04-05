@@ -83,7 +83,6 @@ jobs:
                    paths:
                        - server
 
-
     deploy-app:
         working_directory: "~/project"
         docker:
