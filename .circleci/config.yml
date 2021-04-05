@@ -27,9 +27,9 @@ jobs:
                   name: Run NPM tests
                   command: ls
             - persist_to_workspace:
-                  root: ~/project/
+                  root: ~/project/build/
                   paths:
-                      - .
+                      - client
 
 
     build-backend:
@@ -42,7 +42,6 @@ jobs:
             - run:
                   name: Attach environment variables
                   command: |
-                      cat client/.npmrc
                       cd server
                       echo ENVIRONMENT=production > ".env"
             - node/install-packages:
@@ -51,6 +50,10 @@ jobs:
             - run:
                   command: ls
                   name: Run NPM tests
+            -  persist_to_workspace:
+                   root: ~/project/build/
+                   paths:
+                       - server
 
 
     deploy-app:
