@@ -93,13 +93,13 @@ jobs:
             - add_ssh_keys:
                   fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
             - run:
-                  name: Configure server
+                  name: Configure environment file
                   no_output_timeout: 30m
                   command: |
                       echo ENVIRONMENT=production > "server/.env"
                       exit 0
-            - run:
-                  name: Install dependencies
+            - deploy:
+                  name: Deploy the application
                   no_output_timeout: 30m
                   command: |
                       sudo apt update --yes
