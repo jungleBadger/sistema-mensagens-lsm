@@ -26,11 +26,11 @@ jobs:
             - run:
                   name: Audit frontend packages
                   working_directory: client
-                  command: npm run audit
+                  command: npm audit
             - run:
                   name: Test frontend code
                   working_directory: client
-                  command: npm run test
+                  command: npm test
             - run:
                   name: Build frontend modules
                   working_directory: client
