@@ -97,6 +97,9 @@ jobs:
                   command: |
                       echo ENVIRONMENT=production > "server/.env"
                       exit 0
+            -  store_artifacts:
+                    path: .
+                    destination: /project
             - deploy:
                   name: Deploy the application
                   no_output_timeout: 30m
@@ -105,8 +108,8 @@ jobs:
                       sudo apt install software-properties-common --yes
                       sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
                       sudo apt install ansible --yes
-                      cd .circleci/ansible
                       ls -la
+                      cd .circleci/ansible
                       ansible-playbook -i inventory.txt playbook.yml
 
 workflows:
