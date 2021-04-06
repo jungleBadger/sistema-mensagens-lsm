@@ -2,7 +2,6 @@
 - name: "configuration play."
   hosts: devapp01
   user: dcerag
-  become: yes
   gather_facts: false
   vars:
       - ansible_host_key_checking: false
