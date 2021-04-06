@@ -85,10 +85,11 @@ jobs:
 
     deploy-app:
         working_directory: ~/project
+        docker:
+            -  image: python:3.7-alpine3.11
+        shell: /bin/sh -leo pipefail
         environment:
             -   BASH_ENV: /etc/profile
-        docker:
-            - image: cimg/base:2020.01
         steps:
             - attach_workspace:
                   at: ~/project
@@ -99,18 +100,11 @@ jobs:
                   command: |
                       echo ENVIRONMENT=production > "server/.env"
                       exit 0
-            -  store_artifacts:
-                    path: .
-                    destination: /project
             - deploy:
                   name: Deploy the application
                   no_output_timeout: 30m
                   command: |
-                      sudo apt update --yes
-                      sudo apt install software-properties-common --yes
-                      sudo apt-add-repository --yes --update ppa:ansible/ansible --yes
-                      sudo apt install ansible --yes
-                      ls -la
+                      apk add --update ansible
                       cd .circleci/ansible
                       ansible-playbook -i inventory.txt playbook.yml
 
