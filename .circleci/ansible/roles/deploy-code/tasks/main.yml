@@ -1,12 +1,3 @@
-- name: Testing folders
-  shell: |
-      touch test.txt
-      pwd >> test.txt
-      ls -la >> test.txt
-      cd ~
-      echo 'oi'>> test.txt
-      ls -la >> test.txt
-
 - name: Copying files from CircleCI to VM
   copy:
       src: /root/project/
