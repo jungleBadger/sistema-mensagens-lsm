@@ -11,15 +11,6 @@ jobs:
         steps:
             - checkout
             - run:
-                  name: Attach frontend environment variables
-                  working_directory: client
-                  command: |
-                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        echo NODE_ENV=production >> ".env"
-                      else
-                        echo NODE_ENV=development >> ".env"
-                      fi
-            - run:
                   name: Create `.npmrc` file
                   working_directory: client
                   command: |
@@ -40,6 +31,15 @@ jobs:
                   name: Test frontend code
                   working_directory: client
                   command: npm test
+            - run:
+                  name: Attach frontend environment variables
+                  working_directory: client
+                  command: |
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        echo NODE_ENV=production >> ".env"
+                      else
+                        echo NODE_ENV=development >> ".env"
+                      fi
             - run:
                   name: Build frontend modules
                   working_directory: client
