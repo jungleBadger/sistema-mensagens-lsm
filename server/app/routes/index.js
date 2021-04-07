@@ -1,20 +1,31 @@
 "use strict";
 
-const swaggerJSDoc = require("swagger-jsdoc");
-const swaggerIntegrationConfigs =  require("../configs/swagger-integration");
+const swaggerJSDoc = require("swagger-jsdoc")(require("../configs/swagger-integration"));
+const handleExpressError = require("../helpers/errorHandler").handleExpressError;
+
+const adminHandler = require("../modules/admin/routes/_index");
+const mainHandler = require("./partials/mainHandler");
 
 module.exports = function (app) {
     app.get("/api-docs.json", function (req, res) {
         res.setHeader("Content-Type", "application/json");
-        return res.send(swaggerJSDoc(swaggerIntegrationConfigs));
+        return res.send(swaggerJSDoc);
     });
 
-    app.get(["/admin", "/admin/", "/admin/*"],
-        (req, res) => res.status(200).render("./admin_module/dist/index.html")
-    );
+    app.get("/", (req, res) => {
+    	return res.redirect("/app");
+	});
 
-    app.get(["/app", "/app/", "/app/*"],
-        (req, res) => res.status(200).render("./main_module/dist/index.html")
-    );
+    app.use(
+    	adminHandler
+	);
+
+    app.use(
+    	"/app",
+		mainHandler
+	);
+
+	app.use((err, req, res, next) => err ? handleExpressError(err, res) : next());
+
 }
 

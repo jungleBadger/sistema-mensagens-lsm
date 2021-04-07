@@ -1,6 +1,6 @@
 "use strict";
 
-import {createApp} from "vue";
+import { createApp } from "vue";
 
 import MainComponent from "./components/app.vue";
 import routerHandler from "./router/index.js";
@@ -18,4 +18,4 @@ export default createApp(
 	storeHandler
 ).use(
 	i18nHandler
-).component("FontAwesomeIcon", FontAwesomeIcon).mount("#slm-app");
+).component("FontAwesomeIcon", FontAwesomeIcon).mount("#lsm-app");

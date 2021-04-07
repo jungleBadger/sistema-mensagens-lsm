@@ -3,7 +3,7 @@
 const dotenv = require("dotenv");
 const run = require("./server");
 
-dotenv.config({ "silent": true });
+dotenv.config();
 
 (async () => {
 	return await run();
