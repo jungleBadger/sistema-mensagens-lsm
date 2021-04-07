@@ -15,9 +15,9 @@ jobs:
                   working_directory: client
                   command: |
                       if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        echo NODE_ENV=production > ".env"
+                        echo NODE_ENV=production >> ".env"
                       else
-                        echo NODE_ENV=development > ".env"
+                        echo NODE_ENV=development >> ".env"
                       fi
             - run:
                   name: Create `.npmrc` file
@@ -43,7 +43,13 @@ jobs:
             - run:
                   name: Build frontend modules
                   working_directory: client
-                  command: npm run build:all
+                  command: |
+                    if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                      npm run build:all:prod
+                    else
+                      npm run build:all
+                    fi
+
             - run:
                   name: Destroy `etc` and `node_modules` folder
                   working_directory: client
@@ -72,16 +78,16 @@ jobs:
                   name: Attach backend environment variables
                   working_directory: server
                   command: |
-                      echo DB2_DB=$DB2_DB > ".env"
-                      echo DB2_HOST=$DB2_HOST > ".env"
-                      echo DB2_PORT=$DB2_PORT > ".env"
-                      echo DB2_UID=$DB2_UID > ".env"
-                      echo DB2_PASSWORD=$DB2_PASSWORD > ".env"
-                      echo DB2_SCHEMA=$DB2_SCHEMA > ".env"
+                      echo DB2_DB=$DB2_DB >> ".env"
+                      echo DB2_HOST=$DB2_HOST >> ".env"
+                      echo DB2_PORT=$DB2_PORT >> ".env"
+                      echo DB2_UID=$DB2_UID >> ".env"
+                      echo DB2_PASSWORD=$DB2_PASSWORD >> ".env"
+                      echo DB2_SCHEMA=$DB2_SCHEMA >> ".env"
                       if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        echo NODE_ENV=production > ".env"
+                        echo NODE_ENV=production >> ".env"
                       else
-                        echo NODE_ENV=development > ".env"
+                        echo NODE_ENV=development >> ".env"
                       fi
             - node/install-packages:
                   app-dir: "~/project/server"
