@@ -26,8 +26,7 @@ let connectionPool = new DBConnectionPool(
 	process.env.DB2_HOST,
 	process.env.DB2_PORT,
 	process.env.DB2_UID,
-	process.env.DB2_PASSWORD,
-	process.env.DB2_SCHEMA
+	process.env.DB2_PASSWORD
 );
 
 let server;
