@@ -1,8 +1,7 @@
 - name: Copying files from CircleCI to VM
-  synchronize:
+  copy:
       src: /root/project/
       dest: /home/dcerag/app/web
-      rsync_path: "sudo rsync"
       recursive: yes
 
 - name: Install node dependencies

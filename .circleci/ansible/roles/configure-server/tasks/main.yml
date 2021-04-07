@@ -8,7 +8,7 @@
 - name: "Install python."
   become: true
   dnf:
-    name: ["python", "python3"]
+    name: ["python3"]
     state: latest
 
 - name: "Install nodejs."
