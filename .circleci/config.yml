@@ -11,6 +11,15 @@ jobs:
         steps:
             - checkout
             - run:
+                  name: Attach frontend environment variables
+                  working_directory: client
+                  command: |
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        echo NODE_ENV=production > ".env"
+                      else
+                        echo NODE_ENV=development > ".env"
+                      fi
+            - run:
                   name: Create `.npmrc` file
                   working_directory: client
                   command: |
@@ -39,6 +48,7 @@ jobs:
                   name: Destroy `etc` and `node_modules` folder
                   working_directory: client
                   command: |
+                      rm .npmrc
                       rm _etc -r
                       rm node_modules -rf
             - run:
@@ -49,7 +59,6 @@ jobs:
                   root: ~/project
                   paths:
                       - client
-                      - .circleci
 
     build-backend:
         working_directory: "~/project"
@@ -59,10 +68,20 @@ jobs:
         steps:
             - checkout
             - run:
-                  name: Attach environment variables
+                  name: Attach backend environment variables
+                  working_directory: server
                   command: |
-                      cd server
-                      echo ENVIRONMENT=production > ".env"
+                      echo DB2_DB=$DB2_DB > ".env"
+                      echo DB2_HOST=$DB2_HOST > ".env"
+                      echo DB2_PORT=$DB2_PORT > ".env"
+                      echo DB2_UID=$DB2_UID > ".env"
+                      echo DB2_PASSWORD=$DB2_PASSWORD > ".env"
+                      echo DB2_SCHEMA=$DB2_SCHEMA > ".env"
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        echo NODE_ENV=production > ".env"
+                      else
+                        echo NODE_ENV=development > ".env"
+                      fi
             - node/install-packages:
                   app-dir: "~/project/server"
                   override-ci-command: npm install
@@ -95,11 +114,6 @@ jobs:
                   at: ~/project
             - add_ssh_keys:
                   fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
-            - run:
-                  name: Configure environment file
-                  command: |
-                      echo ENVIRONMENT=production > "server/.env"
-                      exit 0
             - deploy:
                   name: Deploy the application
                   no_output_timeout: 30m
