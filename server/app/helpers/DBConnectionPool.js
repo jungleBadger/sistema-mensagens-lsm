@@ -10,11 +10,11 @@ class DBConnectionPool {
 		port,
 		uid,
 		password,
-		schema,
 		connectionString = "",
 		poolSize = 5
 	) {
-		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};PROTOCOL=TCPIP;UID=${uid};PWD=${password};CURRENTSCHEMA=${schema}`;
+		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};UID=${uid};PWD=${password};`;
+		console.log(this.connectionString )
 		this.pool = new ibm_db.Pool();
 		this.pool.init(poolSize, this.connectionString);
 	}
