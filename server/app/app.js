@@ -1,9 +1,9 @@
 "use strict";
 
 const dotenv = require("dotenv");
+dotenv.config();
 const run = require("./server");
 
-dotenv.config();
 
 (async () => {
 	return await run();

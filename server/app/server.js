@@ -22,15 +22,13 @@ const httpLog = debug("app:endpoint");
 const DBConnectionPool = require("./helpers/DBConnectionPool");
 
 let connectionPool = new DBConnectionPool(
-	"lsmdb",
-	"localhost",
-	"50000",
-	"db2inst1",
-	"test",
-	"DB2INST1"
-)
-
-
+	process.env.DB2_DB,
+	process.env.DB2_HOST,
+	process.env.DB2_PORT,
+	process.env.DB2_UID,
+	process.env.DB2_PASSWORD,
+	process.env.DB2_SCHEMA
+);
 
 let server;
 
