@@ -12,8 +12,11 @@ RUN echo @fortawesome:registry=https://npm.fontawesome.com/ >> .npmrc
 RUN echo //npm.greensock.com/:_authToken=${GSAP_KEY} >> .npmrc
 RUN echo @gsap:registry=https://npm.greensock.com >> .npmrc
 
+RUN cd client && npm install
+RUN cd client && npm build:all
+
 RUN cd server && npm install
-RUN cd server && npm run build
+RUN cd server && npm run lint
 
 EXPOSE 3030
 
