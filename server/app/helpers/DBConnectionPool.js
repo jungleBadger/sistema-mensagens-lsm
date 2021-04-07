@@ -13,9 +13,12 @@ class DBConnectionPool {
 		connectionString = "",
 		poolSize = 5
 	) {
-		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};UID=${uid};PWD=${password};`;
-		console.log(this.connectionString )
-		this.pool = new ibm_db.Pool();
+		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};UID=${uid};PWD=${password}`;
+		this.pool = new ibm_db.Pool(
+			{
+				"systemNaming" : true
+			}
+		);
 		this.pool.init(poolSize, this.connectionString);
 	}
 
@@ -23,6 +26,7 @@ class DBConnectionPool {
 		return new Promise((resolve, reject) => {
 			this.pool.open(
 				this.connectionString,
+
 				(openErr, conn) => {
 					if (openErr) {
 						return reject(`Error opening the DB connection: ${openErr.message}`);
