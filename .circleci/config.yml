@@ -22,7 +22,7 @@ jobs:
             - node/install-packages:
                   app-dir: "~/project/client"
                   override-ci-command: npm install
-                  cache-version: v2
+                  cache-version: v3
             - run:
                   name: Audit frontend packages
                   working_directory: client
@@ -31,15 +31,6 @@ jobs:
                   name: Test frontend code
                   working_directory: client
                   command: npm test
-            - run:
-                  name: Attach frontend environment variables
-                  working_directory: client
-                  command: |
-                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        echo NODE_ENV=production >> ".env"
-                      else
-                        echo NODE_ENV=development >> ".env"
-                      fi
             - run:
                   name: Build frontend modules
                   working_directory: client
