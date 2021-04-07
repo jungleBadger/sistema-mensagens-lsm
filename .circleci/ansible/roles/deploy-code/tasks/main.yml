@@ -7,3 +7,9 @@
   shell: |
       cd /home/dcerag/app/web/server
       npm install
+
+- name: Start PM2
+  become: true
+  shell: |
+      cd /home/dcerag/app/web/server
+      /usr/local/bin/pm2 ls start --name lsm-node npm  -- run start:prod
