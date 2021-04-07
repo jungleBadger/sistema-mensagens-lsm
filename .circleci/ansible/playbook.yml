@@ -6,7 +6,7 @@
   vars:
       - ansible_host_key_checking: false
       - ansible_stdout_callback: yaml
-      - ansible_python_interpreter: /usr/local/bin/python3.6
+      - ansible_python_interpreter: /usr/bin/python3
       - ansible_port: '56024'
       - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
