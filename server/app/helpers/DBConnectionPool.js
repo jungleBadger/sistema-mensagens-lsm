@@ -4,10 +4,19 @@ const ibm_db = require("ibm_db");
 
 class DBConnectionPool {
 
-	constructor(connectionString, poolSize = 5) {
-		this.connectionString = connectionString;
+	constructor(
+		db,
+		host,
+		port,
+		uid,
+		password,
+		schema,
+		connectionString = "",
+		poolSize = 5
+	) {
+		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};PROTOCOL=TCPIP;UID=${uid};PWD=${password};CURRENTSCHEMA=${schema}`;
 		this.pool = new ibm_db.Pool();
-		this.pool.init(poolSize, connectionString);
+		this.pool.init(poolSize, this.connectionString);
 	}
 
 	executeRawSqlInstruction(rawSqlInstruction) {
