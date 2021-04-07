@@ -1,4 +1,10 @@
 ---
+- name: "Install rsync."
+  become: true
+  dnf:
+    name: ["rsync"]
+    state: latest
+
 - name: "Install python."
   become: true
   dnf:
