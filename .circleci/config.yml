@@ -59,6 +59,7 @@ jobs:
                   root: ~/project
                   paths:
                       - client
+                      - .circleci
 
     build-backend:
         working_directory: "~/project"
