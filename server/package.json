@@ -10,8 +10,8 @@
 	"main": "./app/dist/app.js",
 	"scripts": {
 		"start:dev": "nodemon --config ./nodemon.json",
-		"start": "cross-env NODE_ENV=dev DEBUG=app:* node ./app/app.js",
-		"start:prod": "cross-env NODE_ENV=production DEBUG=app:main,app:endpoint node ./app/app.js",
+		"start": "cross-env NODE_ENV=development DEBUG=app:* node -r dotenv/config ./app/app.js",
+		"start:prod": "cross-env NODE_ENV=production DEBUG=app:main,app:endpoint node -r dotenv/config ./app/app.js",
 		"test": "echo 'testing' && exit 0",
 		"test-report": "cross-env NODE_ENV=test nyc mocha --exit --timeout=20000",
 		"lint": "eslint -c .eslintrc.json app/**.js --fix",
