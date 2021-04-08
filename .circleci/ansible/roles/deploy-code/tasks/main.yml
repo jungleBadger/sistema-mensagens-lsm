@@ -8,8 +8,15 @@
       cd /home/dcerag/app/web/server
       npm install
 
+- name: Stop PM2
+  ignore_errors: yes
+  shell: |
+      cd /home/ubuntu/backend
+      pm2 stop lsm-node
+      pm2 delete lsm-node
+
 - name: Start PM2
   become: true
   shell: |
       cd /home/dcerag/app/web/server
-      /usr/local/bin/pm2 ls start --name lsm-node npm  -- run start:prod
+      pm2 start --name "lsm-node" npm -- run start:prod

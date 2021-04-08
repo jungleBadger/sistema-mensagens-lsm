@@ -24,3 +24,8 @@
     global: yes
     production: yes
     state: present
+
+- name: "Set `pm2` alias"
+  become: true
+  shell: |
+      alias pm2='/usr/local/bin/pm2'
