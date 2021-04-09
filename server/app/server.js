@@ -69,6 +69,7 @@ log("Static routes loaded");
 module.exports = async function run (CUSTOM_APP_PORT = 0) {
 
 
+	console.log("Valid");
 	let result1 = await connectionPool.executeRawSqlInstruction([
 		"SELECT service_level, fixpack_num, bld_level",
 		"FROM TABLE (sysproc.env_get_inst_info()) as A;"

@@ -1,4 +1,5 @@
-- name: Copying files from CircleCI to VM
+- name: Copying files from CircleCI to
+  become: true
   shell: |
       rsync -a /root/project/ /home/dcerag/app/web
 
@@ -9,10 +10,11 @@
 
 - name: Stop PM2
   ignore_errors: yes
+  become: true
   shell: |
       cd /home/ubuntu/backend
-      sudo /usr/local/bin/pm2 stop lsm-node
-      sudo /usr/local/bin/pm2 delete lsm-node
+      /usr/local/bin/pm2 stop lsm-node
+      /usr/local/bin/pm2 delete lsm-node
 
 - name: Start PM2
   become: true
