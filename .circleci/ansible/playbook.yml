@@ -14,5 +14,6 @@
   pre_tasks:
       - setup:
   roles:
-      - configure-server
-      - deploy-code
+      - 1-configure-machine
+      - 2-deploy-code
+      - 3-configure-node

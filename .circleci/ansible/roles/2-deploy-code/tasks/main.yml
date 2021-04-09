@@ -1,0 +1,5 @@
+- name: Copying files from CircleCI to VM
+  synchronize:
+      compress: true
+      src: /root/project/
+      dest: /home/dcerag/app/web

@@ -16,18 +16,3 @@
   dnf:
     name: ["@nodejs:14"]
     state: latest
-
-- name: "Update npm."
-  become: true
-  npm:
-      name: npm
-      global: yes
-      state: latest
-
-- name: "Install pm2."
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present

@@ -1,16 +1,25 @@
-- name: Copying files from CircleCI to VM
-  synchronize:
-      compress: true
-      src: /root/project/
-      dest: /home/dcerag/app/web
+---
+- name: "Update npm."
+  become: true
+  npm:
+      name: npm
+      global: yes
+      state: latest
 
+- name: "Install pm2."
+  become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
 
 - name: Install node dependencies
   shell: |
       cd /home/dcerag/app/web/server
       npm install
 
-- name: Stop PM2
+- name: "Stop PM2."
   ignore_errors: yes
   become: true
   shell: |
@@ -18,7 +27,7 @@
       /usr/local/bin/pm2 stop lsm-node
       /usr/local/bin/pm2 delete lsm-node
 
-- name: Start PM2
+- name: "Start PM2."
   become: true
   shell: |
       cd /home/dcerag/app/web/server
