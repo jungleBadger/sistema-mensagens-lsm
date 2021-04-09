@@ -8,6 +8,8 @@
       - ansible_stdout_callback: yaml
       - ansible_port: '56024'
       - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+      - ansible_ssh_pipelining: true
+
 
   pre_tasks:
       - setup:
