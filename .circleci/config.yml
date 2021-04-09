@@ -106,7 +106,7 @@ jobs:
             -  image: python:3.7-alpine3.11
         shell: /bin/sh -leo pipefail
         environment:
-            -   BASH_ENV: /etc/profile
+            - BASH_ENV: /etc/profile
         steps:
             - attach_workspace:
                   at: ~/project

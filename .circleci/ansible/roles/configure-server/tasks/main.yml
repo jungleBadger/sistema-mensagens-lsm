@@ -5,6 +5,12 @@
     name: ["python3"]
     state: latest
 
+- name: "Install rsync."
+  become: true
+  dnf:
+    name: ["rsync"]
+    state: latest
+
 - name: "Install nodejs."
   become: true
   dnf:

@@ -1,7 +1,6 @@
 - name: Copying files from CircleCI to VM
-  copy:
-      src: /root/project/
-      dest: /home/dcerag/app/web
+  shell: |
+      rsync -a /root/project/ /home/dcerag/app/web
 
 - name: Install node dependencies
   shell: |
