@@ -1,5 +1,4 @@
 - name: Copying files from CircleCI to VM
-  become: true
   synchronize:
       compress: true
       src: /root/project/
