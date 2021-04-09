@@ -93,6 +93,10 @@ module.exports = async function run (CUSTOM_APP_PORT = 0) {
 		server = http.createServer(app);
 	}
 
+	app.get("/test", function (req , res) {
+		return res.status(200).send("SHOWCASE");
+	});
+
 	log(`${process.env.LOCAL_HTTPS ? "HTTPS" : "HTTP"} server created`);
 
 	server.listen(Number(CUSTOM_APP_PORT || APP_PORT), function () {
