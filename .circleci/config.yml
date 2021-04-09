@@ -7,7 +7,7 @@ jobs:
         working_directory: "~/project"
         executor:
             name: node/default
-            tag: "14.16.0"
+            tag: "14.16.1"
         steps:
             - checkout
             - run:
@@ -62,7 +62,7 @@ jobs:
         working_directory: "~/project"
         executor:
             name: node/default
-            tag: "14.16.0"
+            tag: "14.16.1"
         steps:
             - checkout
             - run:
