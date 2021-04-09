@@ -11,7 +11,12 @@
     name: ["@nodejs:14"]
     state: latest
 
-- name: "Install pm2"
+- name: "Update npm."
+  become: true
+  shell: |
+      npm i npm@latest -g
+
+- name: "Install pm2."
   become: true
   npm:
     name: pm2
