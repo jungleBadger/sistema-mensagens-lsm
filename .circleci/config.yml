@@ -127,6 +127,7 @@ jobs:
                   name: Install rsync
                   no_output_timeout: 30m
                   command: |
+                      apk add --update openssh
                       apk add --update rsync
             - deploy:
                   name: Deploy the application
