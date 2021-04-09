@@ -11,6 +11,12 @@
     name: ["rsync"]
     state: latest
 
+- name: "Install rsync on the ansible controller."
+  connection: local
+  package:
+      name: rsync
+      state: present
+
 - name: "Install nodejs."
   become: true
   dnf:
