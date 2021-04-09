@@ -114,21 +114,10 @@ jobs:
                   fingerprints: [ "e2:1c:76:aa:29:61:db:ca:a1:d3:c2:59:c6:0c:b1:b9" ]
             - run:
                   name: Update and upgrade packages
-                  no_output_timeout: 30m
                   command: |
                       apk update
                       apk upgrade
-            - run:
-                  name: Install ansible
-                  no_output_timeout: 30m
-                  command: |
-                      apk add --update ansible
-            - run:
-                  name: Install rsync
-                  no_output_timeout: 30m
-                  command: |
-                      apk add --update openssh
-                      apk add --update rsync
+                      apk add --update ansible openssh rsync
             - deploy:
                   name: Deploy the application
                   no_output_timeout: 30m
