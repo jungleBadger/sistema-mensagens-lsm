@@ -13,8 +13,10 @@
 
 - name: "Update npm."
   become: true
-  shell: |
-      npm i npm@latest -g
+  npm:
+      name: npm
+      global: yes
+      state: latest
 
 - name: "Install pm2."
   become: true
