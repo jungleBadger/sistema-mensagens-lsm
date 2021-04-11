@@ -2,6 +2,7 @@
 
 const ibm_db = require("ibm_db");
 
+
 class DBConnectionPool {
 
 	constructor(
@@ -48,7 +49,7 @@ class DBConnectionPool {
 		});
 	}
 
-	executePreparedSqlInstruction(sqlStringTemplate, paramsArray) {
+	executePreparedSqlInstruction(sqlStringTemplate, paramsArray, expectResult = true) {
 		return new Promise((resolve, reject) => {
 			this.pool.open(
 				this.connectionString,
@@ -68,22 +69,33 @@ class DBConnectionPool {
 								return reject(`Error executing the SQL statement: ${executeErr.message}`);
 							}
 
-							operationResult.fetchAll((resultErr, parsedResult) => {
-								if (resultErr) {
-									return reject(`Error fetching the results: ${resultErr.message}`);
-								}
+							if (expectResult) {
+								operationResult.fetchAll((resultErr, parsedResult) => {
+									if (resultErr) {
+										return reject(`Error fetching the results: ${resultErr.message}`);
+									}
 
+									statement.close((statementCloseErr) => {
+										if (statementCloseErr) {
+											return reject(`Error closing the SQL statement: ${statementCloseErr.message}`)
+										}
+
+										conn.close((closeError) => {
+											return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(parsedResult)
+										});
+
+									});
+								});
+							} else {
 								statement.close((statementCloseErr) => {
 									if (statementCloseErr) {
 										return reject(`Error closing the SQL statement: ${statementCloseErr.message}`)
 									}
-
 									conn.close((closeError) => {
-										return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(parsedResult)
+										return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(operationResult)
 									});
-
 								});
-							});
+							}
 						});
 					});
 				}

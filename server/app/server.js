@@ -18,17 +18,6 @@ const APP_PORT = process.env.APP_PORT || 3030;
 const log = debug("app:main");
 const httpLog = debug("app:endpoint");
 
-
-const DBConnectionPool = require("./helpers/DBConnectionPool");
-
-let connectionPool = new DBConnectionPool(
-	process.env.DB2_DB,
-	process.env.DB2_HOST,
-	process.env.DB2_PORT,
-	process.env.DB2_UID,
-	process.env.DB2_PASSWORD
-);
-
 let server;
 
 app.use(compression());
@@ -69,12 +58,12 @@ log("Static routes loaded");
 module.exports = async function run (CUSTOM_APP_PORT = 0) {
 
 
-	console.log("Valid");
-	let result1 = await connectionPool.executeRawSqlInstruction([
-		"SELECT service_level, fixpack_num, bld_level",
-		"FROM TABLE (sysproc.env_get_inst_info()) as A;"
-	].join(" "));
-	console.log(result1);
+	// console.log("Valid");
+	// let result1 = await connectionPool.executeRawSqlInstruction([
+	// 	"SELECT service_level, fixpack_num, bld_level",
+	// 	"FROM TABLE (sysproc.env_get_inst_info()) as A;"
+	// ].join(" "));
+	// console.log(result1);
 	// let result2 = await connectionPool.executeRawSqlInstruction("INSERT INTO TEST (ID) VALUES 55");
 	//
 	// LIMIT 10
@@ -92,10 +81,6 @@ module.exports = async function run (CUSTOM_APP_PORT = 0) {
 	} else {
 		server = http.createServer(app);
 	}
-
-	app.get("/test", function (req , res) {
-		return res.status(200).send("SHOWCASE");
-	});
 
 	log(`${process.env.LOCAL_HTTPS ? "HTTPS" : "HTTP"} server created`);
 

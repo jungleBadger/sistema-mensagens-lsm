@@ -2,17 +2,17 @@
 
 const router = require("express").Router();
 
-const adminUserAPIs = require("./api-admin-user");
+const adminUserAPIs = require("./apiAdminUser");
 const viewRoutes = require("./view");
 
 
 router.use(
-	"/admin/api/user",
+	"/api/admin/user",
 	adminUserAPIs
 );
 
 router.use(
-	"/admin/app",
+	"/admin",
 	viewRoutes
 );
 

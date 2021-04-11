@@ -4,7 +4,7 @@
  * @module security
  * */
 const jwt = require("jsonwebtoken");
-const { hash, compare } = require("bcrypt");
+const { hash, hashSync, compare } = require("bcrypt");
 const raiseError = require("./errorHandler").raiseError;
 const child = require("child_process");
 const path = require("path");
@@ -157,7 +157,6 @@ module.exports = {
 			customRounds
 		);
 	},
-
 
 	/**
 	 * Compares raw data with a previously generated hash.
