@@ -39,7 +39,6 @@
 		"morgan": "^1.10.0",
 		"passport": "^0.4.1",
 		"passport-local": "^1.0.0",
-		"sequelize": "^6.5.0",
 		"swagger-jsdoc": "^6.0.0"
 	},
 	"devDependencies": {
@@ -61,7 +60,6 @@
 		"nyc": "^15.1.0",
 		"replace": "^1.2.0",
 		"swagger-ui-dist": "^3.45.0",
-		"tsc-watch": "^4.2.9",
 		"uglify-js": "^3.12.8",
 		"yargs": "^16.2.0"
 	},
