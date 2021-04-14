@@ -1,7 +1,7 @@
 "use strict";
 
 const Joi = require("joi");
-const raiseError = require("../../../helpers/errorHandler").raiseError;
+const raiseError = require("../helpers/errorHandler").raiseError;
 
 module.exports = class AdminUser {
 
