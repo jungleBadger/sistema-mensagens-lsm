@@ -1,0 +1,16 @@
+{
+	"global": {
+		"removeFilter": "filtro aplicado | filtros aplicados",
+		"refreshData": "Atualizar dados",
+		"cancel": "Cancelar",
+		"delete": "Deletar",
+		"discard": "Descartar",
+		"remove": "Remover",
+		"events": "{eventAmount} evento | {eventAmount} eventos",
+		"parameters": "um parametro | {n} parametros",
+		"rows": "uma linha | {n} linhas",
+		"morning": "Bom dia",
+		"afternoon": "Bom dia",
+		"night": "Boa noite"
+	}
+}

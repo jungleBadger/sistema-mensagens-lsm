@@ -1,7 +1,7 @@
 {
 	"watch": [
-		"./app/dist/*.js",
-		"./app/dist/**/*.js"
+		"./app/*.js",
+		"./app/**/*.js"
 	],
 	"ignore": [
 		".git",

@@ -2,6 +2,7 @@
 
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
+const cookieSession = require("cookie-session");
 const engines = require("consolidate");
 const debug = require("debug");
 const express = require("express");
@@ -10,6 +11,7 @@ const helmet = require("helmet");
 const http = require("http");
 const https = require("https");
 const morgan = require("morgan");
+const passport = require("passport");
 const path = require("path");
 const routes = require("./routes/index");
 
@@ -20,12 +22,27 @@ const httpLog = debug("app:endpoint");
 
 let server;
 
-app.use(compression());
-app.use(cookieParser(process.env.APP_SECRET));
-
 app.use(helmet({
 	"contentSecurityPolicy": false
 }));
+app.use(compression());
+app.use(cookieParser(process.env.APP_SECRET));
+app.use(cookieSession({
+	"secret": process.env.APP_SECRET,
+	"maxAge": 86400000,
+	"saveUninitialized": false,
+	"resave": false,
+	"name": "lsm-app",
+	"key": "LSm_KEY",
+	"cookie": {
+		"secure": true,
+		"httpOnly": true
+	}
+}));
+
+app.use(passport.initialize());
+app.use(passport.session(undefined));
+
 
 app.engine("html", engines.ejs);
 app.set("view engine", "ejs");
