@@ -11,7 +11,7 @@ const helmet = require("helmet");
 const http = require("http");
 const https = require("https");
 const morgan = require("morgan");
-const passport = require("passport");
+const passport = require("./controller/passport");
 const path = require("path");
 const routes = require("./routes/index");
 
@@ -41,7 +41,7 @@ app.use(cookieSession({
 }));
 
 app.use(passport.initialize());
-app.use(passport.session(undefined));
+app.use(passport.session());
 
 
 app.engine("html", engines.ejs);

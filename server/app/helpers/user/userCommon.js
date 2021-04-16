@@ -2,7 +2,7 @@
 
 const raiseError = require("../errorHandler").raiseError;
 const { compareHash } = require("../security");
-const crud = require("./adminUserCRUD");
+const crud = require("./userCRUD");
 
 module.exports = {
 
@@ -12,11 +12,13 @@ module.exports = {
 	 * @async
 	 * @param {string} userEmail - Raw data to be hashed.
 	 * @param {string} userPassword - Token to sign the secret, defaults to APP_SECRET env.
+	 * @param {string} [hashedPassword] - Optional already converted password to avoid a database trip.
 	 * @return {Promise<boolean|Error>} Containing the operation result.
 	 */
 	async checkPassword(
 		userEmail,
-		userPassword
+		userPassword,
+		hashedPassword
 	) {
 
 		if (!userEmail || !userPassword) {
@@ -31,18 +33,16 @@ module.exports = {
 			);
 		}
 
-		let user = await crud.retrieveByEmail(
+		const user = hashedPassword ? {
+			"SENHA": hashedPassword
+		} : await crud.retrieveByEmail(
 			userEmail,
-			["SENHA", "ADMINISTRADOR"]
+			["SENHA"]
 		);
 
-		console.log(user);
-
-		return true;
-
-
-
-
-
+		return await compareHash(
+			userPassword,
+			user.SENHA
+		);
 	}
 }

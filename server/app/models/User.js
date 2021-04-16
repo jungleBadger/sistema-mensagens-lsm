@@ -5,8 +5,6 @@ const raiseError = require("../helpers/errorHandler").raiseError;
 
 module.exports = class AdminUser {
 
-	model = {};
-
 	constructor (
 		email,
 		hashedPassword,
@@ -18,18 +16,18 @@ module.exports = class AdminUser {
 				"EMAIL": Joi.string().email().required(),
 				"SENHA": Joi.string().min(8).max(128).required(),
 				"NOME_EXIBICAO": Joi.string().allow( "").allow(null).default(null).optional(),
-				"ADMINISTRADOR": Joi.boolean().invalid(false),
-				"SENHA_REGISTRADA": Joi.boolean().invalid(true),
-				"EMAIL_CONFIRMADO": Joi.boolean().invalid(false)
+				"ADMINISTRADOR": Joi.boolean().invalid(true),
+				"SENHA_REGISTRADA": Joi.boolean().invalid(false),
+				"EMAIL_CONFIRMADO": Joi.boolean().invalid(true)
 			}
 		).validate(
 			{
 				"EMAIL": email,
 				"SENHA": hashedPassword,
 				"NOME_EXIBICAO": displayName,
-				"ADMINISTRADOR": true,
-				"SENHA_REGISTRADA": false,
-				"EMAIL_CONFIRMADO": true
+				"ADMINISTRADOR": false,
+				"SENHA_REGISTRADA": true,
+				"EMAIL_CONFIRMADO": false
 			}
 		);
 
