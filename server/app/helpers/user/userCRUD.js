@@ -1,6 +1,6 @@
 "use strict";
 
-const AdminUser = require("../../models/AdminUser");
+const User = require("../../models/User");
 const raiseError = require("../errorHandler").raiseError;
 const { generateHash } = require("../security");
 const DBConnectionPool = require("../DBConnectionPool");
@@ -15,7 +15,7 @@ const connectionPool = new DBConnectionPool(
 module.exports = {
 
 	/**
-	 * Creates a new admin User.
+	 * Creates a new User.
 	 * @method create
 	 * @param {string} userEmail - User email to be added.
 	 * @param {string} userPassword - Raw User password to be hashed and stored as the User password.
@@ -31,7 +31,7 @@ module.exports = {
 		if (!userEmail || !userPassword) {
 			throw raiseError(
 				400,
-				"Missing required properties for creating admin User."
+				"Missing required properties for creating User."
 			);
 		} else if (userPassword.length < 8) {
 			throw raiseError(
@@ -40,13 +40,13 @@ module.exports = {
 			);
 		}
 
-		const adminUser = new AdminUser(
+		const user = new User(
 			userEmail,
 			await generateHash(userPassword),
 			userDisplayName
 		);
 
-		const insertKeys = adminUser.getKeys();
+		const insertKeys = user.getKeys();
 
 		try {
 			await connectionPool.executePreparedSqlInstruction(
@@ -54,35 +54,33 @@ module.exports = {
 					`insert into USUARIO (${insertKeys.join(", ")})`,
 					`values (${insertKeys.map(key => '?').join(", ")});`
 				].join(" "),
-				adminUser.getValues(),
+				user.getValues(),
 				false
 			);
-			return await this.retrieveByEmail(userEmail, ["ID", "EMAIL", "ADMINISTRADOR"]);
+			return await this.retrieveByEmail(userEmail, ["ID", "EMAIL"]);
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf("SQLSTATE=23505" > -1)) {
 				throw raiseError(
 					409,
 					`User ${userEmail} already exists.`
 				);
-			} else {
-				throw e;
 			}
 		}
 	},
 
 	/**
-	 * Retrieves all admin users.
+	 * Retrieves all Users.
 	 * @method retrieveAll
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
 	 * @param {number} [limit=20] - Optional limit of rows.
 	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
 	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
-	 * @return {Promise<Object|Error>} Containing all admin Users objects and request metadata.
+	 * @return {Promise<Object|Error>} Containing all Users objects and request metadata.
 	 */
 	async retrieveAll(targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM USUARIO WHERE USUARIO.ADMINISTRADOR = true OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
+			`SELECT ${targetColumns.join(", ")} FROM USUARIO WHERE USUARIO.ADMINISTRADOR = false OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
 		);
 
 		return {
@@ -94,109 +92,95 @@ module.exports = {
 	},
 
 	/**
-	 * Retrieves a single admin User by ID.
+	 * Retrieves a single User by ID.
 	 * @method retrieveById
-	 * @param {string} adminUserId - ID to search for.
+	 * @param {string} userId - ID to search for.
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
-	 * @return {Promise<Object|Error>} Containing the admin User object.
+	 * @return {Promise<Object|Error>} Containing the User object.
 	 */
-	async retrieveById(adminUserId, targetColumns = ["*"]) {
+	async retrieveById(userId, targetColumns = ["*"]) {
 
-		if (!adminUserId) {
+		if (!userId) {
 			throw raiseError(
 				400,
-				"Missing required properties for querying admin User by ID."
+				"Missing required properties for querying User by ID."
 			);
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM USUARIO WHERE USUARIO.ID = ? LIMIT 1;`,
-			[adminUserId]
+			[userId]
 		);
 
 		if (!result || !result.length) {
 			throw raiseError(
 				404,
-				`User ID ${adminUserId} not found.`
+				`User ID ${userId} not found.`
 			);
 		} else {
-			if (!result[0].ADMINISTRADOR) {
-				throw raiseError(
-					403,
-					"User is not an administrator."
-				);
-			} else {
-				return result[0];
-			}
+			return result[0];
 		}
 
 	},
 
 	/**
-	 * Retrieves a single admin User by Email.
+	 * Retrieves a single User by Email.
 	 * @method retrieveByEmail
-	 * @param {string} adminUserEmail - Email to search for.
+	 * @param {string} userEmail - Email to search for.
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
-	 * @return {Promise<Object|Error>} Containing the admin User object.
+	 * @return {Promise<Object|Error>} Containing the User object.
 	 */
-	async retrieveByEmail(adminUserEmail, targetColumns = ["*"]) {
+	async retrieveByEmail(userEmail, targetColumns = ["*"]) {
 
-		if (!adminUserEmail) {
+		if (!userEmail) {
 			throw raiseError(
 				400,
-				"Missing required properties for querying admin User by Email."
+				"Missing required properties for querying User by Email."
 			);
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM USUARIO WHERE USUARIO.EMAIL = ? LIMIT 1;`,
-			[adminUserEmail]
+			[userEmail]
 		);
 
 		if (!result || !result.length) {
 			throw raiseError(
 				404,
-				`User email ${adminUserEmail} not found.`
+				`User email ${userEmail} not found.`
 			);
 		} else {
-			if (!result[0].ADMINISTRADOR) {
-				throw raiseError(
-					403,
-					"User is not an administrator."
-				);
-			} else {
-				return result[0];
-			}
+			return result[0];
 		}
 
 	},
 
-	update(adminUserId, adminUserObject) {
+	update(userId, userObject) {
 
 	},
 
 	/**
-	 * Delete a single admin User.
+	 * Delete a single User.
 	 * @method delete
-	 * @param {string} adminUserId - ID to search for and delete.
+	 * @param {string} userId - ID to search for and delete.
 	 * @return {Promise<string|Error>} Containing the deletion confirmation.
 	 */
-	async delete(adminUserId) {
-		if (!adminUserId) {
+	async delete(userId) {
+		if (!userId) {
 			throw raiseError(
 				400,
-				"Missing required properties for deleting admin User."
+				"Missing required properties for deleting User."
 			);
 		}
 
-		await this.retrieveById(adminUserId);
+		await this.retrieveById(userId);
 
 		await connectionPool.executePreparedSqlInstruction(
-			`DELETE FROM USUARIO WHERE USUARIO.ID = ? AND USUARIO.ADMINISTRADOR = ?;`,
-			[adminUserId, true],
+			`DELETE FROM USUARIO WHERE USUARIO.ID = ? AND USUARIO.ADMINISTRADOR = false;`,
+			[userId],
 			false
 		);
 
-		return `User ${adminUserId} deleted.`;
+		return `User ${userId} deleted`;
 	}
 }
