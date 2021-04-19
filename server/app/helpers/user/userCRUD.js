@@ -52,7 +52,7 @@ module.exports = {
 			await connectionPool.executePreparedSqlInstruction(
 				[
 					`insert into USUARIO (${insertKeys.join(", ")})`,
-					`values (${insertKeys.map(key => '?').join(", ")});`
+					`values (${insertKeys.map(() => '?').join(", ")});`
 				].join(" "),
 				user.getValues(),
 				false
