@@ -4,7 +4,7 @@ const swaggerJSDoc = require("swagger-jsdoc")(require("../configs/swagger-integr
 const handleExpressError = require("../helpers/errorHandler").handleExpressError;
 
 const adminHandler = require("./partials/admin/_index");
-const loginHandler = require("./partials/login/_index");
+const authHandler = require("./partials/auth/_index");
 const mainHandler = require("./partials/mainHandler");
 
 module.exports = function (app) {
@@ -22,7 +22,7 @@ module.exports = function (app) {
 	);
 
 	app.use(
-		loginHandler
+		authHandler
 	);
 
     app.use(

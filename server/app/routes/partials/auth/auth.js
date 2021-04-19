@@ -6,9 +6,15 @@ const passport = require("passport");
 
 router.post(
 	"/login",
-	passport.authenticate("local", { "successRedirect": "/" }, undefined),
-	function(req, res) {
-		res.redirect('/');
+	passport.authenticate("local", {}, undefined),
+	(req, res) => {
+		return (
+			req.query.hasOwnProperty("rest") ?
+				res.status(200).send("ok") :
+				res.redirect(
+				req.session.originalUrl ? req.session.originalUrl : req.user && req.user.isAdmin ? "/admin" : "/"
+			)
+		);
 	}
 );
 
