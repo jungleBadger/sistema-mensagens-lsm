@@ -9,46 +9,6 @@
 			"name": "Login",
 			"item": [
 				{
-					"name": "Get logged user info as not logged in",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response is an object\", function () {\r",
-									"    pm.expect(pm.response.json()).to.exist;\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response object has no properties\", function () {\r",
-									"    pm.expect(pm.response.json().id).to.not.exist;\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/auth/me",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"auth",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Login with invalid parameters - no email",
 					"event": [
 						{
@@ -257,7 +217,7 @@
 					"response": []
 				},
 				{
-					"name": "Login with valid credentials",
+					"name": "Login with valid credentials - admin redirect",
 					"event": [
 						{
 							"listen": "test",
@@ -291,6 +251,56 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login with valid credentials - rest response",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response text has the expected value\", function () {\r",
+									"    pm.expect(pm.response.text()).to.eql(\"ok\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{validAdminUser}}\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/auth/login?rest",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "rest",
+									"value": null
+								}
 							]
 						}
 					},
@@ -708,6 +718,53 @@
 					"name": "Delete admin user",
 					"item": [
 						{
+							"name": "Delete unexistent user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"User ID -1 not found.\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/user/-1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"user",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Delete previously created user",
 							"event": [
 								{
@@ -796,53 +853,6 @@
 										"admin",
 										"user",
 										"{{secondAdminUserId}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete unexistent user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 404\", function () {\r",
-											"    pm.response.to.have.status(404);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.expect(pm.response.text()).to.eql(\"User ID -1 not found.\");\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/api/admin/user/-1",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"admin",
-										"user",
-										"-1"
 									]
 								}
 							},
@@ -1025,52 +1035,42 @@
 	],
 	"variable": [
 		{
-			"id": "98df41fa-e11a-4449-97af-069c1482b25b",
 			"key": "host",
 			"value": "https://localhost:3030"
 		},
 		{
-			"id": "2e74bfe2-329e-4f40-874c-3679f911ee65",
 			"key": "validAdminUser",
 			"value": "txexsxt@txxest.com"
 		},
 		{
-			"id": "dea14b21-934e-4fcb-9654-70415190c1f2",
 			"key": "validAdminUserPassword",
 			"value": "12345678"
 		},
 		{
-			"id": "c0ed0899-568d-49bd-973b-1cfd387b624c",
 			"key": "newAdminEmail",
 			"value": ""
 		},
 		{
-			"id": "a2c05618-a118-4921-a2dc-3f736ff89487",
 			"key": "firstNewdminEmail",
 			"value": ""
 		},
 		{
-			"id": "9290fb49-a581-40fa-b86e-bd509f56fe6f",
 			"key": "secondNewAdminEmail",
 			"value": ""
 		},
 		{
-			"id": "3835278a-c6d8-4524-9a37-9fc64386969d",
 			"key": "firstAdminUserId",
 			"value": ""
 		},
 		{
-			"id": "4cf4a2ed-a087-4652-867f-f16b8b81ea1f",
 			"key": "firstAdminUserEmail",
 			"value": ""
 		},
 		{
-			"id": "3e1ee761-1746-4858-aa52-5abf9606ca14",
 			"key": "secondAdminUserId",
 			"value": ""
 		},
 		{
-			"id": "d71be911-b973-4f6b-aff2-8f177db763d7",
 			"key": "secondAdminUserEmail",
 			"value": ""
 		}
