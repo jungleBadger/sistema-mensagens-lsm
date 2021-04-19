@@ -1,7 +1,6 @@
 <template>
 
 	<div id="lsm-app">
-		<lsm-header></lsm-header>
 		<main>
 			<router-view></router-view>
 		</main>
@@ -10,6 +9,7 @@
 </template>
 <script type="text/javascript">
 "use strict";
+
 import { defineComponent } from "vue";
 import LsmHeader from "../../../../_etc/shared_components/lsm-header"
 

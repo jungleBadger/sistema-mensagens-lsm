@@ -93,7 +93,7 @@ module.exports = env => {
 			"filename": `[contenthash].bundle${env.NODE_ENV === "production" ? ".prod" : ""}.js`,
 			"library": "SurveyModule",
 			"libraryTarget": "umd",
-			"publicPath": "/login_module/dist/js/"
+			"publicPath": "/auth_module/dist/js/"
 		},
 		"performance": {
 			"hints": env.NODE_ENV === "production" ? "warning" : false
