@@ -34,24 +34,6 @@ module.exports = {
 	},
 
 	/**
-	 * Receive an error object representation and returns a
-	 * new native error object constructed with this object converted to string.
-	 *
-	 * @function handleOperationalError
-	 * @param {Object} err - The error representation to be handled.
-	 * @param {number} [err.status=500] - The error HTTP status code.
-	 * @param {string} err.message - The error message.
-	 * @return {Error} The error object parsed
-	 */
-	handleOperationalError(err) {
-		log(err);
-		return {
-			"status": err.status || err.statusCode || 500,
-			"message": err.reason || err.message || "Unknown operational error"
-		};
-	},
-
-	/**
 	 * Receive an error object representation and returns a new native error object constructed with the Error constructor.
 	 *
 	 * @function raiseError
