@@ -13,7 +13,8 @@ passport.serializeUser(function (user, done) {
 	done(null, user);
 });
 
-passport.deserializeUser(async function (profile, done) {
+passport.deserializeUser(async function (req, profile, done) {
+
 	if (profile.updated && (Date.now() - profile.updated < 90000)) {
 		return done(null, profile);
 	} else {
@@ -29,6 +30,8 @@ passport.deserializeUser(async function (profile, done) {
 				"updated": Date.now()
 			});
 		} catch (e) {
+			req.logout();
+			req.session = null;
 			return done(e);
 		}
 	}

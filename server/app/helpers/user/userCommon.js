@@ -1,8 +1,12 @@
 "use strict";
 
 const raiseError = require("../errorHandler").raiseError;
-const { compareHash } = require("../security");
+const { compareHash, generateJWT } = require("../security");
 const crud = require("./userCRUD");
+
+const mailerTransport = require("../mailer");
+const resetPasswordEmailObject = require("../../templates/email/passwordReset");
+const nodemailer = require("nodemailer")
 
 module.exports = {
 
@@ -44,5 +48,31 @@ module.exports = {
 			userPassword,
 			user.SENHA
 		);
+	},
+
+	async requestPasswordReset(userEmail) {
+		await crud.retrieveByEmail(
+			userEmail,
+			["ID"]
+		);
+		let mailResult = await mailerTransport.sendMail({
+			"to": userEmail,
+			"subject": resetPasswordEmailObject.subject,
+			"text": resetPasswordEmailObject.text,
+			"html": resetPasswordEmailObject.html(
+				"https://localhost:3030/api/common/user/request-reset",
+				await generateJWT(
+					{ userEmail },
+					process.env.APP_SECRET,
+					{
+						"expiresIn": "08 hours",
+						"audience": "single_user"
+					}
+				)
+			)
+		});
+
+		//@TODO Remove this log statement later - demo purposes only.
+		console.log("Preview URL: %s", nodemailer.getTestMessageUrl(mailResult));
 	}
 }

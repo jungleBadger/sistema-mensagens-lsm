@@ -4,9 +4,9 @@ import http from "../../../../_etc/js/http";
 
 export default {
 
-	async doLogin(email, password) {
+	async doSignup(email, password) {
 		return await http.post(
-			"/auth/login?rest",
+			"/api/regular/user/",
 			{
 				email,
 				password

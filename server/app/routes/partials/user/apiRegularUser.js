@@ -2,27 +2,27 @@
 
 const express = require("express");
 const router = express.Router();
-const adminUser = require("../../../helpers/user/adminUserCRUD");
+const regularUser = require("../../../helpers/user/userCRUD");
 
 /**
  * @swagger
- * /api/admin/user:
+ * /api/user:
  *   post:
- *     tags: [admin_user]
- *     summary: Create a new admin user.
+ *     tags: [regular_user]
+ *     summary: Create a new regular user.
  *     produces:
  *       - application/json
  *     parameters:
  *      - name: email
  *        in: body
  *        required: true
- *        description: Admin user email.
+ *        description: regular User email.
  *        schema:
  *          type: string
  *      - name: password
  *        in: body
  *        required: true
- *        description: Admin user password that will be hashed.
+ *        description: regular User password that will be hashed.
  *        schema:
  *          type: string
  *      - name: displayName
@@ -33,13 +33,13 @@ const adminUser = require("../../../helpers/user/adminUserCRUD");
  *          type: string
  *     responses:
  *       201:
- *         description: Admin user created.
+ *         description: regular user created.
  *       400:
  *         description: Request parameter issues.
  *       401:
  *         description: Requester not logged in.
  *       403:
- *         description: Requester is not an admin User.
+ *         description: Requester is not an regular User.
  *       409:
  *         description: User email already exists.
  *       500:
@@ -51,7 +51,7 @@ router.post(
 		res.status(
 			201
 		).send(
-			await adminUser.create(
+			await regularUser.create(
 				req.body.email,
 				req.body.password,
 				req.body.displayName
@@ -62,10 +62,10 @@ router.post(
 
 /**
  * @swagger
- * /api/admin/user:
+ * /api/user:
  *   get:
- *     tags: [admin_user]
- *     summary: Paginate admin users.
+ *     tags: [regular_user]
+ *     summary: Paginate regular users.
  *     produces:
  *       - application/json
  *     parameters:
@@ -92,11 +92,11 @@ router.post(
  *          type: string
  *     responses:
  *       200:
- *         description: List of admin Users.
+ *         description: List of regular Users.
  *       401:
  *         description: Requester not logged in.
  *       403:
- *         description: Requester is not an admin User.
+ *         description: Requester is not an regular User.
  *       500:
  *         description: Error handler.
  */
@@ -106,7 +106,7 @@ router.get(
 		res.status(
 			200
 		).send(
-			await adminUser.retrieveAll(
+			await regularUser.retrieveAll(
 				[
 					"ID",
 					"EMAIL",
@@ -122,14 +122,14 @@ router.get(
 
 /**
  * @swagger
- * /api/admin/user/id/:adminUserId:
+ * /api/user/id/:userId:
  *   get:
- *     tags: [admin_user]
- *     summary: Get admin User by ID.
+ *     tags: [regular_user]
+ *     summary: Get regular User by ID.
  *     produces:
  *       - application/json
  *     parameters:
- *      - name: adminUserId
+ *      - name: userId
  *        in: path
  *        required: true
  *        description: ID to search for.
@@ -137,26 +137,27 @@ router.get(
  *          type: string
  *     responses:
  *       200:
- *         description: Admin User object.
+ *         description: regular User object.
  *       400:
  *         description: Invalid parameters.
  *       401:
  *         description: Requester not logged in.
  *       403:
- *         description: Requester is not an admin User.
+ *         description: Requester is not an regular User.
  *       404:
- *         description: Admin User not found.
+ *         description: regular User not found.
  *       500:
  *         description: Error handler.
  */
 router.get(
-	"/id/:adminUserId",
+	"/id/:userId",
+
 	async (req, res) => {
 		res.status(
 			200
 		).send(
-			await adminUser.retrieveById(
-				req.params.adminUserId,
+			await regularUser.retrieveById(
+				req.params.userId,
 				[
 					"ID",
 					"EMAIL",
@@ -169,14 +170,14 @@ router.get(
 
 /**
  * @swagger
- * /api/admin/user/email/:adminUserEmail:
+ * /api/user/email/:userEmail:
  *   get:
- *     tags: [admin_user]
- *     summary: Get admin User by Email.
+ *     tags: [regular_user]
+ *     summary: Get regular User by Email.
  *     produces:
  *       - application/json
  *     parameters:
- *      - name: adminUserEmail
+ *      - name: userEmail
  *        in: path
  *        required: true
  *        description: Email to search for.
@@ -184,26 +185,27 @@ router.get(
  *          type: string
  *     responses:
  *       200:
- *         description: Admin User object.
+ *         description: regular User object.
  *       400:
  *         description: Invalid parameters.
  *       401:
  *         description: Requester not logged in.
  *       403:
- *         description: Requester is not an admin User.
+ *         description: Requester is not an regular User.
  *       404:
- *         description: Admin User not found.
+ *         description: regular User not found.
  *       500:
  *         description: Error handler.
  */
 router.get(
-	"/email/:adminUserEmail",
+	"/email/:userEmail",
+
 	async (req, res) => {
 		res.status(
 			200
 		).send(
-			await adminUser.retrieveByEmail(
-				req.params.adminUserEmail,
+			await regularUser.retrieveByEmail(
+				req.params.userEmail,
 				[
 					"ID",
 					"EMAIL",
@@ -215,21 +217,20 @@ router.get(
 );
 
 router.patch(
-	"/:adminUserId",
-
+	"/:userId",
 	(req, res) => res.status(200).send("OK")
 );
 
 /**
  * @swagger
- * /api/admin/user/:adminUserId:
+ * /api/user/:userId:
  *   delete:
- *     tags: [admin_user]
- *     summary: Delete an admin User by ID.
+ *     tags: [regular_user]
+ *     summary: Delete an regular User by ID.
  *     produces:
  *       - application/json
  *     parameters:
- *      - name: adminUserId
+ *      - name: userId
  *        in: path
  *        required: true
  *        description: ID to search for and delete.
@@ -243,23 +244,25 @@ router.patch(
  *       401:
  *         description: Requester not logged in.
  *       403:
- *         description: Requester is not an admin User.
+ *         description: Requester is not an regular User.
  *       404:
- *         description: Admin User not found.
+ *         description: regular User not found.
  *       500:
  *         description: Error handler.
  */
 router.delete(
-	"/:adminUserId",
+	"/:userId",
+
 	async (req, res) => {
 		res.status(
 			200
 		).send(
-			await adminUser.delete(
-				req.params.adminUserId
+			await regularUser.delete(
+				req.params.userId
 			)
 		)
 	}
 );
+
 
 module.exports = router;

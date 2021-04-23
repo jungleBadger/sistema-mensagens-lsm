@@ -4,12 +4,11 @@ import http from "../../../../_etc/js/http";
 
 export default {
 
-	async doLogin(email, password) {
+	async requestPasswordReset(email) {
 		return await http.post(
-			"/auth/login?rest",
+			"/api/common/user/request-reset",
 			{
-				email,
-				password
+				email
 			}
 		);
 	}

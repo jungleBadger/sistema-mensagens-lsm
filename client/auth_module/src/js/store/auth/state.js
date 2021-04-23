@@ -3,5 +3,12 @@
 export default {
 	"email": "",
 	"password": "",
-	"confirmPassword": ""
+	"confirmPassword": "",
+	"shouldRememberUserEmail": false,
+	"isAppLoading": false,
+	"gCaptchaLatestTs": "",
+
+	"loginErrorMessage": "",
+	"signupErrorMessage": "",
+	"requestResetErrorMessage": ""
 };

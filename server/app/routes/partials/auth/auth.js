@@ -8,11 +8,16 @@ router.post(
 	"/login",
 	passport.authenticate("local", {}, undefined),
 	(req, res) => {
+
+		let redirectPath = req.user.isAdmin ? (req.session.originalUrl ? req.session.originalUrl : "/") : "/"
+		req.session.originalUrl = "";
+
 		return (
-			req.query.hasOwnProperty("rest") ?
-				res.status(200).send("ok") :
-				res.redirect(
-				req.session.originalUrl ? req.session.originalUrl : req.user && req.user.isAdmin ? "/admin" : "/"
+			(req.query.hasOwnProperty("rest") ?
+				res.status(200).send({
+					redirectPath
+				}) :
+				res.redirect(redirectPath)
 			)
 		);
 	}

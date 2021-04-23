@@ -2,7 +2,7 @@
 
 const User = require("../../models/User");
 const raiseError = require("../errorHandler").raiseError;
-const { generateHash } = require("../security");
+const { generateHash, generateJWT } = require("../security");
 const DBConnectionPool = require("../DBConnectionPool");
 const connectionPool = new DBConnectionPool(
 	process.env.DB2_DB,
@@ -11,6 +11,11 @@ const connectionPool = new DBConnectionPool(
 	process.env.DB2_UID,
 	process.env.DB2_PASSWORD
 );
+
+const mailerTransport = require("../mailer");
+const welcomeEmailObject = require("../../templates/email/welcome");
+const nodemailer = require("nodemailer");
+
 
 module.exports = {
 
@@ -57,8 +62,36 @@ module.exports = {
 				user.getValues(),
 				false
 			);
-			return await this.retrieveByEmail(userEmail, ["ID", "EMAIL"]);
+
+
+			//@TODO Review the mailer default options
+			let [newUserResult, mailResult] = await Promise.all([
+				await this.retrieveByEmail(userEmail, ["ID", "EMAIL"]),
+				mailerTransport.sendMail({
+					"to": userEmail, // list of receivers
+					"subject": welcomeEmailObject.subject,
+					"text": welcomeEmailObject.text,
+					"html": welcomeEmailObject.html(
+						"https://localhost:3030/api/common/user/confirm",
+						await generateJWT(
+							{ userEmail },
+							process.env.APP_SECRET,
+							{
+								"expiresIn": "08 hours",
+								"audience": "single_user"
+							}
+						)
+					)
+				})
+			]);
+
+			//@TODO Remove this log statement later - demo purposes only.
+			console.log("Preview URL: %s", nodemailer.getTestMessageUrl(mailResult));
+
+			return newUserResult;
+
 		} catch (e) {
+			console.log(e)
 			if (e && e.indexOf("SQLSTATE=23505" > -1)) {
 				throw raiseError(
 					409,
@@ -155,8 +188,21 @@ module.exports = {
 
 	},
 
-	update(userId, userObject) {
+	/**
+	 * Update User profile by confirming email.
+	 * @method updateAccountConfirmation
+	 * @param {string} userEmail - Email to search for and validate.
+	 * @return {Promise<string|Error>} Containing the operation confirmation.
+	 */
+	async updateAccountConfirmation(userEmail) {
+		let userProfile = await this.retrieveByEmail(userEmail, ["ID"]);
 
+		await connectionPool.executePreparedSqlInstruction(
+			`UPDATE USUARIO SET USUARIO.EMAIL_CONFIRMADO = ? WHERE USUARIO.ID = ?;`,
+			[true, userProfile.ID]
+		);
+
+		return `The system successfully confirmed the User ${userProfile.ID} email.`;
 	},
 
 	/**
@@ -181,6 +227,6 @@ module.exports = {
 			false
 		);
 
-		return `User ${userId} deleted`;
+		return `User ${userId} deleted.`;
 	}
 }

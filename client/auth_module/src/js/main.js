@@ -8,6 +8,19 @@ import storeHandler from "./store/index.js";
 import i18nHandler from "./i18n/index.js";
 import FontAwesomeIcon from "../../../_etc/js/fontawesome-import";
 
+// window.validateCallback = async function () {
+// 	try {
+// 		let result = await grecaptcha.getResponse();
+// 		let verify = await verifyCaptcha(result);
+// 		document.getElementById("recaptcha-button").style.display = "none";
+// 		document.getElementById("main-buttons").style.display = "flex";
+// 		methods.attachListeners();
+// 	} catch (e) {
+// 		console.log(e)
+// 	}
+// }
+//
+
 export default createApp(
 	MainComponent
 ).use(
@@ -16,4 +29,6 @@ export default createApp(
 	storeHandler
 ).use(
 	i18nHandler
-).component("FontAwesomeIcon", FontAwesomeIcon).mount("#lsm-app");
+).component(
+	"FontAwesomeIcon", FontAwesomeIcon
+).mount("#lsm-app");

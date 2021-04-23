@@ -14,11 +14,27 @@ export default {
 		return context.confirmPassword;
 	},
 
-	isLoginFormValid(context) {
-		return context.email && context.password && context.password.length >= 8;
+	shouldRememberUserEmail(context) {
+		return context.shouldRememberUserEmail;
 	},
 
-	isSignupFormValid(context) {
-		return context.email && context.password && context.password.length >= 8 && context.password === context.confirmPassword;
+	loadingState(context) {
+		return context.isAppLoading;
+	},
+
+	gCaptchaLatestTs(context) {
+		return context.gCaptchaLatestTs;
+	},
+
+	loginErrorMessage(context) {
+		return context.loginErrorMessage;
+	},
+
+	signupErrorMessage(context) {
+		return context.signupErrorMessage;
+	},
+
+	requestResetErrorMessage(context) {
+		return context.requestResetErrorMessage;
 	}
 };

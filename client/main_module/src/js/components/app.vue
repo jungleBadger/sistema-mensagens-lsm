@@ -1,7 +1,16 @@
 <template>
 
 	<div id="lsm-app">
-		<lsm-header></lsm-header>
+
+		<lsm-header>
+
+			<template v-slot:app-buttons>
+				<div>
+					<a href="/auth/login">Entrar</a>
+				</div>
+			</template>
+
+		</lsm-header>
 		<main>
 			<router-view></router-view>
 		</main>

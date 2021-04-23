@@ -167,7 +167,7 @@
 			`${modulePath}/src/css/*.scss`
 		])
 			.pipe(plumber())
-			.pipe(cache(sass().on("error", sass.logError)))
+			.pipe(sass().on("error", sass.logError))
 			.pipe(
 				postcss(
 					[
@@ -183,8 +183,16 @@
 									}
 								},
 								"darkMode": "class",
-								"theme": {},
-								"variants": {},
+								"theme": {
+									"fontFamily": {
+										"sans": ["'Source Sans Pro'", "sans-serif;"]
+									}
+								},
+								"variants": {
+									"extend": {
+										"opacity": ['disabled'],
+									}
+								},
 								"plugins": [
 									require("@tailwindcss/forms")
 								]

@@ -6,7 +6,6 @@
 	const gulp = require("gulp");
 	const argv = require("yargs").argv;
 	const fse = require("fs-extra");
-	const eslint = require("gulp-eslint");
 	const path = require("path");
 	const log = require("fancy-log");
 	const jsdoc = require("gulp-jsdoc3");
@@ -17,15 +16,6 @@
 	process.env.NODE_ENV = argv.prod ? "production" : "development";
 
 	log(`STARTING GULP TASK AT ENVIRONMENT: ${process.env.NODE_ENV}`);
-
-	let methods = {
-		"errorHandler": function errorHandler(module, error, stack) {
-			log(colors.red("ERROR FOUND BUILDING THIS ARTIFACT:"), colors.yellow(module));
-			log(stack);
-			log(error);
-			return error;
-		}
-	};
 
 	gulp.task("generate-js-doc", function (cb) {
 		let config = require("./jsdoc-config.json");

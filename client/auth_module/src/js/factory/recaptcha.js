@@ -4,13 +4,11 @@ import http from "../../../../_etc/js/http";
 
 export default {
 
-	async doLogin(email, password) {
+	async verifyCaptcha(recaptchaData) {
 		return await http.post(
-			"/auth/login?rest",
-			{
-				email,
-				password
-			}
+			"/api/recaptcha/",
+			{ recaptchaData }
 		);
 	}
 };
+

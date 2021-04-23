@@ -74,19 +74,6 @@ log("Static routes loaded");
 
 module.exports = async function run (CUSTOM_APP_PORT = 0) {
 
-
-	// console.log("Valid");
-	// let result1 = await connectionPool.executeRawSqlInstruction([
-	// 	"SELECT service_level, fixpack_num, bld_level",
-	// 	"FROM TABLE (sysproc.env_get_inst_info()) as A;"
-	// ].join(" "));
-	// console.log(result1);
-	// let result2 = await connectionPool.executeRawSqlInstruction("INSERT INTO TEST (ID) VALUES 55");
-	//
-	// LIMIT 10
-	// let result3 = await connectionPool.executePreparedSqlInstruction("INSERT INTO TEST (ID) VALUES (?)", [1]);
-	// let result4 = await connectionPool.executePreparedSqlInstruction(" SELECT * FROM TEST WHERE ID = ? LIMIT 10", [55]);
-
 	if (process.env.LOCAL_HTTPS) {
 		server = https.createServer({
 			"hostname": "localhost",

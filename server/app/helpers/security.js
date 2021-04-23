@@ -27,7 +27,10 @@ module.exports = {
 			jwt.sign(
 				rawData,
 				secret || process.env.APP_SECRET,
-				options,
+				{
+					"issuer": "lsm_system",
+					...(options || {})
+				},
 				function (err, token) {
 					return err ? reject(err) : resolve(token);
 				}
@@ -170,5 +173,9 @@ module.exports = {
 			rawData,
 			hash
 		);
-	}
+	},
+
+
+
+
 };

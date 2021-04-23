@@ -2,7 +2,11 @@
 
 	<div id="lsm-app">
 		<main>
-			<router-view></router-view>
+			<router-view v-slot="{ Component }">
+				<keep-alive>
+					<component :is="Component" />
+				</keep-alive>
+			</router-view>
 		</main>
 	</div>
 
@@ -17,6 +21,10 @@ export default defineComponent({
 	"name": "LsmApp",
 	"components": {
 		LsmHeader
+	},
+	beforeCreate () {
+		this.$store.dispatch("auth/checkCaptchaLatestTs");
+		this.$store.dispatch("auth/retrieveStoredEmail");
 	}
 });
 </script>

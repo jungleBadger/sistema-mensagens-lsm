@@ -5,7 +5,9 @@ const handleExpressError = require("../helpers/errorHandler").handleExpressError
 
 const adminHandler = require("./partials/admin/_index");
 const authHandler = require("./partials/auth/_index");
+const googleHandler = require("./partials/google/_index");
 const mainHandler = require("./partials/mainHandler");
+const regularUserHandler = require("./partials/user/_index");
 
 module.exports = function (app) {
     app.get("/api-docs.json", function (req, res) {
@@ -23,6 +25,14 @@ module.exports = function (app) {
 
 	app.use(
 		authHandler
+	);
+
+	app.use(
+		googleHandler
+	);
+
+	app.use(
+		regularUserHandler
 	);
 
     app.use(

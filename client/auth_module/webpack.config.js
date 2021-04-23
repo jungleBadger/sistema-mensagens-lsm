@@ -82,7 +82,7 @@ module.exports = env => {
 			new HtmlWebpackPlugin({
 				"filename": path.join(__dirname, "dist", "index.html"),
 				"template": path.join(__dirname, "src", "index.ejs"),
-				"inject": "body"
+				"inject": false
 			})
 		],
 		"entry": {
