@@ -32,19 +32,30 @@ jobs:
                   working_directory: client
                   command: npm test
             - run:
+                  name: Attach frontend environment variables
+                  working_directory: client
+                  command: |
+                      echo SITE_KEY=$SITE_KEY >> ".env"
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        echo NODE_ENV=production >> ".env"
+                      else
+                        echo NODE_ENV=development >> ".env"
+                      fi
+            - run:
                   name: Build frontend modules
                   working_directory: client
                   command: |
-                    if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                      npm run build:all:prod
-                    else
-                      npm run build:all
-                    fi
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        npm run build:all:prod
+                      else
+                        npm run build:all
+                      fi
 
             - run:
                   name: Destroy `etc` and `node_modules` folder
                   working_directory: client
                   command: |
+                      rm .env
                       rm .npmrc
                       rm _etc -r
                       rm node_modules -rf
@@ -75,6 +86,11 @@ jobs:
                       echo DB2_UID=$DB2_UID >> ".env"
                       echo DB2_PASSWORD=$DB2_PASSWORD >> ".env"
                       echo DB2_SCHEMA=$DB2_SCHEMA >> ".env"
+                      echo EMAIL_HOST=$EMAIL_HOST >> ".env"
+                      echo EMAIL_PORT=$EMAIL_PORT >> ".env"
+                      echo EMAIL_USER=$EMAIL_USER >> ".env"
+                      echo EMAIL_PASSWORD=$EMAIL_PASSWORD >> ".env"
+                      echo RECAPTCHA_KEY=$RECAPTCHA_KEY >> ".env"
                       if [ "${CIRCLE_BRANCH}" == "master" ]; then
                         echo NODE_ENV=production >> ".env"
                       else
