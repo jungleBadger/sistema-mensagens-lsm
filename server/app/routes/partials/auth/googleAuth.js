@@ -4,9 +4,31 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-router.post(
-	"/login",
-	passport.authenticate("local", {}, undefined),
+router.get(
+	"/google",
+	(req, res, next) => {
+		req.session.requestAction = req.query.action || "login";
+		return next();
+	},
+	passport.authenticate(
+		"google",
+		{
+			"scope": [
+				"profile",
+				"email"
+			]
+		},
+		undefined
+	)
+);
+
+router.get(
+	"/google/callback",
+	passport.authenticate(
+		"google",
+		{},
+		undefined
+	),
 	(req, res) => {
 
 		let redirectPath = req.user.isAdmin ? (req.session.originalUrl ? req.session.originalUrl : "/") : "/"
@@ -24,19 +46,5 @@ router.post(
 );
 
 
-
-router.get(
-	"/me",
-	(req, res) => res.status(200).send(req.user || {})
-);
-
-router.all(
-	"/logout",
-	(req, res) => {
-		req.logout();
-		req.session = null;
-		return res.status(200).send("Logged out.");
-	}
-);
 
 module.exports = router;

@@ -23,6 +23,12 @@ export default createRouter({
 			"name": "auth.reset",
 			"path": "/reset",
 			"component": ThePasswordResetForm
+		},
+		{
+			"path": "/:pathMatch(.*)*",
+			"redirect": {
+				"name": "auth.login"
+			}
 		}
 
 	]

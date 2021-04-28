@@ -3,12 +3,13 @@
 const Joi = require("joi");
 const raiseError = require("../helpers/errorHandler").raiseError;
 
-module.exports = class AdminUser {
+module.exports = class User {
 
 	constructor (
 		email,
 		hashedPassword,
-		displayName = ""
+		displayName = "",
+		passwordRegistered = true
 	) {
 		let schemaValidationResult = Joi.object(
 			{
@@ -17,7 +18,7 @@ module.exports = class AdminUser {
 				"SENHA": Joi.string().min(8).max(128).required(),
 				"NOME_EXIBICAO": Joi.string().allow( "").allow(null).default(null).optional(),
 				"ADMINISTRADOR": Joi.boolean().invalid(true),
-				"SENHA_REGISTRADA": Joi.boolean().invalid(false),
+				"SENHA_REGISTRADA": Joi.boolean(),
 				"EMAIL_CONFIRMADO": Joi.boolean().invalid(true)
 			}
 		).validate(

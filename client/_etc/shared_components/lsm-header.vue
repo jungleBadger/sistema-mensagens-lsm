@@ -1,7 +1,8 @@
 <template>
 	<header
 		id="lsm-header"
-		class="flex">
+
+		class="flex p-2 items-center justify-between">
 		<slot name="app-menu">
 
 		</slot>

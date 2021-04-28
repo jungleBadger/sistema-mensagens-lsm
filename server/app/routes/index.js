@@ -40,7 +40,9 @@ module.exports = function (app) {
 		mainHandler
 	);
 
-	app.use((err, req, res, next) => err ? handleExpressError(err, res) : next());
+	app.use((err, req, res, next) => {
+		return err ? handleExpressError(err, res) : next()
+	});
 
 }
 

@@ -11,7 +11,8 @@
 			</template>
 
 		</lsm-header>
-		<main>
+
+		<main class="p-4">
 			<router-view></router-view>
 		</main>
 	</div>

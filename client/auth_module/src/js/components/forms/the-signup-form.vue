@@ -126,17 +126,19 @@
 				<hr class="mt-3 hidden sm:block border-gray-400">
 			</div>
 			<div>
-				<button
+				<a
+					:disabled="loadingState"
 					type="button"
+					href="/auth/google?action=signup"
 					id="google-login-button"
-					title="Clique para criar sua conta com o Google"
+					title="Clique para acessar sua conta através do Google"
 					class="relative border-solid border shadow-sm border-gray-400
                         font-semibold text-gray-600 text-sm py-2 text-center rounded text-center w-full
                         focus:outline-none hover:border-indigo-600">
 					<font-awesome-icon
 						style="line-height: 28px;"
 						:icon="['fab', 'google']" />
-				</button>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -255,6 +257,30 @@ export default {
 
 			}, 1000);
 		}
+	},
+
+	mounted () {
+		let errorStatus = Number(new URLSearchParams(window.location.search).get("status") || 0);
+
+
+		if (errorStatus === 409) {
+
+			this.signupErrorMessage = {
+				"title": "Houve um problema no seu registro de conta usando o Google:",
+				"description": "Já existe uma conta cadastrada com este e-mail."
+			}
+
+		} else if (errorStatus) {
+
+			console.log(errorStatus);
+			this.signupErrorMessage = {
+				"title": "Houve um problema inesperado no seu registro de conta usando o Google!",
+				"description": "Tente novamente em alguns minutos."
+			}
+
+
+		}
+
 	}
 
 }

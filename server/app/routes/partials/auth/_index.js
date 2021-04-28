@@ -2,14 +2,21 @@
 
 const router = require("express").Router();
 
-const viewRoutes = require("./view");
 const authRoutes = require("./auth");
+const googleAuthRoutes = require("./googleAuth");
+const viewRoutes = require("./view");
 
 
 router.use(
 	"/auth",
 	authRoutes
 );
+
+router.use(
+	"/auth",
+	googleAuthRoutes
+);
+
 
 router.use(
 	"/auth",

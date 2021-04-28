@@ -30,7 +30,8 @@ module.exports = {
 	async create(
 		userEmail,
 		userPassword,
-		userDisplayName = null
+		userDisplayName = null,
+
 	) {
 
 		if (!userEmail || !userPassword) {
@@ -161,9 +162,10 @@ module.exports = {
 	 * @method retrieveByEmail
 	 * @param {string} userEmail - Email to search for.
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
-	 * @return {Promise<Object|Error>} Containing the User object.
+	 * @param {boolean} [acceptNotFound=false] - Optional boolean that controls if the not found error should be bypassed.
+	 * @return {Promise<Object|null|Error>} Containing the User object.
 	 */
-	async retrieveByEmail(userEmail, targetColumns = ["*"]) {
+	async retrieveByEmail(userEmail, targetColumns = ["*"], acceptNotFound = false) {
 
 		if (!userEmail) {
 			throw raiseError(
@@ -178,10 +180,16 @@ module.exports = {
 		);
 
 		if (!result || !result.length) {
-			throw raiseError(
-				404,
-				`User email ${userEmail} not found.`
-			);
+
+			if (acceptNotFound) {
+				return null;
+			} else {
+				throw raiseError(
+					404,
+					`User email ${userEmail} not found.`
+				);
+			}
+
 		} else {
 			return result[0];
 		}
@@ -195,6 +203,7 @@ module.exports = {
 	 * @return {Promise<string|Error>} Containing the operation confirmation.
 	 */
 	async updateAccountConfirmation(userEmail) {
+
 		let userProfile = await this.retrieveByEmail(userEmail, ["ID"]);
 
 		await connectionPool.executePreparedSqlInstruction(

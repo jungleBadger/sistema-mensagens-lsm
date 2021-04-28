@@ -43,14 +43,12 @@ export default defineComponent({
 	width: 48px;
 	height: 100%;
 	grid-area: sidemenu;
-	background-color: red;
 }
 
 .app-content {
 	width: 100%;
 	height: 100%;
 	grid-area: content;
-	background-color: blue;
 }
 
 </style>

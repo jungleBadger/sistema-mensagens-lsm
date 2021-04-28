@@ -22,9 +22,11 @@ export default defineComponent({
 	"components": {
 		LsmHeader
 	},
-	beforeCreate () {
-		this.$store.dispatch("auth/checkCaptchaLatestTs");
-		this.$store.dispatch("auth/retrieveStoredEmail");
+	async beforeCreate () {
+		return await Promise.all([
+			this.$store.dispatch("auth/checkCaptchaLatestTs"),
+			this.$store.dispatch("auth/retrieveStoredEmail")
+		]);
 	}
 });
 </script>

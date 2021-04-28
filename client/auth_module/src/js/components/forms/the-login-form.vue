@@ -43,6 +43,7 @@
 				kind="error">
 			</lsm-inline-notification>
 
+
 			<recaptcha-protected-resource>
 
 				<form
@@ -134,9 +135,10 @@
 				<hr class="mt-3 hidden sm:block border-gray-400">
 			</div>
 			<div>
-				<button
+				<a
 					:disabled="loadingState"
 					type="button"
+					href="/auth/google?action=signin"
 					id="google-login-button"
 					title="Clique para acessar sua conta através do Google"
 					class="relative border-solid border shadow-sm border-gray-400
@@ -145,7 +147,7 @@
 					<font-awesome-icon
 						style="line-height: 28px;"
 						:icon="['fab', 'google']" />
-				</button>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -255,6 +257,30 @@ export default {
 				}
 
 			}, 1000);
+		}
+
+	},
+
+	mounted () {
+		let errorStatus = Number(new URLSearchParams(window.location.search).get("status") || 0);
+
+		if (errorStatus === 404) {
+
+			this.loginErrorMessage = {
+				"title": "Houve um problema no seu login com Google:",
+				"description": "Seu e-mail não foi encontrado em nossos registros."
+			}
+
+		} else if (errorStatus) {
+
+
+			console.log(errorStatus);
+			this.loginErrorMessage = {
+				"title": "Houve um problema inesperado no seu login com Google!",
+				"description": "Tente novamente em alguns minutos."
+			}
+
+
 		}
 
 	}

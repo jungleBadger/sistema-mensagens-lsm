@@ -1,6 +1,6 @@
 <template>
 	<div>
-		HOME
+		HOME - Em construção
 	</div>
 </template>
 <script type="text/javascript">
