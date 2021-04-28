@@ -2,6 +2,7 @@
 
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
+const cookieSession = require("cookie-session");
 const engines = require("consolidate");
 const debug = require("debug");
 const express = require("express");
@@ -10,6 +11,7 @@ const helmet = require("helmet");
 const http = require("http");
 const https = require("https");
 const morgan = require("morgan");
+const passport = require("./controller/passport");
 const path = require("path");
 const routes = require("./routes/index");
 
@@ -18,25 +20,29 @@ const APP_PORT = process.env.APP_PORT || 3030;
 const log = debug("app:main");
 const httpLog = debug("app:endpoint");
 
-
-const DBConnectionPool = require("./helpers/DBConnectionPool");
-
-let connectionPool = new DBConnectionPool(
-	process.env.DB2_DB,
-	process.env.DB2_HOST,
-	process.env.DB2_PORT,
-	process.env.DB2_UID,
-	process.env.DB2_PASSWORD
-);
-
 let server;
-
-app.use(compression());
-app.use(cookieParser(process.env.APP_SECRET));
 
 app.use(helmet({
 	"contentSecurityPolicy": false
 }));
+app.use(compression());
+app.use(cookieParser(process.env.APP_SECRET));
+app.use(cookieSession({
+	"secret": process.env.APP_SECRET,
+	"maxAge": 86400000,
+	"saveUninitialized": false,
+	"resave": false,
+	"name": "lsm-app",
+	"key": "LSm_KEY",
+	"cookie": {
+		"secure": true,
+		"httpOnly": true
+	}
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.engine("html", engines.ejs);
 app.set("view engine", "ejs");
@@ -68,19 +74,6 @@ log("Static routes loaded");
 
 module.exports = async function run (CUSTOM_APP_PORT = 0) {
 
-
-	console.log("Valid");
-	let result1 = await connectionPool.executeRawSqlInstruction([
-		"SELECT service_level, fixpack_num, bld_level",
-		"FROM TABLE (sysproc.env_get_inst_info()) as A;"
-	].join(" "));
-	console.log(result1);
-	// let result2 = await connectionPool.executeRawSqlInstruction("INSERT INTO TEST (ID) VALUES 55");
-	//
-	// LIMIT 10
-	// let result3 = await connectionPool.executePreparedSqlInstruction("INSERT INTO TEST (ID) VALUES (?)", [1]);
-	// let result4 = await connectionPool.executePreparedSqlInstruction(" SELECT * FROM TEST WHERE ID = ? LIMIT 10", [55]);
-
 	if (process.env.LOCAL_HTTPS) {
 		server = https.createServer({
 			"hostname": "localhost",
@@ -92,10 +85,6 @@ module.exports = async function run (CUSTOM_APP_PORT = 0) {
 	} else {
 		server = http.createServer(app);
 	}
-
-	app.get("/test", function (req , res) {
-		return res.status(200).send("SHOWCASE");
-	});
 
 	log(`${process.env.LOCAL_HTTPS ? "HTTPS" : "HTTP"} server created`);
 

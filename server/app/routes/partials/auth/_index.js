@@ -2,19 +2,28 @@
 
 const router = require("express").Router();
 
-const adminUserAPIs = require("./api-admin-user");
+const authRoutes = require("./auth");
+const googleAuthRoutes = require("./googleAuth");
 const viewRoutes = require("./view");
 
 
 router.use(
-	"/admin/api/user",
-	adminUserAPIs
+	"/auth",
+	authRoutes
 );
 
 router.use(
-	"/admin/app",
+	"/auth",
+	googleAuthRoutes
+);
+
+
+router.use(
+	"/auth",
 	viewRoutes
 );
+
+
 
 
 module.exports = router

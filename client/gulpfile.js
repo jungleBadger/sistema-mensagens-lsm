@@ -18,13 +18,11 @@
 	const eslint = require("gulp-eslint");
 	const plumber = require("gulp-plumber");
 	const path = require("path");
-	const cssnext = require("postcss-cssnext");
+	const cssnext = require("postcss-preset-env");
 	const log = require("fancy-log");
 	const colors = require("ansi-colors");
 	const webpack = require("webpack");
-	const cssUglifier = [
-		cssnano()
-	];
+	const tailwindcss = require("tailwindcss");
 	const childProcess = require("child_process");
 
 	let currentContext = "";
@@ -165,16 +163,48 @@
 		}
 
 		return gulp.src([
-			modulePath + "/src/css/*.css",
-			modulePath + "/src/css/*.scss"
+			`${modulePath}/src/css/*.css`,
+			`${modulePath}/src/css/*.scss`
 		])
 			.pipe(plumber())
-			.pipe(cache(sass().on("error", sass.logError)))
-			.pipe(postcss([
-				cssnext({})
-			]))
+			.pipe(sass().on("error", sass.logError))
+			.pipe(
+				postcss(
+					[
+						tailwindcss(
+							{
+								"purge": {
+									"content": [
+										`${modulePath}/src/index.ejs`,
+										`${modulePath}/src/js/**/*.vue`
+									],
+									"options": {
+										"keyframes": true,
+									}
+								},
+								"darkMode": "class",
+								"theme": {
+									"fontFamily": {
+										"sans": ["'Source Sans Pro'", "sans-serif;"]
+									}
+								},
+								"variants": {
+									"extend": {
+										"opacity": ['disabled'],
+									}
+								},
+								"plugins": [
+									require("@tailwindcss/forms")
+								]
+							}
+						),
+						cssnext,
+					].concat(
+						isProd ? [cssnano] : []
+					)
+				)
+			)
 			.pipe(cond(!isProd, sourcemaps.init({"loadMaps": true})))
-			.pipe(cond(isProd, postcss(cssUglifier)))
 			.pipe(cond(!isProd, sourcemaps.write("./")))
 			.pipe(gulp.dest(modulePath + "/dist/css/"));
 	});

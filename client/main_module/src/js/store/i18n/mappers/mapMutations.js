@@ -1,8 +1,6 @@
-(function () {
-	"use strict";
+"use strict";
 
-	const mutations = require("../constants/mutation-types.js");
+import mutations from "../constants/mutation-types.js";
+import { mapMutations } from "vuex";
 
-	module.exports = require("Vuex").mapMutations("i18n", Object.keys(mutations).map(mutation => mutations[mutation]));
-
-}());
+export default mapMutations("i18n", Object.keys(mutations).map(mutation => mutations[mutation]));

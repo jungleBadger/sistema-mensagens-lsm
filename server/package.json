@@ -5,7 +5,7 @@
 	"engineStrict": true,
 	"engines": {
 		"node": "14.16.1",
-		"npm": "7.9.0"
+		"npm": "7.11.1"
 	},
 	"main": "./app/dist/app.js",
 	"scripts": {
@@ -32,14 +32,17 @@
 		"dotenv": "^8.2.0",
 		"ejs": "^3.1.6",
 		"express": "^5.0.0-alpha.8",
+		"form-urlencoded": "^6.0.3",
 		"helmet": "^4.4.1",
 		"ibm_db": "^2.7.3",
 		"joi": "^17.4.0",
 		"jsonwebtoken": "^8.5.1",
 		"morgan": "^1.10.0",
+		"ngrok": "^4.0.1",
+		"nodemailer": "^6.5.0",
 		"passport": "^0.4.1",
+		"passport-google-oauth20": "^2.0.0",
 		"passport-local": "^1.0.0",
-		"sequelize": "^6.5.0",
 		"swagger-jsdoc": "^6.0.0"
 	},
 	"devDependencies": {
@@ -51,8 +54,6 @@
 		"faker": "^5.5.3",
 		"fancy-log": "^1.3.3",
 		"fs-extra": "^9.1.0",
-		"gulp": "^4.0.2",
-		"gulp-cli": "^2.3.0",
 		"gulp-jsdoc3": "^3.0.0",
 		"jasmine": "^3.6.4",
 		"jasmine-spec-reporter": "^6.0.0",
@@ -60,10 +61,7 @@
 		"nodemon": "^2.0.7",
 		"nyc": "^15.1.0",
 		"replace": "^1.2.0",
-		"swagger-ui-dist": "^3.45.0",
-		"tsc-watch": "^4.2.9",
-		"uglify-js": "^3.12.8",
-		"yargs": "^16.2.0"
+		"swagger-ui-dist": "^3.45.0"
 	},
 	"author": "jungleBadger",
 	"license": "ISC",

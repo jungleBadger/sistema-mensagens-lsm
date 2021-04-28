@@ -15,40 +15,34 @@ module.exports = {
 	 * @function handleExpressError
 	 * @param {Object|string} err - The error representation to be handled.
 	 * @param {number} [err.status=500] - The error HTTP status code.
+	 * @param {string} [err.redirect] - The optional HTTP redirect.
 	 * @param {string} err.message - The error message.
-	 * @param {Response} expressResponse - The express response object
+	 * @param {any} expressResponse - The express response object
 	 * @return {Response} The express processed response object
 	 */
 	handleExpressError(err, expressResponse) {
 		log(err);
 		try {
 			if (Object.prototype.hasOwnProperty.call(err, "status")) {
+
+				if (err.redirect) {
+					return expressResponse.redirect(`${err.redirect}?status=${err.status || 500}`);
+				}
+
 				return expressResponse.status(err.status || 500).send(err.message || err);
 			} else {
+
 				let parsedError = JSON.parse(err.message);
+
+				if (parsedError.redirect) {
+					return expressResponse.redirect(`${parsedError.redirect}?status=${parsedError.status || 500}`);
+				}
+
 				return expressResponse.status(parsedError.status || 500).send(parsedError.message || err.message || "Unknown Error");
 			}
 		} catch (e) {
 			return expressResponse.status(err.status || 500).send(err.message || err);
 		}
-	},
-
-	/**
-	 * Receive an error object representation and returns a
-	 * new native error object constructed with this object converted to string.
-	 *
-	 * @function handleOperationalError
-	 * @param {Object} err - The error representation to be handled.
-	 * @param {number} [err.status=500] - The error HTTP status code.
-	 * @param {string} err.message - The error message.
-	 * @return {Error} The error object parsed
-	 */
-	handleOperationalError(err) {
-		log(err);
-		return {
-			"status": err.status || err.statusCode || 500,
-			"message": err.reason || err.message || "Unknown operational error"
-		};
 	},
 
 	/**

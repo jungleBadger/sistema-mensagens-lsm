@@ -1,10 +1,17 @@
 <template>
-	<header id="lsm-header">
+	<header
+		id="lsm-header"
+
+		class="flex p-2 items-center justify-between">
 		<slot name="app-menu">
 
 		</slot>
 		<slot name="app-title">
-			<h2>LSM App</h2>
+			<h2 class="m-0">LSM App</h2>
+		</slot>
+
+		<slot name="app-buttons">
+
 		</slot>
 	</header>
 </template>

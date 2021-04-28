@@ -1,12 +1,9 @@
-(function () {
-	"use strict";
+"use strict";
 
-	module.exports = {
-		"setSelectedLanguage": function (context, language) {
-			window.localStorage.setItem("language", language);
-			document.querySelector("html").setAttribute("lang", language);
-			context.commit("selectLanguage", language);
-		}
-	};
-
-}());
+export default {
+	"setSelectedLanguage": function (context, language) {
+		window.localStorage.setItem("language", language);
+		document.querySelector("html").setAttribute("lang", language);
+		context.commit("selectLanguage", language);
+	}
+};
