@@ -5,7 +5,7 @@
 	"engineStrict": false,
 	"engines": {
 		"node": "14.16.1",
-		"npm": "7.9.0"
+		"npm": "7.11.1"
 	},
 	"scripts": {
 		"build:main": "eslint -c .eslintrc.json main_module/src/**/*.js main_module/src/**/*.vue --fix && gulp build -m main",
@@ -88,8 +88,7 @@
 		"webpack": "^5.27.0",
 		"webpack-cli": "^4.1.0",
 		"workbox-build": "^6.1.2",
-		"yargs": "^16.2.0",
-		"yargs-parser": "^20.2.7"
+		"yargs": "^16.2.0"
 	},
 	"browser": {},
 	"browserslist": {
