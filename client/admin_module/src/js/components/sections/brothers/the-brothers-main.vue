@@ -1,7 +1,11 @@
 <template>
-	<div>
-		ADMIN - Em construção
-	</div>
+	<section
+		aria-label="Administração de irmãos"
+		class="h-full p-2 ">
+		IRMAOS
+
+
+	</section>
 </template>
 <script type="text/javascript">
 
@@ -10,8 +14,16 @@
 import { defineComponent } from "vue";
 import {useI18n} from "vue-i18n";
 
+
 export default defineComponent({
-	"name": "AppHome",
+	"name": "TheBrothersMain",
+	"components": {
+	},
+	"data": function () {
+		return {
+
+		}
+	},
 	setup() {
 		return {
 			...useI18n()
