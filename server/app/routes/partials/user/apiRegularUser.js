@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const regularUser = require("../../../helpers/user/userCRUD");
+const { isAdmin } = require("../../middlewares/auth");
 
 /**
  * @swagger
@@ -102,6 +103,7 @@ router.post(
  */
 router.get(
 	"/",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -151,7 +153,7 @@ router.get(
  */
 router.get(
 	"/id/:userId",
-
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -199,7 +201,7 @@ router.get(
  */
 router.get(
 	"/email/:userEmail",
-
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -252,7 +254,7 @@ router.patch(
  */
 router.delete(
 	"/:userId",
-
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
