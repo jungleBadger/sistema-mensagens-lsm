@@ -158,7 +158,8 @@ passport.use(
 						let newUser = await userCRUD.create(
 							providerEmail,
 							await generateHash(Date.now() + "lsm"),
-							displayName
+							displayName,
+							false
 						);
 
 						await linkAccount(

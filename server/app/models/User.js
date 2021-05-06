@@ -27,7 +27,7 @@ module.exports = class User {
 				"SENHA": hashedPassword,
 				"NOME_EXIBICAO": displayName,
 				"ADMINISTRADOR": false,
-				"SENHA_REGISTRADA": true,
+				"SENHA_REGISTRADA": passwordRegistered,
 				"EMAIL_CONFIRMADO": false
 			}
 		);

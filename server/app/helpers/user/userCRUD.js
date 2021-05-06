@@ -25,13 +25,15 @@ module.exports = {
 	 * @param {string} userEmail - User email to be added.
 	 * @param {string} userPassword - Raw User password to be hashed and stored as the User password.
 	 * @param {string|null} [userDisplayName] - Optional User display name
+	 * @param {boolean} [passwordRegistered=true] - Optional flag to define if the password is confirmed. Default is
+	 * `true`, and `false` represents an account created through social providers
 	 * @return {Promise<Object|Error>} Containing the new User ID.
 	 */
 	async create(
 		userEmail,
 		userPassword,
 		userDisplayName = null,
-
+		passwordRegistered = true
 	) {
 
 		if (!userEmail || !userPassword) {
@@ -49,7 +51,8 @@ module.exports = {
 		const user = new User(
 			userEmail,
 			await generateHash(userPassword),
-			userDisplayName
+			userDisplayName,
+			passwordRegistered
 		);
 
 		const insertKeys = user.getKeys();
@@ -228,7 +231,7 @@ module.exports = {
 			);
 		}
 
-		await this.retrieveById(userId);
+		await this.retrieveById(userId, ["ID"]);
 
 		await connectionPool.executePreparedSqlInstruction(
 			`DELETE FROM USUARIO WHERE USUARIO.ID = ? AND USUARIO.ADMINISTRADOR = false;`,
