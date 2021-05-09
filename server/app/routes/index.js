@@ -5,6 +5,7 @@ const handleExpressError = require("../helpers/errorHandler").handleExpressError
 
 const adminHandler = require("./partials/admin/_index");
 const authHandler = require("./partials/auth/_index");
+const brotherHandler = require("./partials/brother/_index");
 const googleHandler = require("./partials/google/_index");
 const mainHandler = require("./partials/mainHandler");
 const regularUserHandler = require("./partials/user/_index");
@@ -26,6 +27,10 @@ module.exports = function (app) {
 
 	app.use(
 		authHandler
+	);
+
+	app.use(
+		brotherHandler
 	);
 
 	app.use(

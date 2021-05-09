@@ -37,25 +37,26 @@ module.exports = {
 
 		try {
 
-			let  x = await connectionPool.executePreparedSqlInstruction(
-				[
-					`SELECT ID from (insert into ${TABLE_NAME} (${insertKeys.join(", ")})`,
-					`values (${insertKeys.map(() => "?").join(", ")}));`
-				].join(" "),
-				brother.getValues()
-			);
+			return {
+				...(
+					await logger.generateLog(
+						"CREATE",
+						(await connectionPool.executePreparedSqlInstruction(
+							[
+								`(SELECT ID FROM FINAL TABLE (insert INTO ${TABLE_NAME} (${insertKeys.join(", ")})`,
+								`values (${insertKeys.map(() => "?").join(", ")})))`
+							].join(" "),
+							brother.getValues(),
+							"fetch"
+						)).ID,
+						TABLE_NAME,
+						operator.email,
+						Number(operator.id)
+					)
+				)
+			};
 
-			console.log(x);
-			let result = await this.retrieveByDisplayName(displayName, ["ID"]);
 
-			await logger.generateLog(
-				"CREATE",
-				result.id,
-				TABLE_NAME,
-				operator.email,
-				Number(operator.id)
-			);
-			return result;
 		} catch (e) {
 			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
 				throw raiseError(

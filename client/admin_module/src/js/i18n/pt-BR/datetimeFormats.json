@@ -7,10 +7,10 @@
 	"long": {
 		"year": "numeric",
 		"month": "short",
-		"day": "numeric",
+		"day": "2-digit",
 		"weekday": "short",
 		"hour": "numeric",
 		"minute": "numeric",
-		"hour12": true
+		"hourCycle": "h23"
 	}
 }

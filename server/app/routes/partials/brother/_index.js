@@ -6,7 +6,7 @@ const brotherAPIs = require("./apiBrothers");
 // const { isAdmin } = require("../../middlewares/auth");
 
 router.use(
-	"/api/brothers",
+	"/api/brother",
 	brotherAPIs
 );
 

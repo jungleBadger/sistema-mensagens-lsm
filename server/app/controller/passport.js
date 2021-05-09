@@ -39,6 +39,8 @@ passport.deserializeUser(async function (req, profile, done) {
 				)
 			);
 		} catch (e) {
+			console.log(" OIII");
+			console.log(e);
 			req.logout();
 			req.session = null;
 			return done(e);

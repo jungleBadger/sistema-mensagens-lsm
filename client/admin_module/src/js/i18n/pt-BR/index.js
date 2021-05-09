@@ -1,10 +1,10 @@
 (function () {
 	"use strict";
 
-	const dateTimeFormats = require("./dateTimeFormats.json");
+	const datetimeFormats = require("./datetimeFormats.json");
 	const messages = require("./messages.json");
 	const numberFormats = require("./numberFormats.json");
 
-	module.exports = {dateTimeFormats, messages, numberFormats};
+	module.exports = {datetimeFormats, messages, numberFormats};
 
 }());

@@ -132,12 +132,13 @@ module.exports = {
 	 * @param {number} [limit=20] - Optional limit of rows.
 	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
 	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all Users objects and request metadata.
 	 */
-	async retrieveAll(targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID") {
+	async retrieveAll(targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM USUARIO WHERE USUARIO.ADMINISTRADOR = false OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
+			`SELECT ${targetColumns.join(", ")} FROM USUARIO WHERE USUARIO.ADMINISTRADOR = false ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
 		);
 
 		return {
@@ -176,15 +177,7 @@ module.exports = {
 				`User ID ${userId} not found.`
 			);
 		} else {
-			if (result.ADMINISTRADOR) {
-				throw raiseError(
-					403,
-					`Operationr blocked - User ${userId} is an administrator.`
-				);
-			} else {
-				return result;
-			}
-
+			return result;
 		}
 
 	},
@@ -263,7 +256,14 @@ module.exports = {
 			);
 		}
 
-		await this.retrieveById(userId, ["ID", "ADMINISTRADOR"]);
+		let user = await this.retrieveById(userId, ["ID", "ADMINISTRADOR"]);
+
+		if (user.ADMINISTRADOR) {
+			throw raiseError(
+				403,
+				`Operationr blocked - User ${userId} is an administrator.`
+			);
+		}
 
 		await connectionPool.executePreparedSqlInstruction(
 			`DELETE FROM USUARIO WHERE USUARIO.ID = ? AND USUARIO.ADMINISTRADOR = ?;`,
