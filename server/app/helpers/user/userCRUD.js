@@ -15,6 +15,9 @@ const connectionPool = new DBConnectionPool(
 const mailerTransport = require("../mailer");
 const welcomeEmailObject = require("../../templates/email/welcome");
 const nodemailer = require("nodemailer");
+const logger = require("../logger");
+
+const TABLE_NAME = "USUARIO";
 
 
 module.exports = {
@@ -27,13 +30,21 @@ module.exports = {
 	 * @param {string|null} [userDisplayName] - Optional User display name
 	 * @param {boolean} [passwordRegistered=true] - Optional flag to define if the password is confirmed. Default is
 	 * `true`, and `false` represents an account created through social providers
+	 * @param {object} [operator={}] - Operator - e.g: logged user performing the operation.
+	 * @param {string|number|null} [operator.id] - The optional operator's ID. Default to `null`
+	 * @param {string} [operator.email] - The optional operator's email. Default to ` system`
 	 * @return {Promise<Object|Error>} Containing the new User ID.
 	 */
+
 	async create(
 		userEmail,
 		userPassword,
 		userDisplayName = null,
-		passwordRegistered = true
+		passwordRegistered = true,
+		operator = {
+			"id": null,
+			"email": "system"
+		}
 	) {
 
 		if (!userEmail || !userPassword) {
@@ -58,41 +69,50 @@ module.exports = {
 		const insertKeys = user.getKeys();
 
 		try {
-			await connectionPool.executePreparedSqlInstruction(
-				[
-					`insert into USUARIO (${insertKeys.join(", ")})`,
-					`values (${insertKeys.map(() => '?').join(", ")});`
-				].join(" "),
-				user.getValues(),
-				false
+			let result = (
+				await logger.generateLog(
+					"CREATE",
+					(await connectionPool.executePreparedSqlInstruction(
+						[
+							`SELECT ID FROM FINAL TABLE (INSERT INTO ${TABLE_NAME} (${insertKeys.join(", ")})`,
+							`values (${insertKeys.map(() => '?').join(", ")}));`
+						].join(" "),
+						user.getValues(),
+						"fetch"
+					)).ID,
+					TABLE_NAME,
+					operator.email,
+					operator.id
+				)
 			);
 
 
 			//@TODO Review the mailer default options
-			let [newUserResult, mailResult] = await Promise.all([
-				await this.retrieveByEmail(userEmail, ["ID", "EMAIL"]),
-				mailerTransport.sendMail({
-					"to": userEmail, // list of receivers
-					"subject": welcomeEmailObject.subject,
-					"text": welcomeEmailObject.text,
-					"html": welcomeEmailObject.html(
-						"https://localhost:3030/api/common/user/confirm",
-						await generateJWT(
-							{ userEmail },
-							process.env.APP_SECRET,
-							{
-								"expiresIn": "08 hours",
-								"audience": "single_user"
-							}
-						)
+			let mailResult = await mailerTransport.sendMail({
+				"to": userEmail, // list of receivers
+				"subject": welcomeEmailObject.subject,
+				"text": welcomeEmailObject.text,
+				"html": welcomeEmailObject.html(
+					"https://localhost:3030/api/common/user/confirm",
+					await generateJWT(
+						{ userEmail },
+						process.env.APP_SECRET,
+						{
+							"expiresIn": "08 hours",
+							"audience": "single_user"
+						}
 					)
-				})
-			]);
+				)
+			});
 
 			//@TODO Remove this log statement later - demo purposes only.
 			console.log("Preview URL: %s", nodemailer.getTestMessageUrl(mailResult));
 
-			return newUserResult;
+			return {
+				"ID": result.ID,
+				"LOG_ID": result.LOG_ID,
+				"EMAIL": userEmail
+			};
 
 		} catch (e) {
 			console.log(e)
@@ -146,16 +166,25 @@ module.exports = {
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM USUARIO WHERE USUARIO.ID = ? LIMIT 1;`,
-			[userId]
+			[userId],
+			"fetch"
 		);
 
-		if (!result || !result.length) {
+		if (!result) {
 			throw raiseError(
 				404,
 				`User ID ${userId} not found.`
 			);
 		} else {
-			return result[0];
+			if (result.ADMINISTRADOR) {
+				throw raiseError(
+					403,
+					`Operationr blocked - User ${userId} is an administrator.`
+				);
+			} else {
+				return result;
+			}
+
 		}
 
 	},
@@ -221,9 +250,12 @@ module.exports = {
 	 * Delete a single User.
 	 * @method delete
 	 * @param {string} userId - ID to search for and delete.
+	 * @param {object} operator={} - Operator - e.g: logged user performing the operation.
+	 * @param {string|number} operator.id - The operator's ID.
+	 * @param {string} operator.email - The operator's email.
 	 * @return {Promise<string|Error>} Containing the deletion confirmation.
 	 */
-	async delete(userId) {
+	async delete(userId, operator) {
 		if (!userId) {
 			throw raiseError(
 				400,
@@ -231,14 +263,19 @@ module.exports = {
 			);
 		}
 
-		await this.retrieveById(userId, ["ID"]);
+		await this.retrieveById(userId, ["ID", "ADMINISTRADOR"]);
 
 		await connectionPool.executePreparedSqlInstruction(
-			`DELETE FROM USUARIO WHERE USUARIO.ID = ? AND USUARIO.ADMINISTRADOR = false;`,
-			[userId],
-			false
+			`DELETE FROM USUARIO WHERE USUARIO.ID = ? AND USUARIO.ADMINISTRADOR = ?;`,
+			[userId, false]
 		);
 
-		return `User ${userId} deleted.`;
+		return await logger.generateLog(
+			"DELETE",
+			userId,
+			TABLE_NAME,
+			operator.email,
+			operator.id
+		);
 	}
 }

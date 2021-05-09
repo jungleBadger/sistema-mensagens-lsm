@@ -49,7 +49,7 @@ class DBConnectionPool {
 		});
 	}
 
-	executePreparedSqlInstruction(sqlStringTemplate, paramsArray, expectResult = true) {
+	executePreparedSqlInstruction(sqlStringTemplate, paramsArray, resultHandling = "fetchAll") {
 		return new Promise((resolve, reject) => {
 			this.pool.open(
 				this.connectionString,
@@ -69,8 +69,9 @@ class DBConnectionPool {
 								return reject(`Error executing the SQL statement: ${executeErr.message}`);
 							}
 
-							if (expectResult) {
-								operationResult.fetchAll((resultErr, parsedResult) => {
+
+							if (resultHandling) {
+								operationResult[resultHandling]((resultErr, parsedResult) => {
 									if (resultErr) {
 										return reject(`Error fetching the results: ${resultErr.message}`);
 									}
@@ -91,11 +92,14 @@ class DBConnectionPool {
 									if (statementCloseErr) {
 										return reject(`Error closing the SQL statement: ${statementCloseErr.message}`)
 									}
+
 									conn.close((closeError) => {
 										return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(operationResult)
 									});
+
 								});
 							}
+
 						});
 					});
 				}

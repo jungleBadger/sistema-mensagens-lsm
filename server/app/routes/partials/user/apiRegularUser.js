@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const regularUser = require("../../../helpers/user/userCRUD");
-const { isAdmin } = require("../../middlewares/auth");
+const { isAdmin, isLoggedIn } = require("../../middlewares/auth");
 
 /**
  * @swagger
@@ -55,7 +55,9 @@ router.post(
 			await regularUser.create(
 				req.body.email,
 				req.body.password,
-				req.body.displayName
+				req.body.displayName,
+				false,
+				req.user
 			)
 		)
 	}
@@ -260,7 +262,8 @@ router.delete(
 			200
 		).send(
 			await regularUser.delete(
-				req.params.userId
+				req.params.userId,
+				req.user
 			)
 		)
 	}

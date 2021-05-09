@@ -14,11 +14,11 @@ module.exports = class User {
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"REFERENCIA_ID": Joi.number().required(),
+				"REFERENCIA_ID": Joi.alternatives([Joi.string(), Joi.number()]).required(),
 				"REFERENCIA_TABELA": Joi.string().max(128).required(),
 				"ACAO": Joi.alternatives().try("CREATE", "EDIT", "DELETE"),
-				"OPERADOR_FANTASIA": Joi.boolean(),
-				"OPERADOR_ID": Joi.boolean()
+				"OPERADOR_FANTASIA": Joi.string().required(),
+				"OPERADOR_ID": Joi.number().integer().required()
 			}
 		).validate(
 			{

@@ -33,11 +33,43 @@ router.get(
 		);
 
 	}
+)
+
+
+/**
+ * @swagger
+ * /api/logs/:logId:
+ *   get:
+ *     tags: [logs]
+ *     summary: Get logger user's log entries.
+ *     produces:
+ *       - application/json
+ *     security:
+ *      - ApiKeyAuth: []
+ *     responses:
+ *       200:
+ *         description: Array of logs.
+ *       400:
+ *         description: Invalid parameters.
+ *       500:
+ *         description: Error handler.
+ */
+router.get(
+	"/:logId",
+	isLoggedIn,
+	async (req, res) => {
+		res.status(200).send(
+			await logger.retrieveById(
+				req.params.logId
+			)
+		);
+
+	}
 );
 
 /**
  * @swagger
- * /api/logs/self:
+ * /api/logs/:
  *   get:
  *     tags: [logs]
  *     summary: Get logger user's log entries.

@@ -1,53 +1,69 @@
-"use strict"
+"use strict";
 
-const Brother = require("../../models/Brother")
-const raiseError = require("../errorHandler").raiseError
-const DBConnectionPool = require("../DBConnectionPool")
+const Brother = require("../../models/Brother");
+const raiseError = require("../errorHandler").raiseError;
+const DBConnectionPool = require("../DBConnectionPool");
 const connectionPool = new DBConnectionPool(
 	process.env.DB2_DB,
 	process.env.DB2_HOST,
 	process.env.DB2_PORT,
 	process.env.DB2_UID,
 	process.env.DB2_PASSWORD
-)
+);
 
-const TABLE_NAME = "IRMAO"
+const TABLE_NAME = "IRMAO";
+const logger = require("../logger");
 
 module.exports = {
 
 	/**
 	 * Creates a new admin User.
 	 * @method create
-	 * @param {string} displayName - Display name
+	 * @param {string} displayName - Display name.
+	 * @param {object} operator - Operator object.
+	 * @param {string} operator.id - Operator's ID.
+	 * @param {string} operator.email - Operator's email.
 	 * @return {Promise<Object|Error>} Containing the new User ID.
 	 */
 	async create (
-		displayName
+		displayName,
+		operator
 	) {
 		const brother = new Brother(
 			displayName
-		)
+		);
 
-		const insertKeys = brother.getKeys()
+		const insertKeys = brother.getKeys();
 
 		try {
-			await connectionPool.executePreparedSqlInstruction(
+
+			let  x = await connectionPool.executePreparedSqlInstruction(
 				[
-					`insert into ${TABLE_NAME} (${insertKeys.join(", ")})`,
-					`values (${insertKeys.map(() => "?").join(", ")});`
+					`SELECT ID from (insert into ${TABLE_NAME} (${insertKeys.join(", ")})`,
+					`values (${insertKeys.map(() => "?").join(", ")}));`
 				].join(" "),
-				brother.getValues(),
-				false
-			)
-			return await this.retrieveByDisplayName(displayName, ["ID", "EMAIL", "ADMINISTRADOR"])
+				brother.getValues()
+			);
+
+			console.log(x);
+			let result = await this.retrieveByDisplayName(displayName, ["ID"]);
+
+			await logger.generateLog(
+				"CREATE",
+				result.id,
+				TABLE_NAME,
+				operator.email,
+				Number(operator.id)
+			);
+			return result;
 		} catch (e) {
 			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
 				throw raiseError(
 					409,
 					`Irmao ${displayName} already exists.`
-				)
+				);
 			} else {
-				throw e
+				throw e;
 			}
 		}
 	},
@@ -65,13 +81,13 @@ module.exports = {
 
 		let results = await connectionPool.executeRawSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ADMINISTRADOR = true OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
-		)
+		);
 
 		return {
 			"offset": skip + results.length,
 			"orderBy": orderBy,
 			"results": results
-		}
+		};
 
 	},
 
@@ -88,21 +104,21 @@ module.exports = {
 			throw raiseError(
 				400,
 				"Missing required properties for querying Brother by ID."
-			)
+			);
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? LIMIT 1;`,
 			[brotherId]
-		)
+		);
 
 		if (!result || !result.length) {
 			throw raiseError(
 				404,
 				`Brother ID ${brotherId} not found.`
-			)
+			);
 		} else {
-			return result[0]
+			return result[0];
 		}
 
 	},
@@ -120,21 +136,21 @@ module.exports = {
 			throw raiseError(
 				400,
 				"Missing required properties for querying admin User by Email."
-			)
+			);
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.NOME_EXIBICAO = ? LIMIT 1;`,
 			[brotherName]
-		)
+		);
 
 		if (!result || !result.length) {
 			throw raiseError(
 				404,
 				`Brother ${brotherName} not found.`
-			)
+			);
 		} else {
-			return result[0]
+			return result[0];
 		}
 
 	},
@@ -151,10 +167,10 @@ module.exports = {
 			throw raiseError(
 				400,
 				"Missing required properties for updating Brother by ID."
-			)
+			);
 		}
 
-		await this.retrieveById(brotherId)
+		await this.retrieveById(brotherId);
 
 		await connectionPool.executePreparedSqlInstruction(
 			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE TABLE_NAME.ID = ?;`,
@@ -164,7 +180,7 @@ module.exports = {
 		return {
 			"ID": brotherId,
 			"NOME_EXIBICAO": newDisplayName
-		}
+		};
 	},
 
 	/**
@@ -178,17 +194,16 @@ module.exports = {
 			throw raiseError(
 				400,
 				"Missing required properties for deleting Brother."
-			)
+			);
 		}
 
-		await this.retrieveById(brotherId, ["ID"])
+		await this.retrieveById(brotherId, ["ID"]);
 
 		await connectionPool.executePreparedSqlInstruction(
 			`DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ?;`,
-			[brotherId],
-			false
-		)
+			[brotherId]
+		);
 
-		return `Brother ${brotherId} deleted.`
+		return `Brother ${brotherId} deleted.`;
 	}
-}
+};

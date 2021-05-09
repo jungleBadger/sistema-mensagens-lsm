@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const adminUser = require("../../../helpers/user/adminUserCRUD");
+const { isAdmin } = require("../../middlewares/auth");
 
 /**
  * @swagger
@@ -47,6 +48,7 @@ const adminUser = require("../../../helpers/user/adminUserCRUD");
  */
 router.post(
 	"/",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			201
@@ -54,7 +56,8 @@ router.post(
 			await adminUser.create(
 				req.body.email,
 				req.body.password,
-				req.body.displayName
+				req.body.displayName,
+				req.user
 			)
 		)
 	}
@@ -102,6 +105,7 @@ router.post(
  */
 router.get(
 	"/",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -151,6 +155,7 @@ router.get(
  */
 router.get(
 	"/id/:adminUserId",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -198,6 +203,7 @@ router.get(
  */
 router.get(
 	"/email/:adminUserEmail",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -216,7 +222,7 @@ router.get(
 
 router.patch(
 	"/:adminUserId",
-
+	isAdmin,
 	(req, res) => res.status(200).send("OK")
 );
 
@@ -251,12 +257,14 @@ router.patch(
  */
 router.delete(
 	"/:adminUserId",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
 		).send(
 			await adminUser.delete(
-				req.params.adminUserId
+				req.params.adminUserId,
+				req.user
 			)
 		)
 	}

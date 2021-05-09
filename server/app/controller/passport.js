@@ -27,12 +27,13 @@ passport.deserializeUser(async function (req, profile, done) {
 		try {
 			let user = await userCRUD.retrieveById(
 				profile.id,
-				["ID", "ADMINISTRADOR", "EMAIL_CONFIRMADO"]
+				["ID", "EMAIL", "ADMINISTRADOR", "EMAIL_CONFIRMADO"]
 			);
 			return done(
 				null,
 				new SessionUser(
 					user.ID,
+					user.EMAIL,
 					user.ADMINISTRADOR,
 					user.EMAIL_CONFIRMADO
 				)
@@ -64,6 +65,7 @@ passport.use(
 					await checkPassword(username, password, user.SENHA) ?
 						new SessionUser(
 							user.ID,
+							username,
 							user.ADMINISTRADOR,
 							user.EMAIL_CONFIRMADO
 						) :
@@ -142,6 +144,7 @@ passport.use(
 						null,
 						new SessionUser(
 							mainAccountUser.ID,
+							providerEmail,
 							mainAccountUser.ADMINISTRADOR,
 							mainAccountUser.EMAIL_CONFIRMADO
 						)
@@ -177,6 +180,7 @@ passport.use(
 							null,
 							new SessionUser(
 								newUser.ID,
+								providerEmail,
 								false,
 								true
 							)
@@ -208,6 +212,7 @@ passport.use(
 						null,
 						new SessionUser(
 							mainAccountUser.ID,
+							providerEmail,
 							mainAccountUser.ADMINISTRADOR,
 							mainAccountUser.EMAIL_CONFIRMADO
 						)
@@ -227,6 +232,7 @@ passport.use(
 						null,
 						new SessionUser(
 							mainAccountUser.ID,
+							providerEmail,
 							mainAccountUser.ADMINISTRADOR,
 							mainAccountUser.EMAIL_CONFIRMADO
 						)

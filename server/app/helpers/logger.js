@@ -1,17 +1,18 @@
-"use strict"
+"use strict";
 
-const Log = require("../models/Log")
-const raiseError = require("./errorHandler").raiseError
-const DBConnectionPool = require("./DBConnectionPool")
+const Log = require("../models/Log");
+const raiseError = require("./errorHandler").raiseError;
+const DBConnectionPool = require("./DBConnectionPool");
 const connectionPool = new DBConnectionPool(
 	process.env.DB2_DB,
 	process.env.DB2_HOST,
 	process.env.DB2_PORT,
 	process.env.DB2_UID,
 	process.env.DB2_PASSWORD
-)
+);
 
-const TABLE_NAME = "LOG_OPERACAO"
+const TABLE_NAME = "LOG_OPERACAO";
+
 
 module.exports = {
 
@@ -23,7 +24,7 @@ module.exports = {
 	 * @param {string} referenceTable - Reference Table that the entity belongs to. E.g: `EVENTOS`
 	 * @param {string} operatorAlias - Log operator alias, usually an e-mail or `system`
 	 * @param {number} [operatorId] - Optional operator foreign key reference to the `USUARIOS` table
-	 * @return {Promise<Object|Error>} Result.
+	 * @return {Promise<{'LOG_ID': string, 'ID': string}|Error>} Result.
 	 */
 	async generateLog (
 		logAction,
@@ -39,16 +40,16 @@ module.exports = {
 			referenceTable,
 			operatorAlias,
 			operatorId
-		)
-		const insertKeys = log.getKeys()
+		);
+		const insertKeys = log.getKeys();
 		return await connectionPool.executePreparedSqlInstruction(
 			[
-				`insert into ${TABLE_NAME} (${insertKeys.join(", ")})`,
-				`values (${insertKeys.map(() => "?").join(", ")});`
+				`SELECT ID AS LOG_ID, REFERENCIA_ID AS ID FROM FINAL TABLE (INSERT INTO ${TABLE_NAME} (${insertKeys.join(", ")})`,
+				`values (${insertKeys.map(() => "?").join(", ")}));`
 			].join(" "),
 			log.getValues(),
-			false
-		)
+			"fetch"
+		);
 	},
 
 	/**
@@ -63,14 +64,14 @@ module.exports = {
 	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ADMINISTRADOR = true OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
-		)
+			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
+		);
 
 		return {
 			"offset": skip + results.length,
 			"orderBy": orderBy,
 			"results": results
-		}
+		};
 
 	},
 
@@ -87,21 +88,22 @@ module.exports = {
 			throw raiseError(
 				400,
 				"Missing required properties for querying Log by ID."
-			)
+			);
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? LIMIT 1;`,
-			[logId]
-		)
+			[logId],
+			"fetch"
+		);
 
-		if (!result || !result.length) {
+		if (!result) {
 			throw raiseError(
 				404,
 				`Log ID ${logId} not found.`
-			)
+			);
 		} else {
-			return result[0]
+			return result;
 		}
 
 	},
@@ -118,7 +120,7 @@ module.exports = {
 			throw raiseError(
 				400,
 				"Missing required properties for querying Log by ID."
-			)
+			);
 		}
 
 		return await connectionPool.executePreparedSqlInstruction(
@@ -126,6 +128,6 @@ module.exports = {
 			[operatorId]
 		);
 
-	},
+	}
 
-}
+};
