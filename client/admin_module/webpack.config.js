@@ -75,8 +75,8 @@ module.exports = env => {
 			}),
 			new webpack.EnvironmentPlugin({
 				"NODE_ENV": env.NODE_ENV,
-				"DEFAULT_LOCALE": "en",
-				"DEFAULT_FALLBACK": "en"
+				"DEFAULT_LOCALE": "pt",
+				"DEFAULT_FALLBACK": "pt"
 			}),
 			new VueLoaderPlugin(),
 			new HtmlWebpackPlugin({

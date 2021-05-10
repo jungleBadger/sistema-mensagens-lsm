@@ -12,7 +12,6 @@ export default {
 	async retrieveLogs(context) {
 		const {skip, limit} = context.getters["pagination"];
 		let logs = await logsFactory.retrieveLogs(skip, limit);
-		console.log(logs);
 		context.commit("logItems", logs.results);
 	}
 

@@ -1,7 +1,7 @@
 <template>
 	<header
 		id="lsm-header"
-		class="bg-white w-full min-h-12 flex items-center justify-between min-h-12 shadow-sm z-20">
+		class="bg-white w-full min-h-12 flex items-center justify-between min-h-12 shadow z-30">
 
 		<slot name="app-menu">
 			<button
@@ -26,7 +26,7 @@
 		</slot>
 
 		<slot name="app-title">
-			<h2 class="m-0">LSM App</h2>
+
 		</slot>
 
 		<slot name="app-buttons">
@@ -39,7 +39,6 @@
 
 "use strict";
 import { defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	"name": "TheAppSideMenu",
@@ -56,11 +55,6 @@ export default defineComponent({
 	"methods": {
 		toggleMenu() {
 			this.isSideMenuOpen = !this.isSideMenuOpen;
-		}
-	},
-	setup() {
-		return {
-			...useI18n()
 		}
 	}
 });

@@ -8,8 +8,7 @@
 			:for="id">
 			{{label}}
 		</label>
-		kkk
-		{{modelValue}}
+
 		<select
 			ref="input"
 			class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
@@ -20,7 +19,7 @@
 			:id="id"
 			:value="modelValue">
 
-			<option value="" disabled>Selecione uma opção</option>
+			<option value="" disabled>{{label}}</option>
 			<option
 				v-for="option in options"
 				:key="option.id"
@@ -56,7 +55,7 @@ export default {
 			"type": String,
 			"required": false,
 			"default": function () {
-				return "";
+				return "Selecione uma opção";
 			}
 		},
 

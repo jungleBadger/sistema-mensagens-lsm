@@ -117,7 +117,7 @@
 						<lsm-button
 							type="submit"
 							label="Acessar conta"
-							class="disabled:opacity-50"
+							class="w-full"
 							:disabled="Boolean(loadingState || userCreatedMessage || !isLoginFormValid)"
 							icon-id="lock"
 							:is-loading="loadingState">

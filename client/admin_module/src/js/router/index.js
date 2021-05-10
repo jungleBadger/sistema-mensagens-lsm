@@ -3,6 +3,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import TheAppHome from "../components/core/the-app-home.vue";
 import TheBrothersMain from "../components/sections/brothers/the-brothers-main.vue";
+import TheBrotherDetails from "../components/sections/brothers/the-brother-details.vue";
 import TheCategoriesMain from "../components/sections/categories/the-categories-main.vue";
 import TheEventsMain from "../components/sections/events/the-events-main.vue";
 import TheUsersMain from "../components/sections/users/the-users-main.vue";
@@ -27,7 +28,16 @@ export default createRouter({
 			"component": TheBrothersMain,
 			"meta": {
 				"indexed": true
-			}
+			},
+			"children": [
+				{
+					"name": "app.brothers.details",
+					"path": ":brotherId",
+					"component": TheBrotherDetails,
+					"meta": {
+					}
+				}
+			]
 		},
 		{
 			"name": "app.categories",

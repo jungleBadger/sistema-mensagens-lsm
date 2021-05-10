@@ -3,8 +3,11 @@
 		aria-label="Logs de ações do sistema"
 		class="w-full h-full p-2 overflow-hidden flex flex-col">
 
-		<header class="h-12">
-			<h2>Log de operações do sistema</h2>
+		<header class="min-h-12 mb-4">
+			<h3 class="text-2xl ">Log de operações</h3>
+			<h4 class="text-l">
+				Consulte e visualize todas operações registradas no Sistema LSM.
+			</h4>
 		</header>
 
 		<main
@@ -17,7 +20,7 @@
 				:items-per-page="pagination.limit"
 				:table-items="logs"
 				:columns-data="tableColumns"
-				sorting-field="createdAt"
+				:is-async-loading="isLoading"
 				sorting-direction="desc"
 				@paginate="updatePagination">
 			</lsm-table>
@@ -30,7 +33,6 @@
 
 "use strict";
 import { defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
 import LsmTable from "../../../../../../_etc/shared_components/ui/lsm-table.vue";
 
 export default defineComponent({
@@ -59,6 +61,14 @@ export default defineComponent({
 		logs() {
 			return this.$store.getters["logs/logItems"];
 		},
+		"isLoading": {
+			get() {
+				return this.$store.getters["logs/isLoading"];
+			},
+			set(val) {
+				this.$store.commit("logs/isLoading", val);
+			}
+		},
 		tableColumns() {
 			return this.$store.getters["logs/tableColumns"];
 		}
@@ -66,26 +76,26 @@ export default defineComponent({
 	"methods": {
 		updatePagination(value) {
 			this.pagination = value;
-		}
-	},
-	async beforeMount () {
-		await Promise.all([
-			this.$store.dispatch("logs/retrieveTotalLogsCount"),
-			this.$store.dispatch("logs/retrieveLogs")
-		]);
-	},
-	setup() {
-		return {
-			...useI18n()
-		}
-	},
-
-	"watch": {
-		async pagination() {
+		},
+		async loadLogs() {
+			this.isLoading = true;
 			await Promise.all([
 				this.$store.dispatch("logs/retrieveTotalLogsCount"),
 				this.$store.dispatch("logs/retrieveLogs")
 			]);
+			this.isLoading = false;
+		}
+	},
+	async beforeMount () {
+		await this.loadLogs();
+	},
+
+	"watch": {
+		async pagination() {
+			if (!this.isLoading) {
+				await this.loadLogs();
+			}
+
 		}
 	}
 });

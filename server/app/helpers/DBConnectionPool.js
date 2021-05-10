@@ -71,6 +71,8 @@ class DBConnectionPool {
 
 
 							if (resultHandling) {
+
+
 								operationResult[resultHandling]((resultErr, parsedResult) => {
 									if (resultErr) {
 										return reject(`Error fetching the results: ${resultErr.message}`);

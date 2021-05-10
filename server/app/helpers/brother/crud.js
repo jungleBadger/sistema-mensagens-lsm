@@ -70,18 +70,35 @@ module.exports = {
 	},
 
 	/**
+	 * Retrieves the count of total Brothers rows.
+	 * @method retrieveTotalRowsCount
+	 * @return {Promise<Object|Error>} Containing all Brother objects and request metadata.
+	 */
+	async retrieveTotalRowsCount() {
+		return {
+			"table": TABLE_NAME,
+			"count": (await connectionPool.executePreparedSqlInstruction(
+				`SELECT COUNT(ID) FROM ${TABLE_NAME};`,
+				[],
+				"fetch"
+			))["1"]
+		};
+	},
+
+	/**
 	 * Retrieves all admin users.
 	 * @method retrieveAll
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
 	 * @param {number} [limit=20] - Optional limit of rows.
 	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
 	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all admin Users objects and request metadata.
 	 */
-	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID") {
+	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ADMINISTRADOR = true OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
+			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
 		);
 
 		return {
@@ -161,9 +178,12 @@ module.exports = {
 	 * @method update
 	 * @param {string} brotherId - Brother ID to search for.
 	 * @param {string} newDisplayName - New display name.
+	 * @param {object} operator - Operator object.
+	 * @param {string} operator.id - Operator's ID.
+	 * @param {string} operator.email - Operator's email.
 	 * @return {Promise<Object|Error>} Containing the brother object.
 	 */
-	async update (brotherId, newDisplayName) {
+	async update (brotherId, newDisplayName, operator) {
 		if (!brotherId || !newDisplayName) {
 			throw raiseError(
 				400,
@@ -174,11 +194,18 @@ module.exports = {
 		await this.retrieveById(brotherId);
 
 		await connectionPool.executePreparedSqlInstruction(
-			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE TABLE_NAME.ID = ?;`,
+			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE ${TABLE_NAME}.ID = ?;`,
 			[newDisplayName, brotherId]
 		);
 
 		return {
+			...(await logger.generateLog(
+				"UPDATE",
+				brotherId,
+				TABLE_NAME,
+				operator.email,
+				Number(operator.id)
+			)),
 			"ID": brotherId,
 			"NOME_EXIBICAO": newDisplayName
 		};
@@ -188,9 +215,12 @@ module.exports = {
 	 * Delete a single admin User.
 	 * @method delete
 	 * @param {string} brotherId - ID to search for and delete.
+	 * @param {object} operator - Operator object.
+	 * @param {string} operator.id - Operator's ID.
+	 * @param {string} operator.email - Operator's email.
 	 * @return {Promise<string|Error>} Containing the deletion confirmation.
 	 */
-	async delete (brotherId) {
+	async delete (brotherId, operator) {
 		if (!brotherId) {
 			throw raiseError(
 				400,
@@ -198,13 +228,18 @@ module.exports = {
 			);
 		}
 
-		await this.retrieveById(brotherId, ["ID"]);
-
 		await connectionPool.executePreparedSqlInstruction(
 			`DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ?;`,
 			[brotherId]
 		);
 
-		return `Brother ${brotherId} deleted.`;
+		return await logger.generateLog(
+			"DELETE",
+			brotherId,
+			TABLE_NAME,
+			operator.email,
+			Number(operator.id)
+		);
+
 	}
 };

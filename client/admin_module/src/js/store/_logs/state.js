@@ -1,16 +1,18 @@
 "use strict";
 
 export default {
+	"isLoading": true,
 	"totalLogsCount": null,
 	"pagination": {
 		"skip": 0,
-		"limit": 5
+		"limit": 20
 	},
 	"logItems": [],
 	"tableColumns": [
 		{
 			"key": "id",
-			"label": "ID"
+			"label": "ID",
+			"size": "60px"
 		},
 		{
 			"key": "operator",
@@ -18,11 +20,13 @@ export default {
 		},
 		{
 			"key": "action",
-			"label": "O quê?"
+			"label": "O quê?",
+			"size": "80px"
 		},
 		{
 			"key": "referenceTable",
-			"label": "Onde?"
+			"label": "Onde?",
+			"size": "80px"
 		},
 		{
 			"key": "createdAt",

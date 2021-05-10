@@ -3,6 +3,11 @@
 import Log from "./model/Log";
 
 export default {
+
+	isLoading(state, loadingState) {
+		state.isLoading = loadingState;
+	},
+
 	totalLogsCount(state, count) {
 		state.totalLogsCount = Number(count);
 	},

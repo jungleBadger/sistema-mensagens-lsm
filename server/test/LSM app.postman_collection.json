@@ -268,7 +268,7 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Response text has the expected value\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"ok\");\r",
+									"    pm.expect(pm.response.text()).to.eql('{\"redirectPath\":\"/\"}');\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -357,7 +357,7 @@
 			]
 		},
 		{
-			"name": "Admin user",
+			"name": "Admin User",
 			"item": [
 				{
 					"name": "Fail-fast",
@@ -497,6 +497,54 @@
 					"name": "Create admin user",
 					"item": [
 						{
+							"name": "Validate if the route is protected - admins only",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 302\", function () {\r",
+											"    pm.response.to.have.status(302);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false,
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/user/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"user",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create user without `displayName`",
 							"event": [
 								{
@@ -507,8 +555,11 @@
 											"    pm.response.to.have.status(201);\r",
 											"});\r",
 											"\r",
-											"pm.collectionVariables.set(\"firstAdminUserId\", JSON.parse(responseBody).ID);\r",
-											"pm.collectionVariables.set(\"firstAdminUserEmail\", JSON.parse(responseBody).EMAIL);"
+											"var response = JSON.parse(responseBody);\r",
+											"\r",
+											"pm.collectionVariables.set(\"firstAdminUserId\", response.ID);\r",
+											"pm.collectionVariables.set(\"firstAdminUserEmail\", response.EMAIL);\r",
+											"pm.collectionVariables.set(\"firstAdminUserLogId\", response.LOG_ID);"
 										],
 										"type": "text/javascript"
 									}
@@ -542,6 +593,61 @@
 							"response": []
 						},
 						{
+							"name": "First creation log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected mdoel\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"firstAdminUserLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"firstAdminUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{firstAdminUserLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{firstAdminUserLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create user with `displayName`",
 							"event": [
 								{
@@ -552,8 +658,11 @@
 											"    pm.response.to.have.status(201);\r",
 											"});\r",
 											"\r",
-											"pm.collectionVariables.set(\"secondAdminUserId\", JSON.parse(responseBody).ID);\r",
-											"pm.collectionVariables.set(\"secondAdminUserEmail\", JSON.parse(responseBody).EMAIL);"
+											"\r",
+											"var response = JSON.parse(responseBody);\r",
+											"pm.collectionVariables.set(\"secondAdminUserId\", response.ID);\r",
+											"pm.collectionVariables.set(\"secondAdminUserEmail\", response.EMAIL);\r",
+											"pm.collectionVariables.set(\"secondAdminUserLogId\", response.LOG_ID);"
 										],
 										"type": "text/javascript"
 									}
@@ -585,6 +694,61 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Second creation log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected mdoel\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"secondAdminUserLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"secondAdminUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{secondAdminUserLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{secondAdminUserLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -611,7 +775,7 @@
 											"});\r",
 											"\r",
 											"\r",
-											"pm.test(\"Response has the orderBy property\", function () {\r",
+											"pm.test(\"Response has more than one object\", function () {\r",
 											"    pm.expect(pm.response.json().results.length).to.greaterThan(1);\r",
 											"});"
 										],
@@ -669,7 +833,7 @@
 											"});\r",
 											"\r",
 											"\r",
-											"pm.test(\"Response has the orderBy property\", function () {\r",
+											"pm.test(\"Response has only one object\", function () {\r",
 											"    pm.expect(pm.response.json().results.length).to.eql(1);\r",
 											"});"
 										],
@@ -728,7 +892,7 @@
 											"    pm.response.to.have.status(404);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Status code is 200\", function () {\r",
+											"pm.test(\"Response has the correct model\", function () {\r",
 											"    pm.expect(pm.response.text()).to.eql(\"User ID -1 not found.\");\r",
 											"});\r",
 											""
@@ -776,8 +940,12 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Correct confirmation message\", function () {\r",
-											"    pm.expect(pm.response.text()).to.eql(`User ${pm.variables.get(\"firstAdminUserId\")} deleted.`);\r",
+											"    pm.collectionVariables.set(\"firstAdminUserDeleteLogId\", pm.response.json().LOG_ID);\r",
+											"    pm.expect(pm.response.json().ID).to.eql(pm.variables.get(\"firstAdminUserId\"));\r",
+											"    pm.expect(pm.response.json()).to.have.property(\"LOG_ID\");\r",
 											"});\r",
+											"\r",
+											"\r",
 											""
 										],
 										"type": "text/javascript"
@@ -812,6 +980,61 @@
 							"response": []
 						},
 						{
+							"name": "First deletion log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected model\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"firstAdminUserDeleteLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"firstAdminUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{firstAdminUserDeleteLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{firstAdminUserDeleteLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Delete previously created user two",
 							"event": [
 								{
@@ -823,8 +1046,12 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Correct confirmation message\", function () {\r",
-											"    pm.expect(pm.response.text()).to.eql(`User ${pm.variables.get(\"secondAdminUserId\")} deleted.`);\r",
+											"    pm.collectionVariables.set(\"secondAdminUserDeleteLogId\", pm.response.json().LOG_ID);\r",
+											"    pm.expect(pm.response.json().ID).to.eql(pm.variables.get(\"secondAdminUserId\"));\r",
+											"    pm.expect(pm.response.json()).to.have.property(\"LOG_ID\");\r",
 											"});\r",
+											"\r",
+											"\r",
 											""
 										],
 										"type": "text/javascript"
@@ -857,6 +1084,61 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Second deletion log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected model\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"secondAdminUserDeleteLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"secondAdminUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{secondAdminUserDeleteLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{secondAdminUserDeleteLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -880,6 +1162,810 @@
 							""
 						]
 					}
+				}
+			]
+		},
+		{
+			"name": "Brother",
+			"item": [
+				{
+					"name": "Add brother",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"brotherId\", response.ID);\r",
+									"pm.collectionVariables.set(\"brotherLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayName\": \"{{$randomFullName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/brother/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"brother",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First creation log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"brotherLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"brotherId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"IRMAO\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{brotherLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{brotherLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Regular User",
+			"item": [
+				{
+					"name": "Fail-fast",
+					"item": [
+						{
+							"name": "Block requests without `email` property",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message is correct\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"Missing required properties for creating User.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/regular/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Block requests with `rawPassword` property containing less than 08 characters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Valid error message\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"Password has to have a length greater or equal to 08.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/regular/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Block requests without `rawPassword` property",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"Missing required properties for creating User.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test@test.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/regular/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create regular user",
+					"item": [
+						{
+							"name": "Create user without `displayName`",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.collectionVariables.set(\"firstRegularUserId\", JSON.parse(responseBody).ID);\r",
+											"pm.collectionVariables.set(\"firstRegularUserEmail\", JSON.parse(responseBody).EMAIL);\r",
+											"pm.collectionVariables.set(\"firstRegularUserLogId\", JSON.parse(responseBody).LOG_ID);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/regular/user/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "First creation log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected mdoel\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"firstRegularUserLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"firstRegularUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{firstRegularUserLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{firstRegularUserLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create user with `displayName`",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.collectionVariables.set(\"secondRegularUserId\", JSON.parse(responseBody).ID);\r",
+											"pm.collectionVariables.set(\"secondRegularUserEmail\", JSON.parse(responseBody).EMAIL);\r",
+											"pm.collectionVariables.set(\"secondRegularUserLogId\", JSON.parse(responseBody).LOG_ID);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/regular/user/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Second creation log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected mdoel\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"secondRegularUserLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"secondRegularUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{secondRegularUserLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{secondRegularUserLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete regular user",
+					"item": [
+						{
+							"name": "Delete unexistent user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"User ID -1 not found.\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/regular/user/-1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete previously created user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Correct confirmation message\", function () {\r",
+											"    pm.collectionVariables.set(\"firstRegularUserDeleteLogId\", pm.response.json().LOG_ID);\r",
+											"    pm.expect(pm.response.json().ID).to.eql(pm.variables.get(\"firstRegularUserId\"));\r",
+											"    pm.expect(pm.response.json()).to.have.property(\"LOG_ID\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/regular/user/{{firstRegularUserId}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user",
+										"{{firstRegularUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "First deletion log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected model\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"firstRegularUserDeleteLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"firstRegularUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{firstRegularUserDeleteLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{firstRegularUserDeleteLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete previously created user two",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Correct confirmation message\", function () {\r",
+											"    pm.collectionVariables.set(\"secondRegularUserDeleteLogId\", pm.response.json().LOG_ID);\r",
+											"    pm.expect(pm.response.json().ID).to.eql(pm.variables.get(\"secondRegularUserId\"));\r",
+											"    pm.expect(pm.response.json()).to.have.property(\"LOG_ID\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/regular/user/{{secondRegularUserId}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"regular",
+										"user",
+										"{{secondRegularUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Second deletion log was generated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected model\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"secondRegularUserDeleteLogId\"));\r",
+											"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"secondRegularUserId\"));\r",
+											"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"USUARIO\");\r",
+											"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/logs/{{secondRegularUserDeleteLogId}}/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"logs",
+										"{{secondRegularUserDeleteLogId}}",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Logs",
+			"item": [
+				{
+					"name": "Get logged user's logs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an array\", function () {\r",
+									"    pm.expect(Array.isArray(pm.response.json())).to.be.true;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has more than one object\", function () {\r",
+									"    pm.expect(pm.response.json().length).to.greaterThan(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/logs/self",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"self"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all logs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the offset property\", function () {\r",
+									"    pm.expect(pm.response.json().offset).to.exist;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the orderBy property\", function () {\r",
+									"    pm.expect(pm.response.json().orderBy).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has more than one object\", function () {\r",
+									"    pm.expect(pm.response.json().results.length).to.greaterThan(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/logs/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1072,6 +2158,66 @@
 		},
 		{
 			"key": "secondAdminUserEmail",
+			"value": ""
+		},
+		{
+			"key": "firstRegularUserId",
+			"value": ""
+		},
+		{
+			"key": "firstRegularUserEmail",
+			"value": ""
+		},
+		{
+			"key": "secondRegularUserId",
+			"value": ""
+		},
+		{
+			"key": "secondRegularUserEmail",
+			"value": ""
+		},
+		{
+			"key": "secondAdminUserLogId",
+			"value": ""
+		},
+		{
+			"key": "firstAdminUserLogId",
+			"value": ""
+		},
+		{
+			"key": "firstRegularUserLogId",
+			"value": ""
+		},
+		{
+			"key": "secondRegularUserLogId",
+			"value": ""
+		},
+		{
+			"key": "firstAdminUserDeleteLogId",
+			"value": ""
+		},
+		{
+			"key": "secondAdminUserDeleteLogId",
+			"value": ""
+		},
+		{
+			"key": "firstRegularUserDeleteLogId",
+			"value": ""
+		},
+		{
+			"key": "secondRegularUserDeleteLogId",
+			"value": ""
+		},
+		{
+			"key": "brotherId",
+			"value": ""
+		},
+		{
+			"key": "brotherLogId",
+			"value": ""
+		},
+		{
+			"key": "brotherDisplayName",
 			"value": ""
 		}
 	]

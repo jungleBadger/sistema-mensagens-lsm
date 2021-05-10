@@ -5,6 +5,13 @@
 	},
 	"decimal": {
 		"style": "decimal",
-		"minimumFractionDigits": 1
+		"minimumFractionDigits": 2
+	},
+	"phone": {
+		"style": "decimal"
+	},
+	"integer": {
+		"minimumIntegerDigits": 2
 	}
+
 }

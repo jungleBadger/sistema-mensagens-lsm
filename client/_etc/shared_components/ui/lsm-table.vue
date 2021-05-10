@@ -6,60 +6,107 @@
 
 		<!--			@SECTION TABLE FILTERS -->
 
-		<header class="bg-yellow-400">
-			<lsm-input
-				:key="selectedFilteringField"
-				v-model="filterText"
-				class="mb-2"
-				autofocus
-			></lsm-input>
-			{{ filterText }}
+		<header class="bg-gray-100 flex gap-2 items-center shadow z-10 p-2 flex-wrap">
 
-			<lsm-select
-				model-value="selectedFilteringField"
-				v-model="selectedFilteringField"
-				:options="filteringFields">
+			<div class="w-48 min-w-1/3">
+				<lsm-select
+					v-model="selectedFilteringField"
+					:model-value="selectedFilteringField"
+					:options="filteringFields"
+					:disabled="isAsyncLoading"
+					label="Selecione um campo para filtrar a tabela.">
+				</lsm-select>
 
-			</lsm-select>
+			</div>
+
+			<div
+				class="flex-1"
+				style="min-width: 240px;">
+				<lsm-input
+					:key="selectedFilteringField"
+					:disabled="isAsyncLoading"
+					v-model="filterText"
+					autofocus
+					placeholder="Digite para filtrar a tabela."
+					type="search">
+				</lsm-input>
+
+			</div>
 
 		</header>
 
 		<!--			@SECTION TABLE BODY -->
 
-		<main
-			class="bg-white max-h-full overflow-hidden flex-1 flex flex-col"
-			role="table">
+		<template v-if="filteredData.length">
+			<div
+				class="bg-white max-h-full overflow-hidden flex flex-col pl-2 pr-2 pb-1 pt-1 ml-px ml-px"
+				role="table">
 
-			<!--			@SECTION TABLE COLUMNS HEADER -->
-
-			<div role="rowgroup">
-				<div role="row">
-				  <span
-					  v-for="column in columnsData"
-					  :key="column.key"
-					  role="columnheader">
-					{{ column.label }}
-				  </span>
-				</div>
-			</div>
-
-
-			<!--			@SECTION TABLE SCROLLER -->
-			<div class="overflow-auto flex-1">
-				<!--			@SECTION TABLE ROWS -->
+				<!--			@SECTION TABLE COLUMNS HEADER -->
 				<div
-					v-for="item in filteredData"
-					:key="item.id"
+					class="w-full sr-only md:not-sr-only"
 					role="rowgroup">
+					<div
+						class="w-full flex"
+						role="row">
+						<button
+							v-for="column in columnsData"
+							:id="column.key"
+							:key="column.key"
+							:aria-label="column.label"
+							:style="{'flex-basis': column.size || 'auto'}"
+							@click="changeSortingOptions(column.key, selectedSortingDirection === 'asc' ? 'desc' : 'asc')"
+							class="flex-1 flex items-center gap-1 hover:bg-gray-200 transition-colors"
+							role="columnheader">
+
+							<template v-if="selectedSortingField === column.key">
+								<template v-if="selectedSortingDirection === 'asc'">
+									<font-awesome-icon :icon="['fal', 'arrow-up-short-wide']" />
+								</template>
+								<template v-else>
+									<font-awesome-icon :icon="['fal', 'arrow-down-short-wide']" />
+								</template>
+
+							</template>
+							<span>
+								{{ column.label }}
+							</span>
+
+						</button>
+
+
+					</div>
+				</div>
+
+
+				<!--			@SECTION TABLE SCROLLER -->
+				<transition-group
+					class="w-full max-w-full overflow-auto flex-1 flex flex-col gap-2 md:gap-0"
+					name="list"
+					role="rowgroup"
+					tag="div">
+					<!--			@SECTION TABLE ROWS -->
+
+					<Component
+						:is="handleClick ? 'button' : 'div'"
+						v-for="item in filteredData"
+						:key="item.id"
+						class="max-w grid flex-col md:flex-row md:flex"
+						@click="emitClick(item)"
+						:class="{'hover:bg-gray-200 active:bg-gray-300 cursor-pointer': this.handleClick}"
+						role="row">
 
 					 <span
 						 v-for="column in columnsData"
 						 :key="column.key"
+						 :aria-labelledby="column.key"
+						 :style="{'flex-basis': column.size || 'auto'}"
+						 class="flex-1 h-8 overflow-hidden overflow-ellipsis ml-0.5"
 						 role="cell">
 							<template v-if="column.type === 'date' ">
 
 								<i18n-d
-									:format="{ key: 'long', era: 'narrow' }"
+									:format="{ 'key': 'shortWithTime' }"
 									:value="item[column.key]"
 								></i18n-d>
 
@@ -69,79 +116,87 @@
 							</template>
 
 					  </span>
+					</Component>
+				</transition-group>
+			</div>
+		</template>
+		<template v-else>
+			<div
+				class="bg-white pl-2 pr-2 pb-4 pt-4"
+				:key="'empty-container'">
+				<template v-if="filterText">
+					Nenhum item encontrado aplicando os filtros selecionados. <button @click="resetFilters" class="text-blue-500 ml-2">Limpar filtros</button>
+				</template>
+				<template v-else>
+					Tabela sem items. As razões podem variar, mas nenhum resultado foi encontrado pelo sistema.
+				</template>
+			</div>
+		</template>
+
+
+		<!--			@SECTION TABLE FOOTER -->
+		<footer class="bg-gray-100 flex justify-between gap-2 items-center shadow z-10 p-2 flex-wrap">
+
+
+			<div class="flex flex-1 gap-4">
+				<div class="flex gap-1 items-center">
+					<label>Itens por página</label>
+					<div class="w-16">
+						<lsm-select
+							:model-value="itemsPerPage"
+							:options="itemsPerPageOptions"
+							:disabled="isAsyncLoading"
+							label="Quantidade de itens por página:"
+							@change="updateItemsPerPage"
+						></lsm-select>
+					</div>
+				</div>
+
+				<div class="flex gap-2 items-center">
+					<label>Página selecionada</label>
+					<div class="w-24">
+						<lsm-select
+							:model-value="currentPage"
+							:options="pageOptions"
+							:disabled="isAsyncLoading"
+							label="Página selecionada:"
+							@change="selectPage"
+						></lsm-select>
+					</div>
 				</div>
 			</div>
 
 
-		</main>
-
-		<footer class="w-full bg-yellow-400">
-
-			<button
-				v-if="isPaginationLeftEnabled"
-				@click="paginateLeft">
-				LEFT
-			</button>
-
 			<template v-if="pageLimits">
 
-				{{ pageLimits.start }} - {{ pageLimits.end }}
-				of
-				{{ totalItemsCount }}
+				<button
+					v-if="isPaginationLeftEnabled"
+					class="w-6"
+
+					title="Clique para carregar página anterior de resultados."
+					@click="paginateLeft">
+					<font-awesome-icon
+						:icon="['fal', 'chevron-left']">
+
+					</font-awesome-icon>
+				</button>
+
+
+				<span><i18n-n :value="pageLimits.start" format="integer"></i18n-n> - <i18n-n :value="pageLimits.end"
+																							 format="integer"></i18n-n> de <i18n-n
+					:value="totalItemsCount" format="integer"></i18n-n></span>
+
+				<button
+					v-if="isPaginationRightEnabled"
+					class="w-6"
+					title="Clique para carregar próxima página de resultados."
+					@click="paginateRight">
+					<font-awesome-icon
+						:icon="['fal', 'chevron-right']">
+
+					</font-awesome-icon>
+				</button>
 			</template>
-
-
-			<button
-				v-if="isPaginationRightEnabled"
-				@click="paginateRight">
-				RIGHT
-			</button>
-
-			<span class="ml-2">
-				current page
-				{{ currentPage }}
-			</span>
-
-			<span class="ml-2">
-				x
-				{{ pageLimits }}
-			</span>
-
-			<span class="ml-2">
-				items per page
-				{{ itemsPerPage }}
-			</span>
-
-			<span class="ml-2">
-				total pages
-				{{ numberOfPages }}
-			</span>
-
-
-			<span>
-				<lsm-select
-					:model-value="itemsPerPage"
-					:options="[
-						{
-							'id': 5,
-							'label': '5'
-						},
-						{
-							'id': 20,
-							'label': '20'
-						},
-						{
-							'id': 50,
-							'label': '50'
-						},
-						{
-							'id': 100,
-							'label': '100'
-						}
-					]"
-					@change="updateItemsPerPage"
-				></lsm-select>
-			</span>
 
 		</footer>
 
@@ -153,7 +208,7 @@
 
 
 import { v4 as uuidv4 } from "uuid";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import LsmInput from "./lsm-input.vue";
 import LsmSelect from "./lsm-select.vue";
@@ -164,13 +219,30 @@ export default defineComponent({
 		LsmInput,
 		LsmSelect
 	},
-	"emits": ["paginate"],
+	"emits": ["paginate", "select"],
 	"props": {
+
 		"id": {
 			"type": String,
 			"required": false,
 			"default": function () {
 				return uuidv4();
+			}
+		},
+
+		"handleClick": {
+			"type": Boolean,
+			"required": false,
+			"default": function () {
+				return false;
+			}
+		},
+
+		"isAsyncLoading": {
+			"type": Boolean,
+			"required": false,
+			"default": function () {
+				return false;
 			}
 		},
 
@@ -217,32 +289,28 @@ export default defineComponent({
 			"default": function () {
 				return "desc";
 			},
-			"validator": value => ['asc', 'desc'].indexOf(value) !== -1
-		},
+			"validator": value => ["asc", "desc"].indexOf(value) !== -1
+		}
 
 	},
 	"data": function () {
 		return {
-			"filteringFields": [
+			"itemsPerPageOptions": [
 				{
-					"id": "all",
-					"label": "Todos os campos"
+					"id": 5,
+					"label": "5"
 				},
 				{
-					"id": "operator",
-					"label": "Operador"
+					"id": 20,
+					"label": "20"
 				},
 				{
-					"id": "action",
-					"label": "Ação"
+					"id": 50,
+					"label": "50"
 				},
 				{
-					"id": "referenceTable",
-					"label": "Tabela"
-				},
-				{
-					"id": "createdAt",
-					"label": "Data da operação"
+					"id": 100,
+					"label": "100"
 				}
 			],
 			"filterText": "",
@@ -255,17 +323,30 @@ export default defineComponent({
 		};
 	},
 	"computed": {
-
+		"filteringFields": function () {
+			return [
+				{
+					"id": "all",
+					"label": "Todos os campos"
+				},
+				...this.columnsData.map(item => {
+					return {
+						"id": item.key,
+						"label": item.label
+					}
+				})
+			]
+		},
 		"filteredData": function () {
 			let result = (
 				(this.filterText ?
-					this.tableItems.filter(item => {
-						return JSON.stringify(
-							item,
-							this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
-						).indexOf(this.filterText) > -1 ;
-					}) :
-					this.tableItems.map(item => item)
+						this.tableItems.filter(item => {
+							return JSON.stringify(
+								item,
+								this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
+							).toLowerCase().indexOf(this.filterText.toLowerCase()) > -1;
+						}) :
+						this.tableItems.map(item => item)
 				)
 			);
 
@@ -276,7 +357,7 @@ export default defineComponent({
 					} else {
 						return a[this.selectedSortingField] < b[this.selectedSortingField] ? -1 : 1;
 					}
-				})
+				});
 			}
 
 			return result;
@@ -284,7 +365,7 @@ export default defineComponent({
 
 		"numberOfPages": function () {
 			if (this.totalItemsCount && this.itemsPerPage) {
-				return Math.floor(this.totalItemsCount / this.itemsPerPage);
+				return Math.ceil(this.totalItemsCount / this.itemsPerPage) || 1;
 			}
 		},
 
@@ -299,6 +380,18 @@ export default defineComponent({
 			}
 		},
 
+		"pageOptions": function () {
+			return this.numberOfPages > 1 ? Array(this.numberOfPages).fill(null).map((item, index) => {
+				return {
+					"id": index + 1,
+					"label": `${index + 1}/${this.numberOfPages}`
+				};
+			}) : [{
+				"id": 1,
+				"label": "1/1"
+			}];
+		},
+
 		"isPaginationLeftEnabled": function () {
 			return this.pageLimits ? this.pageLimits.start > this.itemsPerPage : false;
 		},
@@ -308,6 +401,31 @@ export default defineComponent({
 		}
 	},
 	"methods": {
+
+		resetFilters() {
+			this.selectedFilteringField = "all";
+			this.filterText = "";
+		},
+
+		changeSortingOptions(field, direction) {
+			this.selectedSortingField = field;
+			this.selectedSortingDirection = direction;
+		},
+
+		emitClick(selectedItem) {
+			if (this.handleClick) {
+				this.$emit("select", selectedItem);
+			}
+		},
+
+		selectPage (event) {
+			this.currentPage = Number(event.target.value);
+			this.$emit("paginate", {
+				"skip": this.pageLimits.start - 1,
+				"limit": this.itemsPerPage
+			});
+		},
+
 		paginateLeft () {
 			this.currentPage -= 1;
 			this.$emit("paginate", {
@@ -322,22 +440,30 @@ export default defineComponent({
 				"skip": this.pageLimits.start - 1,
 				"limit": this.itemsPerPage
 			});
+
 		},
 
 		updateItemsPerPage (event) {
+			this.currentPage = 1;
 			this.$emit("paginate", {
 				"skip": 0,
-				"limit": event.target.value
+				"limit": Number(event.target.value)
 			});
+
 		}
 	},
 
 	setup (props) {
-		const { datetimeFormats } = useI18n();
+		const {
+			datetimeFormats,
+			numberFormats
+		} = useI18n();
+
 		return {
 			datetimeFormats,
-			"selectedSortingField": props.sortingField || props.columnsData[0].key,
-			"selectedSortingDirection": props.sortingDirection
+			numberFormats,
+			"selectedSortingField": ref(props.sortingField),
+			"selectedSortingDirection": ref(props.sortingDirection)
 		};
 	}
 });

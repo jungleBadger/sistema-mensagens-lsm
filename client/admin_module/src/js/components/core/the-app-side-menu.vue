@@ -1,7 +1,7 @@
 <template>
 	<nav
 		id="lsm-sidemenu"
-		class="bg-white flex flex-col w-12 shadow-sm z-10"
+		class="bg-white flex flex-col w-12 shadow-sm z-20 bg-white backdrop-filter backdrop-blur-sm bg-opacity-50 md:bg-opacity-100 md:backdrop-filter-none md:backdrop-blur-0 md:bg-white"
 		:class="{'__is-open': isSideMenuOpen}">
 
 
@@ -72,7 +72,6 @@
 "use strict";
 
 import { defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
 import LsmInput from "../../../../../_etc/shared_components/ui/lsm-input.vue";
 
 export default defineComponent({
@@ -156,16 +155,6 @@ export default defineComponent({
 		// selectedRoute() {
 		//
 		// }
-	},
-
-
-	setup() {
-		return {
-			...useI18n()
-		}
-	},
-	mounted () {
-		console.log(this.$route)
 	}
 });
 </script>
@@ -212,8 +201,6 @@ export default defineComponent({
 		position: absolute;
 		height: calc(100% - 48px);
 		transform: translateX(-100%);
-		background-color: rgba(255, 255, 255, 0.5);
-		backdrop-filter: blur(2px);
 
 		&.__is-open {
 			display: block;

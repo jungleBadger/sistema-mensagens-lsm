@@ -1,6 +1,11 @@
 "use strict";
 
 export default {
+
+	isLoading(state) {
+		return state.isLoading;
+	},
+
 	totalLogsCount(state) {
 		return state.totalLogsCount;
 	},
