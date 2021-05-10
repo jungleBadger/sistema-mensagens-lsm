@@ -625,7 +625,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -728,7 +728,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -879,6 +879,72 @@
 					]
 				},
 				{
+					"name": "Get admin user",
+					"item": [
+						{
+							"name": "Get single admin user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response has the expected model\", function () {\r",
+											"    var response = JSON.parse(responseBody);\r",
+											"    pm.expect(response.ID).to.exist;\r",
+											"    pm.expect(response.EMAIL).to.exist;\r",
+											"    pm.expect(response.SENHA_REGISTRADA).to.exist;\r",
+											"    pm.expect(response.EMAIL_CONFIRMADO).to.exist;\r",
+											"    pm.expect(response.ADMINISTRADOR).to.exist;\r",
+											"    pm.expect(response.CRIADO_EM).to.exist;\r",
+											"\r",
+											"    pm.expect(response.ID).to.eql(pm.variables.get(\"firstAdminUserId\"));\r",
+											"    pm.expect(response.ADMINISTRADOR).to.eql(true);\r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/user/{{firstAdminUserId}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"user",
+										"{{firstAdminUserId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Delete admin user",
 					"item": [
 						{
@@ -1012,7 +1078,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1118,7 +1184,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1247,7 +1313,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1263,6 +1329,740 @@
 								"api",
 								"logs",
 								"{{brotherLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get brother by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"brotherId\"));\r",
+									"\r",
+									"    pm.expect(response.NOME_EXIBICAO).to.exist\r",
+									"    pm.expect(response.CRIADO_EM).to.exist\r",
+									"    pm.expect(response.ATUALIZADO_EM).to.exist\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/brother/{{brotherId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"brother",
+								"{{brotherId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all brothers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.offset).to.exist\r",
+									"    pm.expect(response.orderBy).to.exist\r",
+									"    pm.expect(response.results).to.exist\r",
+									"\r",
+									"    pm.expect(Array.isArray(response.results)).to.eql(true);\r",
+									"    pm.expect(response.results.length >= 1).to.eql(true);\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/brother/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"brother",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update brother",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"brotherId\", response.ID);\r",
+									"pm.collectionVariables.set(\"brotherLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayName\": \"{{$randomFullName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/brother/{{brotherId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"brother",
+								"{{brotherId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First update log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"brotherLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"brotherId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"IRMAO\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"UPDATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{brotherLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{brotherLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete brother",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"brotherLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/brother/{{brotherId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"brother",
+								"{{brotherId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First delete log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"brotherLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"brotherId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"IRMAO\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{brotherLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{brotherLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Add category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"categoryId\", response.ID);\r",
+									"pm.collectionVariables.set(\"categoryLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomJobType}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/category/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First creation log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"categoryLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"categoryId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"CATEGORIA\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{categoryLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{categoryLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get category by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"categoryId\"));\r",
+									"\r",
+									"    pm.expect(response.NOME).to.exist\r",
+									"    pm.expect(response.CRIADO_EM).to.exist\r",
+									"    pm.expect(response.ATUALIZADO_EM).to.exist\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/category/{{categoryId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"{{categoryId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.offset).to.exist\r",
+									"    pm.expect(response.orderBy).to.exist\r",
+									"    pm.expect(response.results).to.exist\r",
+									"\r",
+									"    pm.expect(Array.isArray(response.results)).to.eql(true);\r",
+									"    pm.expect(response.results.length >= 1).to.eql(true);\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/category/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"categoryId\", response.ID);\r",
+									"pm.collectionVariables.set(\"categoryLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/category/{{categoryId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"{{categoryId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First update log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"categoryLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"categoryId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"CATEGORIA\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"UPDATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{categoryLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{categoryLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"categoryLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/category/{{categoryId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"{{categoryId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First delete log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"categoryLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"categoryId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"CATEGORIA\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{categoryLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{categoryLogId}}",
 								""
 							]
 						}
@@ -1487,7 +2287,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1588,7 +2388,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"12345678\",\r\n    \"displayName\": \"test\"\r\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2137,7 +2937,7 @@
 			"value": ""
 		},
 		{
-			"key": "firstNewdminEmail",
+			"key": "firstNewAdminEmail",
 			"value": ""
 		},
 		{
@@ -2218,6 +3018,18 @@
 		},
 		{
 			"key": "brotherDisplayName",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		},
+		{
+			"key": "categoryLogId",
+			"value": ""
+		},
+		{
+			"key": "firstNewdminEmail",
 			"value": ""
 		}
 	]

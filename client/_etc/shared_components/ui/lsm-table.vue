@@ -112,7 +112,7 @@
 
 							</template>
 							<template v-else>
-								{{ item[column.key] }}
+								{{ item[column.key]  || "-" }}
 							</template>
 
 					  </span>

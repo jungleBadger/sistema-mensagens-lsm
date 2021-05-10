@@ -153,12 +153,6 @@ export default defineComponent({
 
 	unmounted () {
 		this.$store.commit("brothers/unsetSelectedBrother");
-	},
-
-	setup () {
-
-		console.log(this);
-		return {};
 	}
 });
 </script>

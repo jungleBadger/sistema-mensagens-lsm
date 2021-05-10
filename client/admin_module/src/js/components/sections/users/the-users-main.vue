@@ -22,35 +22,11 @@
 <!--			</lsm-button>-->
 		</header>
 
-		<main
-			class="w-full flex-1 overflow-hidden"
-			role="main"
-			aria-label="Tabela de Irmãos">
 
-<!--			<lsm-table-->
-<!--				:total-items-count="totalUsersCount"-->
-<!--				:items-per-page="pagination.limit"-->
-<!--				:table-items="users"-->
-<!--				:columns-data="tableColumns"-->
-<!--				:is-async-loading="isLoading"-->
-<!--				:handle-click="true"-->
-<!--				sorting-direction="asc"-->
-<!--				@paginate="updatePagination"-->
-<!--				@select="selectItem">-->
-<!--			</lsm-table>-->
-		</main>
+		<the-admin-users-fragment></the-admin-users-fragment>
 
 
-<!--		<router-view-->
-<!--			v-slot="{ Component }">-->
-<!--			<transition-->
-<!--				@enter="fadeIn"-->
-<!--				@leave="fadeOut"-->
-<!--				mode="out-in"-->
-<!--				:css="false">-->
-<!--				<component :is="Component" />-->
-<!--			</transition>-->
-<!--		</router-view>-->
+
 
 
 	</section>
@@ -61,7 +37,8 @@
 import { defineComponent } from "vue";
 import LsmTable from "../../../../../../_etc/shared_components/ui/lsm-table.vue";
 import fade from "../../../../../../_etc/shared_mixins/fade";
-import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button";
+import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button.vue";
+import TheAdminUsersFragment from "./admin/the-admin-users-fragment.vue";
 
 export default defineComponent({
 	"name": "TheUsersMain",
@@ -70,7 +47,8 @@ export default defineComponent({
 	],
 	"components": {
 		LsmButton,
-		LsmTable
+		LsmTable,
+		TheAdminUsersFragment
 	},
 	"data": function () {
 		return {
@@ -78,85 +56,10 @@ export default defineComponent({
 		}
 	},
 	"computed": {
-		// totalUsersCount() {
-		// 	return this.$store.getters["users/totalUsersCount"];
-		// },
-		// "pagination": {
-		// 	get() {
-		// 		return this.$store.getters["users/pagination"];
-		// 	},
-		// 	set(val) {
-		// 		this.$store.commit("users/pagination", val);
-		// 	}
-		// },
-		//
-		// users() {
-		// 	return this.$store.getters["users/brotherItems"];
-		// },
-		// "isLoading": {
-		// 	get() {
-		// 		return this.$store.getters["users/isLoading"];
-		// 	},
-		// 	set(val) {
-		// 		this.$store.commit("users/isLoading", val);
-		// 	}
-		// },
-		// tableColumns() {
-		// 	return this.$store.getters["users/tableColumns"];
-		// }
+
 	},
 	"methods": {
-
-		// openCreateModal() {
-		// 	this.$router.push(
-		// 		{
-		// 			"name": "app.users.details",
-		// 			"params": {
-		// 				"brotherId": "novo"
-		// 			}
-		// 		}
-		// 	)
-		// },
-		//
-		// selectItem(item) {
-		// 	this.$store.commit("users/selectedUser", item);
-		// 	this.$router.push(
-		// 		{
-		// 			"name": "app.users.details",
-		// 			"params": {
-		// 				"brotherId": item.id
-		// 			}
-		// 		}
-		// 	)
-		// },
-		//
-		// updatePagination(value) {
-		// 	this.pagination = value;
-		// },
-		// async loadUsers() {
-		// 	this.isLoading = true;
-		// 	await Promise.all([
-		// 		this.$store.dispatch("users/retrieveTotalUsersCount"),
-		// 		this.$store.dispatch("users/retrieveUsers")
-		// 	]);
-		// 	this.isLoading = false;
-		// 	return true;
-		// }
 	}
-
-	// async mounted () {
-	// 	await this.loadUsers();
-	// },
-
-
-	// "watch": {
-	// 	async pagination() {
-	// 		if (!this.isLoading) {
-	// 			await this.loadUsers();
-	// 		}
-	//
-	// 	}
-	// }
 });
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">

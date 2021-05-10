@@ -8,6 +8,7 @@ import TheCategoriesMain from "../components/sections/categories/the-categories-
 import TheCategoryDetails from "../components/sections/categories/the-category-details.vue";
 import TheEventsMain from "../components/sections/events/the-events-main.vue";
 import TheUsersMain from "../components/sections/users/the-users-main.vue";
+import TheAdminUserDetails from "../components/sections/users/admin/the-admin-user-details.vue";
 import TheLogsMain from "../components/sections/logs/the-logs-main.vue";
 
 export default createRouter({
@@ -71,7 +72,16 @@ export default createRouter({
 			"component": TheUsersMain,
 			"meta": {
 				"indexed": true
-			}
+			},
+			"children": [
+				{
+					"name": "app.users.admin.details",
+					"path": ":adminUserId",
+					"component": TheAdminUserDetails,
+					"meta": {
+					}
+				}
+			]
 		},
 		{
 			"name": "app.logs",

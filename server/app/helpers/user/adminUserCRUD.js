@@ -91,6 +91,22 @@ module.exports = {
 	},
 
 	/**
+	 * Retrieves the count of total Admin users rows.
+	 * @method retrieveTotalRowsCount
+	 * @return {Promise<Object|Error>} Containing all Admin users objects and request metadata.
+	 */
+	async retrieveTotalRowsCount() {
+		return {
+			"table": TABLE_NAME,
+			"count": (await connectionPool.executePreparedSqlInstruction(
+				`SELECT COUNT(ID) FROM ${TABLE_NAME};`,
+				[],
+				"fetch"
+			))["1"]
+		};
+	},
+
+	/**
 	 * Retrieves all admin users.
 	 * @method retrieveAll
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.

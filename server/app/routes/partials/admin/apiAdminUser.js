@@ -63,6 +63,16 @@ router.post(
 	}
 );
 
+router.get(
+	"/count",
+	isAdmin,
+	async (req, res) => {
+		res.status(200).send(
+			await adminUser.retrieveTotalRowsCount()
+		);
+	}
+);
+
 /**
  * @swagger
  * /api/admin/user:
@@ -121,7 +131,10 @@ router.get(
 				[
 					"ID",
 					"EMAIL",
-					"NOME_EXIBICAO"
+					"NOME_EXIBICAO",
+					"SENHA_REGISTRADA",
+					"EMAIL_CONFIRMADO",
+					"CRIADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
@@ -134,7 +147,7 @@ router.get(
 
 /**
  * @swagger
- * /api/admin/user/id/:adminUserId:
+ * /api/admin/user/:adminUserId:
  *   get:
  *     tags: [admin_user]
  *     summary: Get admin User by ID.
@@ -162,7 +175,7 @@ router.get(
  *         description: Error handler.
  */
 router.get(
-	"/id/:adminUserId",
+	"/:adminUserId",
 	isAdmin,
 	async (req, res) => {
 		res.status(
@@ -173,7 +186,11 @@ router.get(
 				[
 					"ID",
 					"EMAIL",
-					"NOME_EXIBICAO"
+					"NOME_EXIBICAO",
+					"SENHA_REGISTRADA",
+					"EMAIL_CONFIRMADO",
+					"ADMINISTRADOR",
+					"CRIADO_EM"
 				]
 			)
 		)
