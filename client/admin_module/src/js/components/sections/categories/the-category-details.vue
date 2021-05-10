@@ -1,15 +1,15 @@
 <template>
 	<lsm-modal
 
-		@close="goToBrothersHome">
+		@close="goToCategoriesHome">
 
 		<template v-slot:modal-header>
 			<h3 class="text-gray-800 text-lg font-semibold">
 				<template v-if="isDocumentExistent">
-					Editar Irmão {{ selectedBrother.id }}
+					Editar Categoria {{ selectedCategory.id }}
 				</template>
 				<template v-else>
-					Criar novo Irmão
+					Criar nova Categoria
 				</template>
 			</h3>
 		</template>
@@ -21,7 +21,7 @@
 				<label class="text-gray-700 ">Nome de exibição</label>
 
 				<lsm-input
-					v-model="displayName"
+					v-model="name"
 					@keyup.enter="submitForm"
 					autofocus
 					placeholder="Digite nome de exibição">
@@ -71,7 +71,7 @@ import LsmInput from "../../../../../../_etc/shared_components/ui/lsm-input";
 import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button";
 
 export default defineComponent({
-	"name": "TheBrotherDetails",
+	"name": "TheCategoryDetails",
 	"components": {
 		LsmButton,
 		LsmInput,
@@ -81,78 +81,78 @@ export default defineComponent({
 		return {
 			"isLoading": false,
 			"isDeleteLoading": false,
-			"displayName": ""
+			"name": ""
 		};
 	},
 	"computed": {
-		selectedBrother () {
-			return this.$store.getters["brothers/selectedBrother"];
+		selectedCategory () {
+			return this.$store.getters["categories/selectedCategory"];
 		},
 
 		isDocumentExistent () {
-			return this.selectedBrother && this.selectedBrother.id;
+			return this.selectedCategory && this.selectedCategory.id;
 		}
 	},
 	"methods": {
-		goToBrothersHome () {
-			return this.$router.push({ "name": "app.brothers" });
+		goToCategoriesHome () {
+			return this.$router.push({ "name": "app.categories" });
 		},
 
 		async submitForm () {
 			this.isLoading = true;
 
 			if (this.isDocumentExistent) {
-				await this.$store.dispatch("brothers/updateBrother", {
-					"id": this.selectedBrother.id,
-					"displayName": this.displayName
+				await this.$store.dispatch("categories/updateCategory", {
+					"id": this.selectedCategory.id,
+					"name": this.name
 				});
 			} else {
-				await this.$store.dispatch("brothers/createBrother", this.displayName);
+				await this.$store.dispatch("categories/createCategory", this.name);
 			}
 
 			await Promise.all([
-				this.$store.dispatch("brothers/retrieveTotalBrothersCount"),
-				this.$store.dispatch("brothers/retrieveBrothers")
+				this.$store.dispatch("categories/retrieveTotalCategoriesCount"),
+				this.$store.dispatch("categories/retrieveCategories")
 			]);
 
 			this.isLoading = false;
-			return this.goToBrothersHome();
+			return this.goToCategoriesHome();
 		},
 
 		async deleteItem() {
 
 			this.isDeleteLoading = true;
 
-			await this.$store.dispatch("brothers/deleteBrother", this.selectedBrother.id);
+			await this.$store.dispatch("categories/deleteCategory", this.selectedCategory.id);
 
 			await Promise.all([
-				this.$store.dispatch("brothers/retrieveTotalBrothersCount"),
-				this.$store.dispatch("brothers/retrieveBrothers")
+				this.$store.dispatch("categories/retrieveTotalCategoriesCount"),
+				this.$store.dispatch("categories/retrieveCategories")
 			]);
 
 			this.isDeleteLoading = false;
-			return this.goToBrothersHome();
+			return this.goToCategoriesHome();
 		}
 	},
 
 	async mounted () {
-		if (!this.selectedBrother && this.$route.params.brotherId !== "novo") {
+		if (!this.selectedCategory && this.$route.params.categoryId !== "novo") {
 			this.isLoading = true;
 			this.$store.commit(
-				"brothers/selectedBrother",
-				await this.$store.dispatch("brothers/retrieveBrotherById", this.$route.params.brotherId)
+				"categories/selectedCategory",
+				await this.$store.dispatch("categories/retrieveCategoryById", this.$route.params.categoryId)
 			);
 			this.isLoading = false;
 		}
 
-		if (this.selectedBrother) {
-			this.displayName = this.selectedBrother.displayName;
+		if (this.selectedCategory) {
+			this.name = this.selectedCategory.name;
 		}
 
 	},
 
 	unmounted () {
-		this.$store.commit("brothers/unsetSelectedBrother");
+		this.$store.commit("categories/unsetSelectedCategory");
 	},
 
 	setup () {

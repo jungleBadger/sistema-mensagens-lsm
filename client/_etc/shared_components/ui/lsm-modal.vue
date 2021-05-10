@@ -8,8 +8,7 @@
 			class="flex flex-col rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto  ">
 
 			<header
-				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm"
-				style="flex-basis: 42px;">
+				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm">
 				<slot name="modal-header">
 
 				</slot>

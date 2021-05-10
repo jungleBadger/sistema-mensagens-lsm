@@ -30,6 +30,6 @@ export default {
 
 	async deleteBrother(context, brotherId) {
 		return await brothersFactory.deleteBrother(brotherId);
-	},
+	}
 
 };

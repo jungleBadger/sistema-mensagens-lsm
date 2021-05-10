@@ -142,7 +142,7 @@ export default defineComponent({
 		// 	this.isLoading = false;
 		// 	return true;
 		// }
-	},
+	}
 
 	// async mounted () {
 	// 	await this.loadUsers();

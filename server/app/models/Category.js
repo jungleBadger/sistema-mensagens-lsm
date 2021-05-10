@@ -3,20 +3,20 @@
 const Joi = require("joi");
 const raiseError = require("../helpers/errorHandler").raiseError;
 
-module.exports = class Brother {
+module.exports = class Category {
 
 	model = {};
 
 	constructor (
-		displayName
+		name
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"NOME_EXIBICAO": Joi.string().max(256)
+				"NOME": Joi.string().max(64)
 			}
 		).validate(
 			{
-				"NOME_EXIBICAO": displayName
+				"NOME": name
 			}
 		);
 

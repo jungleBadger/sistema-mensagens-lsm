@@ -1,6 +1,6 @@
 "use strict";
 
-const Brother = require("../../models/Brother");
+const Category = require("../../models/Category");
 const raiseError = require("../errorHandler").raiseError;
 const DBConnectionPool = require("../DBConnectionPool");
 const connectionPool = new DBConnectionPool(
@@ -11,29 +11,29 @@ const connectionPool = new DBConnectionPool(
 	process.env.DB2_PASSWORD
 );
 
-const TABLE_NAME = "IRMAO";
+const TABLE_NAME = "CATEGORIA";
 const logger = require("../logger");
 
 module.exports = {
 
 	/**
-	 * Creates a new admin User.
+	 * Creates a new Category.
 	 * @method create
-	 * @param {string} displayName - Display name.
+	 * @param {string} name - Display name.
 	 * @param {object} operator - Operator object.
 	 * @param {string} operator.id - Operator's ID.
 	 * @param {string} operator.email - Operator's email.
 	 * @return {Promise<Object|Error>} Containing the new User ID.
 	 */
 	async create (
-		displayName,
+		name,
 		operator
 	) {
-		const brother = new Brother(
-			displayName
+		const category = new Category(
+			name
 		);
 
-		const insertKeys = brother.getKeys();
+		const insertKeys = category.getKeys();
 
 		try {
 
@@ -46,7 +46,7 @@ module.exports = {
 								`(SELECT ID FROM FINAL TABLE (insert INTO ${TABLE_NAME} (${insertKeys.join(", ")})`,
 								`values (${insertKeys.map(() => "?").join(", ")})))`
 							].join(" "),
-							brother.getValues(),
+							category.getValues(),
 							"fetch"
 						)).ID,
 						TABLE_NAME,
@@ -58,10 +58,11 @@ module.exports = {
 
 
 		} catch (e) {
+			console.log(e);
 			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
 				throw raiseError(
 					409,
-					`Irmao ${displayName} already exists.`
+					`Irmao ${name} already exists.`
 				);
 			} else {
 				throw e;
@@ -70,9 +71,9 @@ module.exports = {
 	},
 
 	/**
-	 * Retrieves the count of total Brothers rows.
+	 * Retrieves the count of total Categories rows.
 	 * @method retrieveTotalRowsCount
-	 * @return {Promise<Object|Error>} Containing all Brother objects and request metadata.
+	 * @return {Promise<Object|Error>} Containing all Category objects and request metadata.
 	 */
 	async retrieveTotalRowsCount() {
 		return {
@@ -110,30 +111,30 @@ module.exports = {
 	},
 
 	/**
-	 * Retrieves a single Brother by ID.
+	 * Retrieves a single Category by ID.
 	 * @method retrieveById
-	 * @param {string} brotherId - ID to search for.
+	 * @param {string} categoryId - ID to search for.
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
-	 * @return {Promise<Object|Error>} Containing the Brother object.
+	 * @return {Promise<Object|Error>} Containing the Category object.
 	 */
-	async retrieveById (brotherId, targetColumns = ["*"]) {
+	async retrieveById (categoryId, targetColumns = ["*"]) {
 
-		if (!brotherId) {
+		if (!categoryId) {
 			throw raiseError(
 				400,
-				"Missing required properties for querying Brother by ID."
+				"Missing required properties for querying Category by ID."
 			);
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? LIMIT 1;`,
-			[brotherId]
+			[categoryId]
 		);
 
 		if (!result || !result.length) {
 			throw raiseError(
 				404,
-				`Brother ID ${brotherId} not found.`
+				`Category ID ${categoryId} not found.`
 			);
 		} else {
 			return result[0];
@@ -142,15 +143,15 @@ module.exports = {
 	},
 
 	/**
-	 * Retrieves a single Brother by Display name.
+	 * Retrieves a single Category by Display name.
 	 * @method retrieveByDisplayName
-	 * @param {string} brotherName - Display name to search for.
+	 * @param {string} categoryName - Display name to search for.
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
-	 * @return {Promise<Object|Error>} Containing the brother object.
+	 * @return {Promise<Object|Error>} Containing the category object.
 	 */
-	async retrieveByDisplayName (brotherName, targetColumns = ["*"]) {
+	async retrieveByDisplayName (categoryName, targetColumns = ["*"]) {
 
-		if (!brotherName) {
+		if (!categoryName) {
 			throw raiseError(
 				400,
 				"Missing required properties for querying admin User by Email."
@@ -159,13 +160,13 @@ module.exports = {
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.NOME_EXIBICAO = ? LIMIT 1;`,
-			[brotherName]
+			[categoryName]
 		);
 
 		if (!result || !result.length) {
 			throw raiseError(
 				404,
-				`Brother ${brotherName} not found.`
+				`Category ${categoryName} not found.`
 			);
 		} else {
 			return result[0];
@@ -174,67 +175,67 @@ module.exports = {
 	},
 
 	/**
-	 * Updates a single Brother's Display name.
+	 * Updates a single Category's Display name.
 	 * @method update
-	 * @param {string} brotherId - Brother ID to search for.
-	 * @param {string} newDisplayName - New display name.
+	 * @param {string} categoryId - Category ID to search for.
+	 * @param {string} newName - New name.
 	 * @param {object} operator - Operator object.
 	 * @param {string} operator.id - Operator's ID.
 	 * @param {string} operator.email - Operator's email.
-	 * @return {Promise<Object|Error>} Containing the brother object.
+	 * @return {Promise<Object|Error>} Containing the category object.
 	 */
-	async update (brotherId, newDisplayName, operator) {
-		if (!brotherId || !newDisplayName) {
+	async update (categoryId, newName, operator) {
+		if (!categoryId || !newName) {
 			throw raiseError(
 				400,
-				"Missing required properties for updating Brother by ID."
+				"Missing required properties for updating Category by ID."
 			);
 		}
 
-		await this.retrieveById(brotherId);
+		await this.retrieveById(categoryId);
 
 		await connectionPool.executePreparedSqlInstruction(
-			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE ${TABLE_NAME}.ID = ?;`,
-			[newDisplayName, brotherId]
+			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME = ? WHERE ${TABLE_NAME}.ID = ?;`,
+			[newName, categoryId]
 		);
 
 		return {
 			...(await logger.generateLog(
 				"UPDATE",
-				brotherId,
+				categoryId,
 				TABLE_NAME,
 				operator.email,
 				Number(operator.id)
 			)),
-			"NOME_EXIBICAO": newDisplayName
+			"NOME": newName
 		};
 	},
 
 	/**
 	 * Delete a single admin User.
 	 * @method delete
-	 * @param {string} brotherId - ID to search for and delete.
+	 * @param {string} categoryId - ID to search for and delete.
 	 * @param {object} operator - Operator object.
 	 * @param {string} operator.id - Operator's ID.
 	 * @param {string} operator.email - Operator's email.
 	 * @return {Promise<string|Error>} Containing the deletion confirmation.
 	 */
-	async delete (brotherId, operator) {
-		if (!brotherId) {
+	async delete (categoryId, operator) {
+		if (!categoryId) {
 			throw raiseError(
 				400,
-				"Missing required properties for deleting Brother."
+				"Missing required properties for deleting Category."
 			);
 		}
 
 		await connectionPool.executePreparedSqlInstruction(
 			`DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ?;`,
-			[brotherId]
+			[categoryId]
 		);
 
 		return await logger.generateLog(
 			"DELETE",
-			brotherId,
+			categoryId,
 			TABLE_NAME,
 			operator.email,
 			Number(operator.id)
