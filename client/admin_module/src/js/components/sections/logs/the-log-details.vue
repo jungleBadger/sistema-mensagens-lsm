@@ -1,20 +1,31 @@
 <template>
 	<div>
-		ADMIN - Em construção
+		DETAILS
 	</div>
 </template>
 <script type="text/javascript">
 
-
 "use strict";
 import { defineComponent } from "vue";
-import {useI18n} from "vue-i18n";
 
 export default defineComponent({
-	"name": "AppHome",
+	"name": "TheLogDetails",
+	"components": {
+	},
+	"data": function () {
+		return {
+
+		}
+	},
+	"computed": {
+
+	},
+	"methods": {
+
+	},
+
 	setup() {
 		return {
-			...useI18n()
 		}
 	}
 });

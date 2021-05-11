@@ -76,7 +76,7 @@
 						<lsm-button
 							type="submit"
 							label="Recuperar senha"
-							class="disabled:opacity-50"
+							class="w-full"
 							:disabled="Boolean(loadingState || !isRequestResetFormValid)"
 							icon-id="seal-exclamation"
 							:is-loading="loadingState">

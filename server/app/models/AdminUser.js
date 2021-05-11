@@ -42,6 +42,7 @@ module.exports = class AdminUser {
 			this.model = schemaValidationResult.value;
 		}
 
+
 	}
 
 	getKeys() {

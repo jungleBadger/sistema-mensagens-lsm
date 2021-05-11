@@ -1,12 +1,17 @@
 <template>
 
-
 	<button
-		@click="!isLoading ? $emit('click', $event) : () => null"
-		v-bind="$attrs"
-		class="group bg-blue-600 hover:bg-blue-700 relative w-full py-2 px-4 border flex justify-between items-center
+		:disabled="isLoading"
+		:aria-disabled="isLoading"
+		:class="{
+			'bg-blue-600 hover:bg-blue-700 active:bg-blue-500': type === 'regular',
+			'bg-red-600 hover:bg-red-700 active:bg-red-500': type === 'danger'
+		}"
+		class="group relative py-2 px-4 border flex justify-between items-center
 		border-transparent text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
-		focus:ring-indigo-500">
+	focus:ring-indigo-500 disabled:opacity-50  transition-colors"
+
+		v-bind="$attrs">
 
 
 		<span>{{label}}</span>
@@ -62,6 +67,17 @@ export default {
 			"default": function () {
 				return false;
 			}
+		},
+
+
+		"type": {
+			"type": String,
+			"required": false,
+			"default": function () {
+				return "regular";
+			},
+			"validator": value => ["regular", "danger"].indexOf(value) !== -1
+
 		},
 
 

@@ -1,4 +1,11 @@
-@import "_etc/css/variables";
+@import "_etc/css/global";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+hr::after {
+	background-color: var(--bg);
+	content: attr(data-hr-content);
+	padding: var(--p);
+	position: absolute;
+	transform: translate(var(--trans-x), var(--trans-y));
+}

@@ -178,19 +178,22 @@
 										`${modulePath}/src/index.ejs`,
 										`${modulePath}/src/js/**/*.vue`
 									],
-									"options": {
-										"keyframes": true,
-									}
 								},
 								"darkMode": "class",
 								"theme": {
 									"fontFamily": {
 										"sans": ["'Source Sans Pro'", "sans-serif;"]
+									},
+									"extend": {
+										"colors": {
+											"inherit": "inherit"
+										}
 									}
 								},
 								"variants": {
 									"extend": {
-										"opacity": ['disabled'],
+										"opacity": ["disabled"],
+										"backgroundColor": ["active"],
 									}
 								},
 								"plugins": [

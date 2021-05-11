@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const regularUser = require("../../../helpers/user/userCRUD");
+const { isAdmin, isLoggedIn } = require("../../middlewares/auth");
 
 /**
  * @swagger
@@ -54,7 +55,9 @@ router.post(
 			await regularUser.create(
 				req.body.email,
 				req.body.password,
-				req.body.displayName
+				req.body.displayName,
+				false,
+				req.user
 			)
 		)
 	}
@@ -87,7 +90,14 @@ router.post(
  *        in: query
  *        required: false
  *        default: ID
- *        description: Limit.
+ *        description: Sorting field - defaults to ID.
+ *        schema:
+ *          type: string
+ *      - name: orderDirection
+ *        in: query
+ *        required: false
+ *        default: DESC
+ *        description: Sorting direction - defaults to DESC.
  *        schema:
  *          type: string
  *     responses:
@@ -102,6 +112,7 @@ router.post(
  */
 router.get(
 	"/",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -112,9 +123,10 @@ router.get(
 					"EMAIL",
 					"NOME_EXIBICAO"
 				],
-				req.query.limit || 20,
-				req.query.skip || 0,
-				req.query.orderBy || "ID"
+				Number(req.query.limit) || 20,
+				Number(req.query.skip) || 0,
+				req.query.orderBy || "ID",
+				req.query.orderDirection || "DESC"
 			)
 		)
 	}
@@ -151,7 +163,7 @@ router.get(
  */
 router.get(
 	"/id/:userId",
-
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -199,7 +211,7 @@ router.get(
  */
 router.get(
 	"/email/:userEmail",
-
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -252,13 +264,14 @@ router.patch(
  */
 router.delete(
 	"/:userId",
-
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
 		).send(
 			await regularUser.delete(
-				req.params.userId
+				req.params.userId,
+				req.user
 			)
 		)
 	}
