@@ -18,7 +18,7 @@ module.exports = function (app) {
         return res.send(swaggerJSDoc);
     });
 
-    app.get(["/google4aa023a715102fc5", "google4aa023a715102fc5.html"], (req, res) => {
+    app.get(["/google4aa023a715102fc5", "/google4aa023a715102fc5.html"], (req, res) => {
     	return res.status(200).render("./_etc/google4aa023a715102fc5.html");
 	});
 
