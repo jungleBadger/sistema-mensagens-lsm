@@ -1,11 +1,21 @@
 <template>
 	<header
 		id="lsm-header"
+		class="w-full min-h-12 flex items-center justify-between min-h-12 shadow-sm">
 
-		class="flex p-2 items-center justify-between">
 		<slot name="app-menu">
-
+			<button
+				class="w-12 h-12 flex items-center justify-center"
+				@click="toggleMenu">
+				<template v-if="isMenuOpen">
+					<font-awesome-icon :icon="['fal', 'xmark']"/>
+				</template>
+				<template v-else>
+					<font-awesome-icon :icon="['fal', 'bars' ]"/>
+				</template>
+			</button>
 		</slot>
+
 		<slot name="app-title">
 			<h2 class="m-0">LSM App</h2>
 		</slot>
@@ -24,6 +34,16 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	"name": "LsmSideMenu",
+	"data": function () {
+		return {
+			"isMenuOpen": false
+		}
+	},
+	"methods": {
+		toggleMenu() {
+			this.isMenuOpen = !this.isMenuOpen;
+		}
+	},
 	setup() {
 		return {
 			...useI18n()

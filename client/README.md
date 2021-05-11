@@ -1,5 +1,3 @@
-
-
 ### App stack
 
 1. Node.js v14.16.1+

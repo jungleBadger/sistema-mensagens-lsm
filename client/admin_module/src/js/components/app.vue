@@ -1,32 +1,52 @@
 <template>
 
-	<lsm-header class="app-header">
-		<template v-slot:app-menu>
-			<button>
-				MENU
-			</button>
-		</template>
+	<section class="flex flex-col flex-1 h-full max-h-full">
+
+		<the-app-header>
+			<template v-slot:app-menu>
+			</template>
+		</the-app-header>
 
 
-	</lsm-header>
-	<app-side-menu class="app-side-menu"></app-side-menu>
-	<main class="app-content">
-		<router-view></router-view>
-	</main>
+		<main
+			class="overflow-y-hidden flex-1 flex"
+			style="background-color: #d7e8ef;">
+
+			<the-app-side-menu></the-app-side-menu>
+
+			<router-view
+				class="overflow-y-auto p-4 flex-1"
+				v-slot="{ Component }">
+				<transition
+					@enter="fadeIn"
+					@leave="fadeOut"
+					mode="out-in"
+					:css="false">
+					<component :is="Component" />
+				</transition>
+			</router-view>
+
+		</main>
+	</section>
+
 
 
 </template>
 <script type="text/javascript">
 "use strict";
 import { defineComponent } from "vue";
-import LsmHeader from "../../../../_etc/shared_components/lsm-header"
-import AppSideMenu from "./core/app-side-menu"
+import TheAppHeader from "./core/the-app-header.vue";
+import TheAppSideMenu from "./core/the-app-side-menu.vue";
+import fade from "../../../../_etc/shared_mixins/fade";
 
 export default defineComponent({
 	"name": "LsmAdminApp",
+	"mixins": [
+		fade
+	],
 	"components": {
-		AppSideMenu,
-		LsmHeader
+		TheAppHeader,
+		TheAppSideMenu
 	}
 });
 </script>
@@ -34,21 +54,6 @@ export default defineComponent({
 
 
 
-.app-header {
-	width: 100%;
-	grid-area: header;
-}
 
-.app-side-menu {
-	width: 48px;
-	height: 100%;
-	grid-area: sidemenu;
-}
-
-.app-content {
-	width: 100%;
-	height: 100%;
-	grid-area: content;
-}
 
 </style>

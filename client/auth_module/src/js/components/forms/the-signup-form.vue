@@ -110,7 +110,7 @@
 						<lsm-button
 							type="submit"
 							label="Criar conta"
-							class="disabled:opacity-50"
+							class="w-full"
 							:disabled="Boolean(loadingState || userCreatedMessage || !isSignupFormValid)"
 							icon-id="user-plus"
 							:is-loading="loadingState">

@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const adminUser = require("../../../helpers/user/adminUserCRUD");
+const { isAdmin } = require("../../middlewares/auth");
 
 /**
  * @swagger
@@ -47,6 +48,7 @@ const adminUser = require("../../../helpers/user/adminUserCRUD");
  */
 router.post(
 	"/",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			201
@@ -54,9 +56,20 @@ router.post(
 			await adminUser.create(
 				req.body.email,
 				req.body.password,
-				req.body.displayName
+				req.body.displayName,
+				req.user
 			)
 		)
+	}
+);
+
+router.get(
+	"/count",
+	isAdmin,
+	async (req, res) => {
+		res.status(200).send(
+			await adminUser.retrieveTotalRowsCount()
+		);
 	}
 );
 
@@ -87,7 +100,14 @@ router.post(
  *        in: query
  *        required: false
  *        default: ID
- *        description: Limit.
+ *        description: Sorting field - defaults to ID.
+ *        schema:
+ *          type: string
+ *      - name: orderDirection
+ *        in: query
+ *        required: false
+ *        default: DESC
+ *        description: Sorting direction - defaults to DESC.
  *        schema:
  *          type: string
  *     responses:
@@ -102,6 +122,7 @@ router.post(
  */
 router.get(
 	"/",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -110,11 +131,15 @@ router.get(
 				[
 					"ID",
 					"EMAIL",
-					"NOME_EXIBICAO"
+					"NOME_EXIBICAO",
+					"SENHA_REGISTRADA",
+					"EMAIL_CONFIRMADO",
+					"CRIADO_EM"
 				],
-				req.query.limit || 20,
-				req.query.skip || 0,
-				req.query.orderBy || "ID"
+				Number(req.query.limit) || 20,
+				Number(req.query.skip) || 0,
+				req.query.orderBy || "ID",
+				req.query.orderDirection || "DESC"
 			)
 		)
 	}
@@ -122,7 +147,7 @@ router.get(
 
 /**
  * @swagger
- * /api/admin/user/id/:adminUserId:
+ * /api/admin/user/:adminUserId:
  *   get:
  *     tags: [admin_user]
  *     summary: Get admin User by ID.
@@ -150,7 +175,8 @@ router.get(
  *         description: Error handler.
  */
 router.get(
-	"/id/:adminUserId",
+	"/:adminUserId",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -160,7 +186,11 @@ router.get(
 				[
 					"ID",
 					"EMAIL",
-					"NOME_EXIBICAO"
+					"NOME_EXIBICAO",
+					"SENHA_REGISTRADA",
+					"EMAIL_CONFIRMADO",
+					"ADMINISTRADOR",
+					"CRIADO_EM"
 				]
 			)
 		)
@@ -198,6 +228,7 @@ router.get(
  */
 router.get(
 	"/email/:adminUserEmail",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -216,7 +247,7 @@ router.get(
 
 router.patch(
 	"/:adminUserId",
-
+	isAdmin,
 	(req, res) => res.status(200).send("OK")
 );
 
@@ -251,12 +282,14 @@ router.patch(
  */
 router.delete(
 	"/:adminUserId",
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
 		).send(
 			await adminUser.delete(
-				req.params.adminUserId
+				req.params.adminUserId,
+				req.user
 			)
 		)
 	}
