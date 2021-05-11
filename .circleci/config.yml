@@ -80,6 +80,7 @@ jobs:
                   name: Attach backend environment variables
                   working_directory: server
                   command: |
+                      echo APP_SECRET=$APP_SECRET >> ".env"
                       echo DB2_DB=$DB2_DB >> ".env"
                       echo DB2_HOST=$DB2_HOST >> ".env"
                       echo DB2_PORT=$DB2_PORT >> ".env"
