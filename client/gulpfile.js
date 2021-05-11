@@ -24,6 +24,7 @@
 	const webpack = require("webpack");
 	const tailwindcss = require("tailwindcss");
 	const childProcess = require("child_process");
+	const purgecss = require("@fullhuman/postcss-purgecss");
 
 	let currentContext = "";
 	let modulePath;
@@ -162,6 +163,7 @@
 			fse.remove(modulePath + "/dist/css/style.css.map");
 		}
 
+		console.log(modulePath);
 		return gulp.src([
 			`${modulePath}/src/css/*.css`,
 			`${modulePath}/src/css/*.scss`
@@ -175,9 +177,13 @@
 							{
 								"purge": {
 									"content": [
-										`${modulePath}/src/index.ejs`,
-										`${modulePath}/src/js/**/*.vue`
+										`./${modulePath}/src/index.ejs`,
+										`./${modulePath}/src/js/components/**/*.vue`,
+										"./_etc/shared_components/**/*.vue"
 									],
+								},
+								"options": {
+									"keyframes": true
 								},
 								"darkMode": "class",
 								"theme": {
@@ -201,9 +207,26 @@
 								]
 							}
 						),
-						cssnext,
 					].concat(
-						isProd ? [cssnano] : []
+						isProd ? [
+							purgecss({
+								"content": [
+									`./${modulePath}/src/index.ejs`,
+									`./${modulePath}/src/js/components/**/*.vue`,
+									"./_etc/shared_components/**/*.vue"
+								],
+								defaultExtractor (content) {
+									const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, '')
+									return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || []
+								},
+								"whitelist": [],
+								"whitelistPatterns": [ /-(leave|enter|appear)(|-(to|from|active))$/, /^(?!(|.*?:)cursor-move).+-move$/, /^router-link(|-exact)-active$/ ],
+							}),
+							cssnano,
+							cssnext
+						] : [
+							cssnext
+						]
 					)
 				)
 			)

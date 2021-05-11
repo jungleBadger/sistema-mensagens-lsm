@@ -96,7 +96,7 @@ module.exports = env => {
 			"publicPath": "/auth_module/dist/js/"
 		},
 		"performance": {
-			"hints": env.NODE_ENV === "production" ? "warning" : false
+			"hints": env.NODE_ENV === "production" ? false : "warning"
 		},
 		"target": "web",
 		"resolve": {
