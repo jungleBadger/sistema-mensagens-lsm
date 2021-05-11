@@ -91,8 +91,8 @@ export default defineComponent({
 					window.grecaptcha.ready(() => {
 						window.grecaptcha.render(this.$refs.test, {
 							//@TODO Inject the correct key through dotenv
-							// "sitekey" : "6LcfZrwUAAAAADH29S0KUmYoBIEPgidh9VN6TkJs",
-							"sitekey" : "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+							// "sitekey" : "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+							"sitekey" : "6LcmU9AaAAAAAK_0Vtnwg0HnS_-cz1L2beFykMSS\n",
 							"hl": "pt",
 							"callback": this.submitValidationForm
 						});
