@@ -4,8 +4,8 @@ import categoriesFactory from "../../factory/categories";
 
 export default {
 
-	async createCategory(context, displayName) {
-		return await categoriesFactory.createCategory({displayName});
+	async createCategory(context, name) {
+		return await categoriesFactory.createCategory({name});
 	},
 
 	async retrieveTotalCategoriesCount(context) {
