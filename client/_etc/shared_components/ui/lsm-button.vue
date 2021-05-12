@@ -4,8 +4,8 @@
 		:disabled="isLoading"
 		:aria-disabled="isLoading"
 		:class="{
-			'bg-blue-600 hover:bg-blue-700 active:bg-blue-500': type === 'regular',
-			'bg-red-600 hover:bg-red-700 active:bg-red-500': type === 'danger'
+			'bg-blue-600 hover:bg-blue-700 active:bg-blue-500': kind === 'regular',
+			'bg-red-600 hover:bg-red-700 active:bg-red-500': kind === 'danger'
 		}"
 		class="group relative py-2 px-4 border flex justify-between items-center
 		bg-blue-600 hover:bg-blue-700 active:bg-blue-500
@@ -71,7 +71,7 @@ export default {
 		},
 
 
-		"type": {
+		"kind": {
 			"type": String,
 			"required": false,
 			"default": function () {

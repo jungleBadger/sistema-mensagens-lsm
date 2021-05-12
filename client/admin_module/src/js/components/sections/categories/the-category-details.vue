@@ -42,7 +42,7 @@
 					icon-style="fas"
 					label="Deletar"
 					role="button"
-					type="danger"
+					kind="danger"
 					@click="deleteItem">
 				</lsm-button>
 				<lsm-button
