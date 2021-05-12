@@ -141,9 +141,14 @@
 					href="/auth/google?action=signin"
 					id="google-login-button"
 					title="Clique para acessar sua conta através do Google"
-					class="relative border-solid border shadow-sm border-gray-400
+					class="
+					py-2 px-4 border flex justify-between items-center
+					relative border-solid border shadow-sm border-gray-400
                         font-semibold text-gray-600 text-sm py-2 text-center rounded text-center w-full
                         focus:outline-none hover:border-indigo-600">
+					<span>
+						Entre com Google
+					</span>
 					<font-awesome-icon
 						style="line-height: 28px;"
 						:icon="['fab', 'google']" />
