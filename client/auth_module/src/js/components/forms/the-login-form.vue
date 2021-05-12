@@ -271,7 +271,14 @@ export default {
 				"description": "Seu e-mail não foi encontrado em nossos registros."
 			}
 
-		} else if (errorStatus) {
+		} else if (errorStatus === 409) {
+
+			this.loginErrorMessage = {
+				"title": "Já existe uma conta cadastrada com este e-mail!",
+				"description": "Faça o login abaixo."
+			}
+
+		}  else if (errorStatus) {
 
 
 			console.log(errorStatus);

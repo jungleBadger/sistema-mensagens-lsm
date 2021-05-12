@@ -119,7 +119,7 @@ passport.use(
 						{
 							"status": 409,
 							"message": "Account already linked.",
-							"redirect": "/auth/signup"
+							"redirect": "/auth/login"
 						}
 					);
 
@@ -247,7 +247,7 @@ passport.use(
 						{
 							"status": 404,
 							"message": "Account does not exist.",
-							"redirect": "/auth/login"
+							"redirect": "/auth/signup"
 						}
 					);
 				}

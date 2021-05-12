@@ -261,8 +261,6 @@ export default {
 
 	mounted () {
 		let errorStatus = Number(new URLSearchParams(window.location.search).get("status") || 0);
-
-
 		if (errorStatus === 409) {
 
 			this.signupErrorMessage = {
@@ -270,9 +268,15 @@ export default {
 				"description": "Já existe uma conta cadastrada com este e-mail."
 			}
 
+		} else if (errorStatus === 404) {
+
+			this.signupErrorMessage = {
+				"title": "Seu e-mail não foi encontrado em nossos registros!",
+				"description": "Crie sua conta abaixo."
+			}
+
 		} else if (errorStatus) {
 
-			console.log(errorStatus);
 			this.signupErrorMessage = {
 				"title": "Houve um problema inesperado no seu registro de conta usando o Google!",
 				"description": "Tente novamente em alguns minutos."
