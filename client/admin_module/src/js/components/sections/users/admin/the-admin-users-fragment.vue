@@ -53,30 +53,30 @@ export default defineComponent({
 	},
 	"computed": {
 		totalAdminUsersCount() {
-			return this.$store.getters["adminUsers/totalAdminUsersCount"];
+			return this.$store.getters["users/admin/totalAdminUsersCount"];
 		},
 		"pagination": {
 			get() {
-				return this.$store.getters["adminUsers/pagination"];
+				return this.$store.getters["users/admin/pagination"];
 			},
 			set(val) {
-				this.$store.commit("adminUsers/pagination", val);
+				this.$store.commit("users/admin/pagination", val);
 			}
 		},
 
 		adminUsers() {
-			return this.$store.getters["adminUsers/adminUserItems"];
+			return this.$store.getters["users/admin/adminUserItems"];
 		},
 		"isLoading": {
 			get() {
-				return this.$store.getters["adminUsers/isLoading"];
+				return this.$store.getters["users/admin/isLoading"];
 			},
 			set(val) {
-				this.$store.commit("adminUsers/isLoading", val);
+				this.$store.commit("users/admin/isLoading", val);
 			}
 		},
 		tableColumns() {
-			return this.$store.getters["adminUsers/tableColumns"];
+			return this.$store.getters["users/admin/tableColumns"];
 		}
 	},
 	"methods": {
@@ -93,7 +93,7 @@ export default defineComponent({
 		},
 
 		selectItem(item) {
-			this.$store.commit("adminUsers/selectedAdminUser", item);
+			this.$store.commit("users/admin/selectedAdminUser", item);
 			this.$router.push(
 				{
 					"name": "app.users.admin.details",
@@ -110,8 +110,8 @@ export default defineComponent({
 		async loadAdminUsers() {
 			this.isLoading = true;
 			await Promise.all([
-				this.$store.dispatch("adminUsers/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("adminUsers/retrieveAdminUsers")
+				this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
+				this.$store.dispatch("users/admin/retrieveAdminUsers")
 			]);
 			this.isLoading = false;
 			return true;

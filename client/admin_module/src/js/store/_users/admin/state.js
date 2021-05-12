@@ -10,11 +10,6 @@ export default {
 	"adminUserItems": [],
 	"tableColumns": [
 		{
-			"key": "id",
-			"label": "ID",
-			"size": "60px"
-		},
-		{
 			"key": "email",
 			"label": "Email",
 			"size": "240px"

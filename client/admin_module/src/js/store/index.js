@@ -7,7 +7,7 @@ import brothers from "./_brothers/module";
 import categories from "./_categories/module";
 import events from "./_events/module";
 import logs from "./_logs/module";
-import adminUsers from "./_adminUsers/module";
+import users from "./_users/module";
 
 
 export default createStore({
@@ -18,7 +18,7 @@ export default createStore({
 		categories,
 		events,
 		logs,
-		adminUsers
+		users
 	},
 	"strict": process.env.NODE_ENV !== "production"
 });

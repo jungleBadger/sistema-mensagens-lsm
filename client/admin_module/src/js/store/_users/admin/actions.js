@@ -1,6 +1,6 @@
 "use strict";
 
-import adminUsersFactory from "../../factory/adminUsers";
+import adminUsersFactory from "../../../factory/adminUsers";
 
 export default {
 

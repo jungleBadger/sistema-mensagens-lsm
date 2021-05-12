@@ -102,7 +102,7 @@ export default defineComponent({
 	},
 	"computed": {
 		selectedAdminUser () {
-			return this.$store.getters["adminUsers/selectedAdminUser"];
+			return this.$store.getters["users/admin/selectedAdminUser"];
 		},
 
 		isDocumentExistent () {
@@ -118,17 +118,17 @@ export default defineComponent({
 			this.isLoading = true;
 
 			if (this.isDocumentExistent) {
-				await this.$store.dispatch("adminUsers/updateAdminUser", {
+				await this.$store.dispatch("users/admin/updateAdminUser", {
 					"id": this.selectedAdminUser.id,
 					"displayName": this.displayName
 				});
 			} else {
-				await this.$store.dispatch("adminUsers/createAdminUser", this.displayName);
+				await this.$store.dispatch("users/admin/createAdminUser", this.displayName);
 			}
 
 			await Promise.all([
-				this.$store.dispatch("adminUsers/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("adminUsers/retrieveAdminUsers")
+				this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
+				this.$store.dispatch("users/admin/retrieveAdminUsers")
 			]);
 
 			this.isLoading = false;
@@ -139,11 +139,11 @@ export default defineComponent({
 
 			this.isDeleteLoading = true;
 
-			await this.$store.dispatch("adminUsers/deleteAdminUser", this.selectedAdminUser.id);
+			await this.$store.dispatch("users/admin/deleteAdminUser", this.selectedAdminUser.id);
 
 			await Promise.all([
-				this.$store.dispatch("adminUsers/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("adminUsers/retrieveAdminUsers")
+				this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
+				this.$store.dispatch("users/admin/retrieveAdminUsers")
 			]);
 
 			this.isDeleteLoading = false;
@@ -155,8 +155,8 @@ export default defineComponent({
 		if (!this.selectedAdminUser && this.$route.params.adminUserId !== "novo") {
 			this.isLoading = true;
 			this.$store.commit(
-				"adminUsers/selectedAdminUser",
-				await this.$store.dispatch("adminUsers/retrieveAdminUserById", this.$route.params.adminUserId)
+				"users/admin/selectedAdminUser",
+				await this.$store.dispatch("users/admin/retrieveAdminUserById", this.$route.params.adminUserId)
 			);
 			this.isLoading = false;
 		}
@@ -171,7 +171,7 @@ export default defineComponent({
 	},
 
 	unmounted () {
-		this.$store.commit("adminUsers/unsetSelectedAdminUser");
+		this.$store.commit("users/admin/unsetSelectedAdminUser");
 	}
 });
 </script>
