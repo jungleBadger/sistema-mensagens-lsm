@@ -1,9 +1,9 @@
 <template>
 	<section
 		aria-label="Logs de ações do sistema"
-		class="w-full h-full p-2 overflow-hidden flex flex-col">
+		class="w-full h-full overflow-hidden flex flex-col">
 
-		<header class="min-h-12 mb-4">
+		<header class="min-h-12 mb-3 pl-2 pr-2 md:pl-0 md:pr-0">
 			<h3 class="text-2xl ">Log de operações</h3>
 			<h4 class="text-l">
 				Consulte e visualize todas operações registradas no Sistema LSM.

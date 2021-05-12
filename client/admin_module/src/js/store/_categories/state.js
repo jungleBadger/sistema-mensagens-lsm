@@ -10,11 +10,6 @@ export default {
 	"categoryItems": [],
 	"tableColumns": [
 		{
-			"key": "id",
-			"label": "ID",
-			"size": "60px"
-		},
-		{
 			"key": "name",
 			"label": "Nome",
 			"size": "240px"

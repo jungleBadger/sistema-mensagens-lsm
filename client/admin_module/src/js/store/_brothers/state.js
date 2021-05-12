@@ -10,11 +10,6 @@ export default {
 	"brotherItems": [],
 	"tableColumns": [
 		{
-			"key": "id",
-			"label": "ID",
-			"size": "60px"
-		},
-		{
 			"key": "displayName",
 			"label": "Nome exibição",
 			"size": "240px"

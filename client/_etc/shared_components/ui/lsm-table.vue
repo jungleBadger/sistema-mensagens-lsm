@@ -8,7 +8,7 @@
 
 		<header class="bg-gray-100 flex gap-2 items-center shadow z-10 p-2 flex-wrap">
 
-			<div class="w-48 min-w-1/3">
+			<div class="w-full md:w-48">
 				<lsm-select
 					v-model="selectedFilteringField"
 					:model-value="selectedFilteringField"
@@ -39,7 +39,7 @@
 
 		<template v-if="filteredData.length">
 			<div
-				class="bg-white max-h-full overflow-hidden flex flex-col pl-2 pr-2 pb-1 pt-1 ml-px ml-px"
+				class="bg-white max-h-full overflow-hidden flex flex-col p-0 md:p-1 ml-px ml-px"
 				role="table">
 
 				<!--			@SECTION TABLE COLUMNS HEADER -->
@@ -81,7 +81,7 @@
 
 				<!--			@SECTION TABLE SCROLLER -->
 				<transition-group
-					class="w-full max-w-full overflow-auto flex-1 flex flex-col gap-2 md:gap-0"
+					class="w-full max-w-full overflow-y-auto overflow-x-hidden flex-1 flex flex-col"
 					name="list"
 					role="rowgroup"
 					tag="div">
@@ -91,9 +91,9 @@
 						:is="handleClick ? 'button' : 'div'"
 						v-for="item in filteredData"
 						:key="item.id"
-						class="max-w grid flex-col md:flex-row md:flex"
+						class="row-item max-w grid flex-col md:flex-row md:flex border-b-2 border-gray-300 md:border-b-0"
 						@click="emitClick(item)"
-						:class="{'hover:bg-gray-200 active:bg-gray-300 cursor-pointer': this.handleClick}"
+						:class="{'hover:bg-gray-200 active:bg-gray-300 cursor-pointer': handleClick}"
 						role="row">
 
 					 <span
@@ -139,7 +139,7 @@
 
 
 			<div class="flex flex-1 gap-4">
-				<div class="flex gap-1 items-center">
+				<div class="flex gap-1 flex-col items-start md:items-center md:flex-row">
 					<label>Itens por página</label>
 					<div class="w-16">
 						<lsm-select
@@ -152,7 +152,7 @@
 					</div>
 				</div>
 
-				<div class="flex gap-2 items-center">
+				<div class="flex gap-1 flex-col items-start md:items-center md:flex-row">
 					<label>Página selecionada</label>
 					<div class="w-24">
 						<lsm-select
@@ -169,33 +169,36 @@
 
 			<template v-if="pageLimits">
 
-				<button
-					v-if="isPaginationLeftEnabled"
-					class="w-6"
+				<div>
+					<button
+						v-if="isPaginationLeftEnabled"
+						class="w-8 h-8"
 
-					title="Clique para carregar página anterior de resultados."
-					@click="paginateLeft">
-					<font-awesome-icon
-						:icon="['fal', 'chevron-left']">
+						title="Clique para carregar página anterior de resultados."
+						@click="paginateLeft">
+						<font-awesome-icon
+							:icon="['fal', 'chevron-left']">
 
-					</font-awesome-icon>
-				</button>
+						</font-awesome-icon>
+					</button>
 
 
-				<span><i18n-n :value="pageLimits.start" format="integer"></i18n-n> - <i18n-n :value="pageLimits.end"
-																							 format="integer"></i18n-n> de <i18n-n
-					:value="totalItemsCount" format="integer"></i18n-n></span>
+					<span class="text-lg"><i18n-n :value="pageLimits.start" format="integer"></i18n-n> - <i18n-n :value="pageLimits.end"
+																								 format="integer"></i18n-n> de <i18n-n
+						:value="totalItemsCount" format="integer"></i18n-n></span>
 
-				<button
-					v-if="isPaginationRightEnabled"
-					class="w-6"
-					title="Clique para carregar próxima página de resultados."
-					@click="paginateRight">
-					<font-awesome-icon
-						:icon="['fal', 'chevron-right']">
+					<button
+						v-if="isPaginationRightEnabled"
+						class="w-8 h-8"
+						title="Clique para carregar próxima página de resultados."
+						@click="paginateRight">
+						<font-awesome-icon
+							:icon="['fal', 'chevron-right']">
 
-					</font-awesome-icon>
-				</button>
+						</font-awesome-icon>
+					</button>
+				</div>
+
 			</template>
 
 		</footer>
@@ -204,7 +207,7 @@
 
 
 </template>
-<script>
+<script type="text/javascript">
 
 
 import { v4 as uuidv4 } from "uuid";
@@ -469,6 +472,11 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss" rel="stylesheet/scss" scoped>
 
+@media screen and (max-width: 768px) {
+	.row-item:last-child  {
+		border-bottom: 0 !important;
+	}
+}
 </style>
