@@ -8,7 +8,7 @@ export default {
 		state.isLoading = loadingState;
 	},
 
-	totalCategorysCount(state, count) {
+	totalCategoriesCount(state, count) {
 		state.totalCategoriesCount = Number(count);
 	},
 

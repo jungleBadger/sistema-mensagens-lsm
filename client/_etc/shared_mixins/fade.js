@@ -8,14 +8,14 @@ export default {
 			gsap.set(el, {"autoAlpha": 0});
 			gsap.to(el, {
 				"autoAlpha": 1,
-				"duration": 0.66,
+				"duration": 0.5,
 				"onComplete": done
 			});
 		},
 		fadeOut(el, done) {
 			gsap.to(el, {
 				"autoAlpha": 0,
-				"duration": 0.5,
+				"duration": 0.33,
 				"onComplete": done
 			});
 		},
@@ -23,7 +23,7 @@ export default {
 			gsap.to(el, {
 				"autoAlpha": 0,
 				"position": "absolute",
-				"duration": 0.5,
+				"duration": 0.33,
 				"onComplete": done
 			});
 		}

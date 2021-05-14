@@ -34,7 +34,7 @@ export default {
 		return await http.patch(
 			`/api/category/${category.id}`,
 			{
-				"displayName": category.displayName
+				"name": category.name
 			}
 		);
 	},

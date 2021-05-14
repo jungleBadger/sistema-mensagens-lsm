@@ -26,6 +26,7 @@
 				</transition>
 			</router-view>
 
+			<lsm-toast-notification-container>s</lsm-toast-notification-container>
 		</main>
 	</section>
 
@@ -38,6 +39,8 @@ import { defineComponent } from "vue";
 import TheAppHeader from "./core/the-app-header.vue";
 import TheAppSideMenu from "./core/the-app-side-menu.vue";
 import fade from "../../../../_etc/shared_mixins/fade";
+import LsmToastNotificationContainer
+	from "../../../../_etc/shared_components/ui/notification/lsm-toast-notification-container";
 
 export default defineComponent({
 	"name": "LsmAdminApp",
@@ -45,6 +48,7 @@ export default defineComponent({
 		fade
 	],
 	"components": {
+		LsmToastNotificationContainer,
 		TheAppHeader,
 		TheAppSideMenu
 	}

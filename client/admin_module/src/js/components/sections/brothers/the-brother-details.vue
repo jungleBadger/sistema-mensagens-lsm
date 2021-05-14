@@ -46,7 +46,7 @@
 					@click="deleteItem">
 				</lsm-button>
 				<lsm-button
-					:disabled="isDeleteLoading"
+					:disabled="isFormInvalid"
 					:is-loading="isLoading"
 					class="w-24"
 					icon-id="check"
@@ -85,10 +85,13 @@ export default defineComponent({
 		};
 	},
 	"computed": {
+		isFormInvalid() {
+			return !this.displayName || this.isDeleteLoading;
+		},
+
 		selectedBrother () {
 			return this.$store.getters["brothers/selectedBrother"];
 		},
-
 		isDocumentExistent () {
 			return this.selectedBrother && this.selectedBrother.id;
 		}
@@ -138,11 +141,19 @@ export default defineComponent({
 	async mounted () {
 		if (!this.selectedBrother && this.$route.params.brotherId !== "novo") {
 			this.isLoading = true;
-			this.$store.commit(
-				"brothers/selectedBrother",
-				await this.$store.dispatch("brothers/retrieveBrotherById", this.$route.params.brotherId)
-			);
-			this.isLoading = false;
+
+			let brother = await this.$store.dispatch("brothers/retrieveBrotherById", this.$route.params.brotherId);
+			if (brother) {
+				this.$store.commit(
+					"brothers/selectedBrother",
+					brother
+				);
+				this.isLoading = false;
+			} else {
+				return await this.$router.replace({ "name": "app.brothers" });
+			}
+
+
 		}
 
 		if (this.selectedBrother) {

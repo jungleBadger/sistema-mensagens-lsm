@@ -222,10 +222,8 @@
 								"whitelist": [],
 								"whitelistPatterns": [ /-(leave|enter|appear)(|-(to|from|active))$/, /^(?!(|.*?:)cursor-move).+-move$/, /^router-link(|-exact)-active$/ ],
 							}),
-							cssnano,
-							cssnext
+							cssnano
 						] : [
-							cssnext
 						]
 					)
 				)

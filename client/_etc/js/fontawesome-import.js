@@ -1,5 +1,6 @@
 "use strict";
 
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 import { faEye } from "@fortawesome/pro-light-svg-icons/faEye";
@@ -8,6 +9,8 @@ import { faBars } from "@fortawesome/pro-light-svg-icons/faBars";
 import { faXmark } from "@fortawesome/pro-light-svg-icons/faXmark";
 import { faChevronRight } from "@fortawesome/pro-light-svg-icons/faChevronRight";
 import { faChevronLeft } from "@fortawesome/pro-light-svg-icons/faChevronLeft";
+import { faUndo } from "@fortawesome/pro-light-svg-icons/faUndo";
+import { faSync } from "@fortawesome/pro-light-svg-icons/faSync";
 
 import { faArrowDownShortWide } from "@fortawesome/pro-light-svg-icons/faArrowDownShortWide";
 import { faArrowUpShortWide } from "@fortawesome/pro-light-svg-icons/faArrowUpShortWide";
@@ -31,6 +34,8 @@ import { faSealExclamation } from "@fortawesome/pro-solid-svg-icons/faSealExclam
 import { faGoogle } from "@fortawesome/free-brands-svg-icons/faGoogle";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+
+
 library.add(
 	faEye,
 	faEyeSlash,
@@ -38,6 +43,9 @@ library.add(
 	faXmark,
 	faChevronRight,
 	faChevronLeft,
+	faUndo,
+	faSync,
+
 	faArrowDownShortWide,
 	faArrowUpShortWide,
 	faUserTie,

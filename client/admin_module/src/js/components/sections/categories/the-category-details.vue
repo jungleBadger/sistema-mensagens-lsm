@@ -45,8 +45,9 @@
 					kind="danger"
 					@click="deleteItem">
 				</lsm-button>
+
 				<lsm-button
-					:disabled="isDeleteLoading"
+					:disabled="isFormInvalid"
 					:is-loading="isLoading"
 					class="w-24"
 					icon-id="check"
@@ -56,6 +57,7 @@
 					@click="submitForm">
 				</lsm-button>
 			</div>
+
 
 		</template>
 
@@ -85,6 +87,10 @@ export default defineComponent({
 		};
 	},
 	"computed": {
+		isFormInvalid () {
+			return !this.name || this.isDeleteLoading || !this.selectedCategory || (this.name === this.selectedCategory.name);
+		},
+
 		selectedCategory () {
 			return this.$store.getters["categories/selectedCategory"];
 		},
@@ -138,11 +144,18 @@ export default defineComponent({
 	async mounted () {
 		if (!this.selectedCategory && this.$route.params.categoryId !== "novo") {
 			this.isLoading = true;
-			this.$store.commit(
-				"categories/selectedCategory",
-				await this.$store.dispatch("categories/retrieveCategoryById", this.$route.params.categoryId)
-			);
-			this.isLoading = false;
+
+			let category = await this.$store.dispatch("categories/retrieveCategoryById", this.$route.params.categoryId);
+
+			if (category) {
+				this.$store.commit(
+					"categories/selectedCategory",
+					category
+				);
+			} else {
+				return await this.$router.replace({"name": "app.categories"});
+			}
+
 		}
 
 		if (this.selectedCategory) {
@@ -153,12 +166,6 @@ export default defineComponent({
 
 	unmounted () {
 		this.$store.commit("categories/unsetSelectedCategory");
-	},
-
-	setup () {
-
-		console.log(this);
-		return {};
 	}
 });
 </script>

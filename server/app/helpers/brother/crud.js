@@ -58,10 +58,10 @@ module.exports = {
 
 
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
 				throw raiseError(
 					409,
-					`Irmao ${displayName} already exists.`
+					`Brother ${displayName} already exists.`
 				);
 			} else {
 				throw e;
@@ -193,10 +193,23 @@ module.exports = {
 
 		await this.retrieveById(brotherId);
 
-		await connectionPool.executePreparedSqlInstruction(
-			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE ${TABLE_NAME}.ID = ?;`,
-			[newDisplayName, brotherId]
-		);
+
+		try {
+			await connectionPool.executePreparedSqlInstruction(
+				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE ${TABLE_NAME}.ID = ?;`,
+				[newDisplayName, brotherId]
+			);
+		} catch (e) {
+			console.log(e);
+			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
+				throw raiseError(
+					409,
+					`Brother ${newDisplayName} already exists.`
+				);
+			} else {
+				throw e;
+			}
+		}
 
 		return {
 			...(await logger.generateLog(
@@ -208,6 +221,7 @@ module.exports = {
 			)),
 			"NOME_EXIBICAO": newDisplayName
 		};
+
 	},
 
 	/**

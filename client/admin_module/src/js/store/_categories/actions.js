@@ -5,7 +5,46 @@ import categoriesFactory from "../../factory/categories";
 export default {
 
 	async createCategory(context, name) {
-		return await categoriesFactory.createCategory({name});
+		try {
+			await categoriesFactory.createCategory({name});
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "success",
+					"title": "Sucesso!",
+					"subtitle": "Categoria criado com sucesso."
+				},
+				{"root": true}
+			);
+			return true;
+		} catch (e) {
+
+			let error = {
+				"title": "Houve um erro ao criar a Categoria.",
+				"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+			}
+
+			if (e.status === 409) {
+				error = {
+					"title": "Houve um conflito ao criar a Categoria.",
+					"subtitle": `Categoria ${name} já existe no sistema.`
+				}
+			}
+
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": error.title,
+					"subtitle": error.subtitle
+				},
+				{"root": true}
+			);
+			console.log(e);
+			return false;
+		}
+
+
 	},
 
 	async retrieveTotalCategoriesCount(context) {
@@ -20,16 +59,96 @@ export default {
 	},
 
 	async retrieveCategoryById(context, categoryId) {
-		return await categoriesFactory.retrieveCategoryById(categoryId);
+		try {
+			return await categoriesFactory.retrieveCategoryById(categoryId);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": `Houve um erro ao carregar a Categoria ${categoryId}.`,
+					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+			console.log(e);
+			return false;
+		}
+
 	},
 
 
 	async updateCategory(context, category) {
-		return await categoriesFactory.updateCategory(category);
+
+		try {
+			await categoriesFactory.updateCategory(category);
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "success",
+					"title": "Sucesso!",
+					"subtitle": "Categoria atualizada com sucesso."
+				},
+				{"root": true}
+			);
+			return true;
+		} catch (e) {
+			let error = {
+				"title": "Houve um erro ao atualizar a Categoria.",
+				"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+			}
+
+			if (e.status === 409) {
+				error = {
+					"title": "Houve um conflito ao atualizar a Categoria.",
+					"subtitle": `Categoria ${category.name} já existe no sistema.`
+				}
+			}
+
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": error.title,
+					"subtitle": error.subtitle
+				},
+				{"root": true}
+			);
+			console.log(e);
+			return false;
+
+
+		}
 	},
 
 	async deleteCategory(context, categoryId) {
-		return await categoriesFactory.deleteCategory(categoryId);
+		try {
+			await categoriesFactory.deleteCategory(categoryId);
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "success",
+					"title": "Sucesso!",
+					"subtitle": "Categoria excluída com sucesso."
+				},
+				{"root": true}
+			);
+			return true;
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro ao excluir a Categoria.",
+					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+			console.log(e);
+			return false;
+		}
+
+
 	}
 
 };

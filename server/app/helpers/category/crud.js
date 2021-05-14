@@ -59,10 +59,10 @@ module.exports = {
 
 		} catch (e) {
 			console.log(e);
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
 				throw raiseError(
 					409,
-					`Irmao ${name} already exists.`
+					`Category ${name} already exists.`
 				);
 			} else {
 				throw e;
@@ -191,13 +191,23 @@ module.exports = {
 				"Missing required properties for updating Category by ID."
 			);
 		}
-
 		await this.retrieveById(categoryId);
 
-		await connectionPool.executePreparedSqlInstruction(
-			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME = ? WHERE ${TABLE_NAME}.ID = ?;`,
-			[newName, categoryId]
-		);
+		try {
+			await connectionPool.executePreparedSqlInstruction(
+				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME = ? WHERE ${TABLE_NAME}.ID = ?;`,
+				[newName, categoryId]
+			);
+		} catch (e) {
+			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
+				throw raiseError(
+					409,
+					`Category ${newName} already exists.`
+				);
+			} else {
+				throw e;
+			}
+		}
 
 		return {
 			...(await logger.generateLog(
@@ -209,6 +219,8 @@ module.exports = {
 			)),
 			"NOME": newName
 		};
+
+
 	},
 
 	/**
