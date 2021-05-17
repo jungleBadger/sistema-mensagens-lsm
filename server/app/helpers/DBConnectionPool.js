@@ -1,7 +1,7 @@
 "use strict";
 
 const ibm_db = require("ibm_db");
-
+const raiseError = require("./errorHandler").raiseError;
 
 class DBConnectionPool {
 
@@ -21,6 +21,55 @@ class DBConnectionPool {
 			}
 		);
 		this.pool.init(poolSize, this.connectionString);
+	}
+	/**
+	 * @method buildSearchQuery
+	 * @param {Array<string>} [selectColumns=["*"]] - Optional - TBD.
+	 * @param {string} tableName - TBD.
+	 * @param {string} [filterColumn="ID"] - Optional - TBD.
+	 * @param {string} filterText - TBD.
+	 * @param {Array<string>} [extraFilterColumns] - Optional - TBD.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @return {Object} Containing the deletion confirmation.
+	 */
+	static buildSearchQuery (
+		selectColumns = ["*"],
+		tableName,
+		filterColumn= "ID",
+		filterText,
+		extraFilterColumns = [],
+		orderBy= "ID",
+		orderDirection = "ASC",
+		skip= 0,
+		limit= 20
+	) {
+
+		if (!tableName && !filterText) {
+			return raiseError(
+				400,
+				"Missing parameters to build search query"
+			)
+		}
+
+		return {
+			"searchQuery": [
+				`SELECT ${selectColumns.join(", ")} FROM ${tableName}`,
+				`WHERE LOWER(${tableName}.${filterColumn}) LIKE LOWER('%${filterText}%')`,
+				extraFilterColumns.map((column) => `OR LOWER(${tableName}.${column}) LIKE LOWER('%${filterText}%')`).join(" "),
+				`ORDER BY ${tableName}.${orderBy} ${orderDirection}`,
+				`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
+				";"
+			].join(" "),
+			"countQuery": [
+				`SELECT COUNT(ID) FROM ${tableName}`,
+				`WHERE LOWER(${tableName}.${filterColumn}) LIKE LOWER('%${filterText}%')`,
+				extraFilterColumns.map((column) => `OR LOWER(${tableName}.${column}) LIKE LOWER('%${filterText}%')`).join(" "),
+				";"
+			].join(" ")
+		}
 	}
 
 	executeRawSqlInstruction(rawSqlInstruction) {

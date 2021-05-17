@@ -111,34 +111,25 @@ export default defineComponent({
 				});
 			} else {
 				await this.$store.dispatch("brothers/createBrother", this.displayName);
+				await Promise.all([
+					this.$store.dispatch("brothers/retrieveTotalBrothersCount"),
+					this.$store.dispatch("brothers/retrieveBrothers")
+				]);
 			}
-
-			await Promise.all([
-				this.$store.dispatch("brothers/retrieveTotalBrothersCount"),
-				this.$store.dispatch("brothers/retrieveBrothers")
-			]);
 
 			this.isLoading = false;
 			return this.goToBrothersHome();
 		},
 
 		async deleteItem() {
-
 			this.isDeleteLoading = true;
-
 			await this.$store.dispatch("brothers/deleteBrother", this.selectedBrother.id);
-
-			await Promise.all([
-				this.$store.dispatch("brothers/retrieveTotalBrothersCount"),
-				this.$store.dispatch("brothers/retrieveBrothers")
-			]);
-
 			this.isDeleteLoading = false;
 			return this.goToBrothersHome();
 		}
 	},
 
-	async mounted () {
+	async created () {
 		if (!this.selectedBrother && this.$route.params.brotherId !== "novo") {
 			this.isLoading = true;
 

@@ -5,27 +5,33 @@ export default {
 	"totalLogsCount": null,
 	"pagination": {
 		"skip": 0,
-		"limit": 20
+		"limit": 20,
+		"orderBy": "CRIADO_EM",
+		"orderDirection": "DESC"
 	},
 	"logItems": [],
 	"tableColumns": [
 		{
+			"originalId": "OPERADOR_FANTASIA",
 			"key": "operator",
-			"label": "Quem?"
+			"label": "Operador"
 		},
 		{
+			"originalId": "ACAO",
 			"key": "action",
-			"label": "O quê?",
+			"label": "Ação",
 			"size": "80px"
 		},
 		{
+			"originalId": "REFERENCIA_TABELA",
 			"key": "referenceTable",
-			"label": "Onde?",
+			"label": "Entidade",
 			"size": "80px"
 		},
 		{
+			"originalId": "CRIADO_EM",
 			"key": "createdAt",
-			"label": "Quando?",
+			"label": "Criado em",
 			"type": "date"
 		}
 	]

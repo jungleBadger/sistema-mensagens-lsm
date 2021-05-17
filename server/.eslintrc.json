@@ -38,7 +38,8 @@
 			"error",
 			"tab",
 			{
-				"outerIIFEBody": 1
+				"outerIIFEBody": 1,
+				"SwitchCase": 1
 			}
 		],
 		"keyword-spacing": [

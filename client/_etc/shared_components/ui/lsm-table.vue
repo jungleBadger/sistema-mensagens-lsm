@@ -23,11 +23,9 @@
 				class="flex-1"
 				style="min-width: 240px;">
 				<lsm-input
-					:key="selectedFilteringField"
-					:disabled="isAsyncLoading"
 					v-model="filterText"
 					autofocus
-					placeholder="Digite para filtrar a tabela."
+					:placeholder="isAsyncSearchEnabled ? 'Digite 03 caracteres ou mais para buscar.' : 'Digite para filtrar a tabela.'"
 					type="search">
 				</lsm-input>
 
@@ -51,16 +49,16 @@
 						role="row">
 						<button
 							v-for="column in columnsData"
-							:id="column.key"
+							:id="`th-${column.key}`"
 							:key="column.key"
 							:aria-label="column.label"
 							:style="{'flex-basis': column.size || 'auto'}"
-							@click="changeSortingOptions(column.key, selectedSortingDirection === 'asc' ? 'desc' : 'asc')"
+							@click="changeSortingOptions(column.originalId || column.key, selectedSortingDirectionCode === 'ASC' ? 'DESC' : 'ASC')"
 							class="flex-1 flex items-center gap-1 hover:bg-gray-200 transition-colors"
 							role="columnheader">
 
-							<template v-if="selectedSortingField === column.key">
-								<template v-if="selectedSortingDirection === 'asc'">
+							<template v-if="selectedSortingField === (column.originalId || column.key)">
+								<template v-if="selectedSortingDirectionCode === 'ASC'">
 									<font-awesome-icon :icon="['fal', 'arrow-up-short-wide']" />
 								</template>
 								<template v-else>
@@ -99,7 +97,7 @@
 					 <span
 						 v-for="column in columnsData"
 						 :key="column.key"
-						 :aria-labelledby="column.key"
+						 :aria-labelledby="`th-${column.key}`"
 						 :style="{'flex-basis': column.size || 'auto'}"
 						 class="flex-1 h-8 overflow-hidden overflow-ellipsis ml-0.5"
 						 role="cell">
@@ -222,7 +220,7 @@ export default defineComponent({
 		LsmInput,
 		LsmSelect
 	},
-	"emits": ["paginate", "select"],
+	"emits": ["paginate", "select", "search"],
 	"props": {
 
 		"id": {
@@ -242,6 +240,14 @@ export default defineComponent({
 		},
 
 		"isAsyncLoading": {
+			"type": Boolean,
+			"required": false,
+			"default": function () {
+				return false;
+			}
+		},
+
+		"isAsyncSearchEnabled": {
 			"type": Boolean,
 			"required": false,
 			"default": function () {
@@ -278,7 +284,7 @@ export default defineComponent({
 			}
 		},
 
-		"sortingField": {
+		"orderBy": {
 			"type": String,
 			"required": false,
 			"default": function () {
@@ -286,13 +292,13 @@ export default defineComponent({
 			}
 		},
 
-		"sortingDirection": {
+		"orderDirection": {
 			"type": String,
 			"required": false,
 			"default": function () {
 				return "desc";
 			},
-			"validator": value => ["asc", "desc"].indexOf(value) !== -1
+			"validator": value => ["ASC", "DESC"].indexOf(value.toUpperCase()) !== -1
 		}
 
 	},
@@ -319,13 +325,23 @@ export default defineComponent({
 			"filterText": "",
 			"selectedFilteringField": "all",
 
+			// Links to `orderBy` prop
 			"selectedSortingField": "",
+
+			// Links to `orderDirection` prop
 			"selectedSortingDirection": "",
 
-			"currentPage": 1
+			"currentPage": 1,
+
+			"debounce": Date.now()
 		};
 	},
 	"computed": {
+
+		"selectedSortingDirectionCode": function () {
+			return (this.selectedSortingDirection || "" ).toUpperCase();
+		},
+
 		"filteringFields": function () {
 			return [
 				{
@@ -335,35 +351,33 @@ export default defineComponent({
 				...this.columnsData.map(item => {
 					return {
 						"id": item.key,
+						"originalId": item.originalId,
 						"label": item.label
 					}
 				})
 			]
 		},
 		"filteredData": function () {
-			let result = (
-				(this.filterText ?
-						this.tableItems.filter(item => {
-							return JSON.stringify(
-								item,
-								this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
-							).toLowerCase().indexOf(this.filterText.toLowerCase()) > -1;
-						}) :
-						this.tableItems.map(item => item)
-				)
+
+			return (!this.isAsyncSearchEnabled && this.filterText ?
+				this.tableItems.filter(item => {
+					return JSON.stringify(
+						item,
+						this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
+					).toLowerCase().indexOf(this.filterText.toLowerCase()) > -1;
+				}) :
+				this.tableItems.map(item => item)
 			);
 
-			if (this.selectedSortingField) {
-				result.sort((a, b) => {
-					if (this.selectedSortingDirection === "desc") {
-						return a[this.selectedSortingField] < b[this.selectedSortingField] ? 1 : -1;
-					} else {
-						return a[this.selectedSortingField] < b[this.selectedSortingField] ? -1 : 1;
-					}
-				});
-			}
-
-			return result;
+			// if (this.selectedSortingField) {
+			// 	result.sort((a, b) => {
+			// 		if (this.selectedSortingDirectionCode === "DESC") {
+			// 			return a[this.selectedSortingField] < b[this.selectedSortingField] ? 1 : -1;
+			// 		} else {
+			// 			return a[this.selectedSortingField] < b[this.selectedSortingField] ? -1 : 1;
+			// 		}
+			// 	});
+			// }
 		},
 
 		"numberOfPages": function () {
@@ -410,49 +424,52 @@ export default defineComponent({
 			this.filterText = "";
 		},
 
-		changeSortingOptions(field, direction) {
-			this.selectedSortingField = field;
-			this.selectedSortingDirection = direction;
-		},
-
 		emitClick(selectedItem) {
 			if (this.handleClick) {
 				this.$emit("select", selectedItem);
 			}
 		},
 
+
+		emitPaginate(override = {}) {
+			this.$emit("paginate", {
+				"filteringField": this.selectedFilteringField,
+				"orderBy": this.selectedSortingField,
+				"orderDirection": this.selectedSortingDirectionCode,
+				"filteringValue": this.filterText,
+				"skip": this.pageLimits.start - 1,
+				"limit": this.itemsPerPage,
+				...override
+			});
+		},
+
+		// All of the following methods represent data handling changes and re-trigger the pagination event
+		changeSortingOptions(field, direction) {
+			this.selectedSortingField = field;
+			this.selectedSortingDirection = direction;
+			this.emitPaginate();
+		},
+
 		selectPage (event) {
 			this.currentPage = Number(event.target.value);
-			this.$emit("paginate", {
-				"skip": this.pageLimits.start - 1,
-				"limit": this.itemsPerPage
-			});
+			this.emitPaginate();
 		},
 
 		paginateLeft () {
 			this.currentPage -= 1;
-			this.$emit("paginate", {
-				"skip": this.pageLimits.start - 1,
-				"limit": this.itemsPerPage
-			});
+			this.emitPaginate();
 		},
 
 		paginateRight () {
 			this.currentPage += 1;
-			this.$emit("paginate", {
-				"skip": this.pageLimits.start - 1,
-				"limit": this.itemsPerPage
-			});
-
+			this.emitPaginate();
 		},
 
 		updateItemsPerPage (event) {
 			this.currentPage = 1;
-			this.$emit("paginate", {
-				"skip": 0,
+			this.emitPaginate({
 				"limit": Number(event.target.value)
 			});
-
 		}
 	},
 
@@ -465,9 +482,37 @@ export default defineComponent({
 		return {
 			datetimeFormats,
 			numberFormats,
-			"selectedSortingField": ref(props.sortingField),
-			"selectedSortingDirection": ref(props.sortingDirection)
+			"selectedSortingField": ref(props.orderBy),
+			"selectedSortingDirection": ref(props.orderDirection)
 		};
+	},
+
+	"watch": {
+		"filterText": function (newValue) {
+			if (this.isAsyncSearchEnabled) {
+				this.currentPage = 1;
+				this.debounce = Date.now();
+				if (!newValue) {
+					this.$emit("search", {
+						"filteringField": this.selectedFilteringField,
+						"orderBy": this.selectedSortingField,
+						"orderDirection": this.selectedSortingDirectionCode,
+						"filteringValue": ""
+					});
+				} else {
+					setTimeout(() => {
+						if (newValue.length >= 3 && Date.now() - this.debounce >= 300) {
+							this.$emit("search", {
+								"filteringField": this.selectedFilteringField,
+								"orderBy": this.selectedSortingField,
+								"orderDirection": this.selectedSortingDirectionCode,
+								"filteringValue": newValue
+							});
+						}
+					}, 300)
+				}
+			}
+		}
 	}
 });
 </script>

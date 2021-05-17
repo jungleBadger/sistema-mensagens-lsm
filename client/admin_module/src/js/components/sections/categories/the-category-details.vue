@@ -114,34 +114,25 @@ export default defineComponent({
 				});
 			} else {
 				await this.$store.dispatch("categories/createCategory", this.name);
+				await Promise.all([
+					this.$store.dispatch("categories/retrieveTotalCategoriesCount"),
+					this.$store.dispatch("categories/retrieveCategories")
+				]);
 			}
-
-			await Promise.all([
-				this.$store.dispatch("categories/retrieveTotalCategoriesCount"),
-				this.$store.dispatch("categories/retrieveCategories")
-			]);
 
 			this.isLoading = false;
 			return this.goToCategoriesHome();
 		},
 
 		async deleteItem() {
-
 			this.isDeleteLoading = true;
-
 			await this.$store.dispatch("categories/deleteCategory", this.selectedCategory.id);
-
-			await Promise.all([
-				this.$store.dispatch("categories/retrieveTotalCategoriesCount"),
-				this.$store.dispatch("categories/retrieveCategories")
-			]);
-
 			this.isDeleteLoading = false;
 			return this.goToCategoriesHome();
 		}
 	},
 
-	async mounted () {
+	async created () {
 		if (!this.selectedCategory && this.$route.params.categoryId !== "novo") {
 			this.isLoading = true;
 

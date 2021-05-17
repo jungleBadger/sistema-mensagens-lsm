@@ -41,21 +41,65 @@ export default {
 			);
 			console.log(e);
 			return false;
-
-
-
 		}
 	},
 
+	async searchBrothers(context, params) {
+		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
+		try {
+			let result = await brothersFactory.searchBrothers(params.filterText, params.filterColumn, skip, limit, orderBy, orderDirection);
+			context.commit("totalBrothersCount", result.totalCount);
+			context.commit("brotherItems", result.results);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro realizando a busca.",
+					"subtitle": "Confira os filtros, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+
+	},
+
 	async retrieveTotalBrothersCount(context) {
-		let result = await brothersFactory.retrieveTotalBrothersCount();
-		context.commit("totalBrothersCount", result.count);
+		try {
+			let result = await brothersFactory.retrieveTotalBrothersCount();
+			context.commit("totalBrothersCount", result.count);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro calculando o total de items.",
+					"subtitle": "Confira os filtros, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+
 	},
 
 	async retrieveBrothers(context) {
-		const {skip, limit} = context.getters["pagination"];
-		let brothers = await brothersFactory.retrieveBrothers(skip, limit);
-		context.commit("brotherItems", brothers.results);
+		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
+
+		try {
+			let brothers = await brothersFactory.retrieveBrothers(skip, limit, orderBy, orderDirection);
+			context.commit("brotherItems", brothers.results);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro buscando dados.",
+					"subtitle": "Confira os filtros, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+
 	},
 
 	async retrieveBrotherById(context, brotherId) {
@@ -84,6 +128,8 @@ export default {
 	async updateBrother(context, brother) {
 		try {
 			await brothersFactory.updateBrother(brother);
+			let brothers = context.getters["brotherItems"];
+
 			context.commit(
 				"notification/addNotification",
 				{
@@ -92,6 +138,15 @@ export default {
 					"subtitle": "Irmão atualizado com sucesso."
 				},
 				{"root": true}
+			);
+			context.commit(
+				"brotherItems",
+				brothers.map(item => {
+					return item.id === brother.id ? {
+						...item,
+						...brother
+					} : item;
+				})
 			);
 			return true;
 		} catch (e) {
@@ -124,6 +179,8 @@ export default {
 	async deleteBrother(context, brotherId) {
 		try {
 			await brothersFactory.deleteBrother(brotherId);
+			let brothers = context.getters["brotherItems"];
+
 			context.commit(
 				"notification/addNotification",
 				{
@@ -133,6 +190,8 @@ export default {
 				},
 				{"root": true}
 			);
+			context.commit("totalBrothersCount", brothers.length - 1);
+			context.commit("brotherItems", brothers.filter(item => item.id !== brotherId));
 			return true;
 		} catch (e) {
 			context.commit(

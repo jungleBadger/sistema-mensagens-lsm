@@ -60,6 +60,52 @@ router.get(
 	}
 );
 
+
+/**
+ * @swagger
+ * /api/category/search:
+ *   delete:
+ *     tags: [category]
+ *     summary: Search categories.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Category object updated.
+ *       400:
+ *         description: Request parameter issues.
+ *       401:
+ *         description: Requester not logged in.
+ *       403:
+ *         description: Requester is not an admin User.
+ *       500:
+ *         description: Error handler.
+ */
+router.get(
+	"/search",
+	isAdmin,
+	async (req, res) => {
+		res.status(
+			200
+		).send(
+			await category.search(
+				req.query.filterText,
+				req.query.filterColumn || "NOME",
+				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [],
+				req.query.targetColumns ? req.query.targetColumns.split(",") : [
+					"ID",
+					"NOME",
+					"CRIADO_EM"
+				],
+				Number(req.query.limit) || 20,
+				Number(req.query.skip) || 0,
+				req.query.orderBy || "ID",
+				req.query.orderDirection || "DESC"
+			)
+		)
+	}
+);
+
 router.get(
 	"/:categoryId",
 	isLoggedIn,

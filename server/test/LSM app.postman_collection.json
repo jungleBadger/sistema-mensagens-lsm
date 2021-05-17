@@ -1648,6 +1648,55 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/brother/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"brother",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1679,7 +1728,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"{{$randomJobType}}\"\r\n}",
+							"raw": "{\r\n    \"name\": \"{{$randomBankAccountName}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2064,6 +2113,55 @@
 								"logs",
 								"{{categoryLogId}}",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/category/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
 							]
 						}
 					},
@@ -2762,6 +2860,55 @@
 								"api",
 								"logs",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/logs/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
 							]
 						}
 					},

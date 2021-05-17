@@ -56,7 +56,6 @@ module.exports = {
 				)
 			};
 
-
 		} catch (e) {
 			console.log(e);
 			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
@@ -75,7 +74,7 @@ module.exports = {
 	 * @method retrieveTotalRowsCount
 	 * @return {Promise<Object|Error>} Containing all Category objects and request metadata.
 	 */
-	async retrieveTotalRowsCount() {
+	async retrieveTotalRowsCount () {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
@@ -83,6 +82,57 @@ module.exports = {
 				[],
 				"fetch"
 			))["1"]
+		};
+	},
+
+	/**
+	 * Search categories.
+	 * @method search
+	 * @param {string} filterText - Filtering text.
+	 * @param {string} [filterColumn="NOME"] - Optional column selector to use in the SELECT statement.
+	 * @param {Array<string>} [extraFilterColumns=[]] - TBD.
+	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @return {Promise<object|Error>} Containing the deletion confirmation.
+	 */
+	async search (filterText, filterColumn = "NOME", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
+		if (!filterText) {
+			throw raiseError(
+				400,
+				"Missing required properties for searching Category."
+			);
+		}
+
+		let {
+			searchQuery,
+			countQuery
+		} = DBConnectionPool.buildSearchQuery(
+			targetColumns, TABLE_NAME, filterColumn, filterText, extraFilterColumns, orderBy, orderDirection, skip, limit
+		);
+
+		console.log(searchQuery);
+
+		let [results, countResults] = await Promise.all([
+			connectionPool.executeRawSqlInstruction(
+				searchQuery,
+				[]
+			),
+			connectionPool.executePreparedSqlInstruction(
+				countQuery,
+				[],
+				"fetch"
+			)
+		]);
+
+		return {
+			"offset": skip + results.length,
+			"orderBy": orderBy,
+			"orderDirection": orderDirection,
+			"totalCount": countResults["1"],
+			"results": results
 		};
 	},
 
@@ -96,7 +146,7 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all admin Users objects and request metadata.
 	 */
-	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
+	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
@@ -159,7 +209,7 @@ module.exports = {
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.NOME_EXIBICAO = ? LIMIT 1;`,
+			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.NOME = ? LIMIT 1;`,
 			[categoryName]
 		);
 
@@ -219,7 +269,6 @@ module.exports = {
 			)),
 			"NOME": newName
 		};
-
 
 	},
 

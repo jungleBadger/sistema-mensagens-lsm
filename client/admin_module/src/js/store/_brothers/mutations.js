@@ -12,10 +12,12 @@ export default {
 		state.totalBrothersCount = Number(count);
 	},
 
-	pagination(state, pagination = {"skip": 0, "limit": 5}) {
+	pagination(state, pagination = {"skip": 0, "limit": 5, "orderBy": "NOME_EXIBICAO", "orderDirection": "ASC"}) {
 		state.pagination = {
 			"skip": pagination.skip,
-			"limit": pagination.limit
+			"limit": pagination.limit,
+			"orderBy": pagination.orderBy,
+			"orderDirection": pagination.orderDirection
 		}
 	},
 

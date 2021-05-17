@@ -47,15 +47,66 @@ export default {
 
 	},
 
+
+	async searchCategories(context, params) {
+		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
+
+		try {
+			let result = await categoriesFactory.searchCategories(params.filterText, params.filterColumn, skip, limit, orderBy, orderDirection);
+			context.commit("totalCategoriesCount", result.totalCount);
+			context.commit("categoryItems", result.results);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro realizando a busca.",
+					"subtitle": "Confira os filtros, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+
+
+	},
+
+
 	async retrieveTotalCategoriesCount(context) {
-		let result = await categoriesFactory.retrieveTotalCategoriesCount();
-		context.commit("totalCategoriesCount", result.count);
+		try {
+			let result = await categoriesFactory.retrieveTotalCategoriesCount();
+			context.commit("totalCategoriesCount", result.count);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro calculando o total de items.",
+					"subtitle": "Confira os filtros, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+
 	},
 
 	async retrieveCategories(context) {
-		const {skip, limit} = context.getters["pagination"];
-		let categories = await categoriesFactory.retrieveCategories(skip, limit);
-		context.commit("categoryItems", categories.results);
+		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
+
+		try {
+			let categories = await categoriesFactory.retrieveCategories(skip, limit, orderBy, orderDirection);
+			context.commit("categoryItems", categories.results);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro buscando dados.",
+					"subtitle": "Confira os filtros, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+
 	},
 
 	async retrieveCategoryById(context, categoryId) {
@@ -82,6 +133,8 @@ export default {
 
 		try {
 			await categoriesFactory.updateCategory(category);
+			let categories = context.getters["categoryItems"];
+
 			context.commit(
 				"notification/addNotification",
 				{
@@ -90,6 +143,15 @@ export default {
 					"subtitle": "Categoria atualizada com sucesso."
 				},
 				{"root": true}
+			);
+			context.commit(
+				"categoryItems",
+				categories.map(item => {
+					return item.id === categories.id ? {
+						...item,
+						...categories
+					} : item;
+				})
 			);
 			return true;
 		} catch (e) {
@@ -116,14 +178,14 @@ export default {
 			);
 			console.log(e);
 			return false;
-
-
 		}
 	},
 
 	async deleteCategory(context, categoryId) {
 		try {
 			await categoriesFactory.deleteCategory(categoryId);
+			let categories = context.getters["categoryItems"];
+
 			context.commit(
 				"notification/addNotification",
 				{
@@ -133,6 +195,8 @@ export default {
 				},
 				{"root": true}
 			);
+			context.commit("totalCategoriesCount", categories.length - 1);
+			context.commit("categoryItems", categories.filter(item => item.id !== categoryId));
 			return true;
 		} catch (e) {
 			context.commit(

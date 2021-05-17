@@ -5,7 +5,7 @@ export default class Category {
 
 		this.id = props.ID || props.id;
 		this.name = props.NOME || props.name;
-		this.createdAt = new Date(props.CRIADO_EM + " UTC") || props.createdAt;
+		this.createdAt = props.createdAt || new Date(props.CRIADO_EM + " UTC");
 
 	}
 

@@ -124,12 +124,11 @@ export default defineComponent({
 				});
 			} else {
 				await this.$store.dispatch("users/admin/createAdminUser", this.displayName);
+				await Promise.all([
+					this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
+					this.$store.dispatch("users/admin/retrieveAdminUsers")
+				]);
 			}
-
-			await Promise.all([
-				this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("users/admin/retrieveAdminUsers")
-			]);
 
 			this.isLoading = false;
 			return this.goToAdminUsersHome();
@@ -141,17 +140,12 @@ export default defineComponent({
 
 			await this.$store.dispatch("users/admin/deleteAdminUser", this.selectedAdminUser.id);
 
-			await Promise.all([
-				this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("users/admin/retrieveAdminUsers")
-			]);
-
 			this.isDeleteLoading = false;
 			return this.goToAdminUsersHome();
 		}
 	},
 
-	async mounted () {
+	async created () {
 		if (!this.selectedAdminUser && this.$route.params.adminUserId !== "novo") {
 			this.isLoading = true;
 			this.$store.commit(
