@@ -1,27 +1,26 @@
 <template>
 	<div
+		@mouseenter="pauseCloseListener"
+		@mouseleave="resumeOrStartCloseListener"
 		:class="{
 			'bg-green-600 text-white': notification.kind === 'success',
 			'bg-yellow-500 text-gray-800': notification.kind === 'warning',
 			'bg-red-600 text-white': notification.kind === 'error'
 		}"
 		style="min-width: 18rem; width: auto"
-		class="cursor-default bg-white h-auto p-1 rounded shadow-lg z-40 bg-opacity-90 mt-2">
+		class="cursor-default bg-white h-auto p-1 rounded shadow-lg z-40 bg-opacity-90 mt-2 relative">
 
+		<div class=" w-full h-full">
+			<button
+				class="absolute w-6 h-6 right-1 top-1"
+				@click="handleCloseRequest">
+				<span
+					role="img"
+					aria-label="Fechar notificação">
+						<font-awesome-icon :icon="['fal', 'xmark']" />
+					</span>
 
-<!--		<cv-toast-notification-->
-<!--			:key="notification.id"-->
-<!--			:kind="notification.kind"-->
-<!--			:title="notification.title"-->
-<!--			:sub-title="notification.subtitle"-->
-<!--			:caption="notification.caption"-->
-<!--			@close="handleCloseRequest"-->
-<!--			:close-aria-label="'close'">-->
-<!--		</cv-toast-notification>-->
-<!--		-->
-
-
-		<div>
+			</button>
 			<h6 class="font-semibold">{{notification.title}}</h6>
 			<p>{{notification.subtitle}}</p>
 		</div>
@@ -78,9 +77,28 @@ export default defineComponent(
 			}
 		},
 
+		"data": function () {
+			return {
+				"timeout": null
+			}
+		},
 		"computed": {
 		},
 		"methods": {
+
+			pauseCloseListener() {
+				if (this.timeout) {
+					window.clearTimeout(this.timeout);
+					this.timeout = null;
+				}
+			},
+
+			resumeOrStartCloseListener() {
+				this.timeout = window.setTimeout(() => {
+					this.handleCloseRequest();
+				}, this.notification.disappearInMs || 5000);
+			},
+
 			handleCloseRequest() {
 				this.$store.commit("notification/dismissNotification", this.notification.id);
 			},
@@ -94,9 +112,7 @@ export default defineComponent(
 			}
 		},
 		"mounted": function () {
-			window.setTimeout(() => {
-				this.handleCloseRequest();
-			}, this.notification.disappearInMs || 5000);
+			this.resumeOrStartCloseListener();
 
 		}
 	}

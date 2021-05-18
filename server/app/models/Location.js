@@ -1,0 +1,50 @@
+"use strict";
+
+const Joi = require("joi");
+const raiseError = require("../helpers/errorHandler").raiseError;
+
+module.exports = class Location {
+
+	model = {};
+
+	constructor (
+		country,
+		state,
+		city,
+		description
+	) {
+		let schemaValidationResult = Joi.object(
+			{
+				"PAIS": Joi.string().max(64).required(),
+				"ESTADO": Joi.string().max(64).required(),
+				"CIDADE": Joi.string().max(64).required(),
+				"DESCRICAO": Joi.string().max(128).optional().allow("")
+			}
+		).validate(
+			{
+				"PAIS": country,
+				"ESTADO": state,
+				"CIDADE": city,
+				"DESCRICAO": description || ""
+			}
+		);
+
+		if (schemaValidationResult.error) {
+			throw raiseError(
+				400,
+				schemaValidationResult.error.message
+			);
+		} else {
+			this.model = schemaValidationResult.value;
+		}
+
+	}
+
+	getKeys() {
+		return Object.keys(this.model || {});
+	}
+
+	getValues() {
+		return Object.values(this.model || {});
+	}
+}

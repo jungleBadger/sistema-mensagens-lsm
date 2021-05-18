@@ -1,7 +1,6 @@
 <template>
 
 	<section class="flex flex-col flex-1 h-full max-h-full">
-
 		<the-app-header>
 			<template v-slot:app-menu>
 			</template>

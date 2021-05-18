@@ -83,7 +83,7 @@ router.get(
  */
 router.get(
 	"/search",
-	isAdmin,
+	isLoggedIn,
 	async (req, res) => {
 		res.status(
 			200
@@ -109,12 +109,14 @@ router.get(
 
 router.get(
 	"/",
-	isAdmin,
+	isLoggedIn,
 	async (req, res) => {
 		res.status(200).send(
 			await brother.retrieveAll(
 				[
-					"*"
+					"ID",
+					"NOME_EXIBICAO",
+					"CRIADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,

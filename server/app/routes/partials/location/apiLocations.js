@@ -2,15 +2,15 @@
 
 const express = require("express");
 const router = express.Router();
-const category = require("../../../helpers/category/crud");
+const location = require("../../../helpers/location/crud");
 const { isAdmin, isLoggedIn } = require("../../middlewares/auth");
 
 /**
  * @swagger
- * /api/category:
+ * /api/location:
  *   post:
- *     tags: [category]
- *     summary: Create a new Brother.
+ *     tags: [location]
+ *     summary: Create a new Location.
  *     produces:
  *       - application/json
  *     parameters:
@@ -41,8 +41,8 @@ router.post(
 		res.status(
 			201
 		).send(
-			await category.create(
-				req.body.name,
+			await location.create(
+				req.body,
 				req.user
 			)
 		)
@@ -55,7 +55,7 @@ router.get(
 	isLoggedIn,
 	async (req, res) => {
 		res.status(200).send(
-			await category.retrieveTotalRowsCount()
+			await location.retrieveTotalRowsCount()
 		);
 	}
 );
@@ -63,15 +63,15 @@ router.get(
 
 /**
  * @swagger
- * /api/category/search:
+ * /api/location/search:
  *   delete:
- *     tags: [category]
- *     summary: Search categories.
+ *     tags: [location]
+ *     summary: Search brothers.
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: Category object updated.
+ *         description: Brother object updated.
  *       400:
  *         description: Request parameter issues.
  *       401:
@@ -88,61 +88,71 @@ router.get(
 		res.status(
 			200
 		).send(
-			await category.search(
+			await location.search(
 				req.query.filterText,
-				req.query.filterColumn || "NOME",
+				req.query.filterColumn || "PAIS",
 				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [],
 				req.query.targetColumns ? req.query.targetColumns.split(",") : [
 					"ID",
-					"NOME",
+					"PAIS",
+					"ESTADO",
+					"CIDADE",
+					"DESCRICAO",
 					"CRIADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
-				req.query.orderBy || "ID",
-				req.query.orderDirection || "DESC"
+				req.query.orderBy || "PAIS",
+				req.query.orderDirection || "ASC"
 			)
 		)
 	}
 );
 
-router.get(
-	"/:categoryId",
-	isLoggedIn,
-	async (req, res) => {
-		res.status(200).send(
-			await category.retrieveById(
-				req.params.categoryId
-			)
-		);
-
-	}
-);
 
 router.get(
 	"/",
 	isLoggedIn,
 	async (req, res) => {
 		res.status(200).send(
-			await category.retrieveAll(
+			await location.retrieveAll(
 				[
-					"*"
+					"ID",
+					"PAIS",
+					"ESTADO",
+					"CIDADE",
+					"DESCRICAO",
+					"CRIADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
-				req.query.orderBy || "ID",
-				req.query.orderDirection || "DESC"
+				req.query.orderBy || "PAIS",
+				req.query.orderDirection || "ASC"
 			)
 		);
 	}
 );
 
+router.get(
+	"/:locationId",
+	isLoggedIn,
+	async (req, res) => {
+		res.status(200).send(
+			await location.retrieveById(
+				req.params.locationId
+			)
+		);
+
+	}
+);
+
+
 /**
  * @swagger
- * /api/category/:categoryId:
+ * /api/location/:locationId:
  *   patch:
- *     tags: [category]
- *     summary: Updates a given category.
+ *     tags: [location]
+ *     summary: Updates a given location.
  *     produces:
  *       - application/json
  *     parameters:
@@ -169,26 +179,27 @@ router.get(
  *         description: Error handler.
  */
 router.patch(
-	"/:categoryId",
+	"/:locationId",
 	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
 		).send(
-			await category.update(
-				req.params.categoryId,
-				req.body.name,
+			await location.update(
+				req.params.locationId,
+				req.body,
 				req.user
 			)
 		)
 	}
-);
+)
+
 /**
  * @swagger
- * /api/category/:categoryId:
+ * /api/location/:locationId:
  *   delete:
- *     tags: [category]
- *     summary: Deletes a given category.
+ *     tags: [location]
+ *     summary: Deletes a given location.
  *     produces:
  *       - application/json
  *     responses:
@@ -208,19 +219,21 @@ router.patch(
  *         description: Error handler.
  */
 router.delete(
-	"/:categoryId",
+	"/:locationId",
 	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
 		).send(
-			await category.delete(
-				req.params.categoryId,
+			await location.delete(
+				req.params.locationId,
 				req.user
 			)
 		)
 	}
 );
+
+
 
 
 module.exports = router;

@@ -20,6 +20,7 @@ import { faUserGroupCrown } from "@fortawesome/pro-solid-svg-icons/faUserGroupCr
 import { faPodcast } from "@fortawesome/pro-solid-svg-icons/faPodcast";
 import { faHome } from "@fortawesome/pro-solid-svg-icons/faHome";
 import { faBallPile } from "@fortawesome/pro-solid-svg-icons/faBallPile";
+import { faEarthAmericas } from "@fortawesome/pro-solid-svg-icons/faEarthAmericas";
 import { faBoxArchive } from "@fortawesome/pro-solid-svg-icons/faBoxArchive";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
 import { faTrash } from "@fortawesome/pro-solid-svg-icons/faTrash";
@@ -57,6 +58,7 @@ library.add(
 	faCheck,
 	faTrash,
 	faPlus,
+	faEarthAmericas,
 
 	faLock,
 	faSpinnerThird,

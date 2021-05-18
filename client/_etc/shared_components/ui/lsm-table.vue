@@ -6,7 +6,7 @@
 
 		<!--			@SECTION TABLE FILTERS -->
 
-		<header class="bg-gray-100 flex gap-2 items-center shadow z-10 p-2 flex-wrap">
+		<header class="bg-gray-100 flex gap-2 items-center shadow z-20 p-2 flex-wrap">
 
 			<div class="w-full md:w-48">
 				<lsm-select
@@ -28,21 +28,24 @@
 					:placeholder="isAsyncSearchEnabled ? 'Digite 03 caracteres ou mais para buscar.' : 'Digite para filtrar a tabela.'"
 					type="search">
 				</lsm-input>
-
 			</div>
+
+
 
 		</header>
 
+
 		<!--			@SECTION TABLE BODY -->
 
-		<template v-if="filteredData.length">
-			<div
-				class="bg-white max-h-full overflow-hidden flex flex-col p-0 md:p-1 ml-px ml-px"
-				role="table">
+		<div
+			class="bg-white max-h-full overflow-hidden flex flex-col p-0 md:p-2 md:pt-0 md:pb-0 ml-px ml-px relative"
+			role="table">
 
-				<!--			@SECTION TABLE COLUMNS HEADER -->
+			<lsm-progress-bar v-if="isAsyncLoading"></lsm-progress-bar>
+
+			<template v-if="filteredData.length">
 				<div
-					class="w-full sr-only md:not-sr-only"
+					class="w-full z-10 sr-only md:not-sr-only"
 					role="rowgroup">
 					<div
 						class="w-full flex"
@@ -104,7 +107,9 @@
 							<template v-if="column.type === 'date' ">
 
 								<i18n-d
-									:format="{ 'key': 'shortWithTime' }"
+									tag="span"
+									locale="pt"
+									format="shortWithTime"
 									:value="item[column.key]"
 								></i18n-d>
 
@@ -116,20 +121,26 @@
 					  </span>
 					</Component>
 				</transition-group>
-			</div>
-		</template>
-		<template v-else>
-			<div
-				class="bg-white pl-2 pr-2 pb-4 pt-4"
-				:key="'empty-container'">
-				<template v-if="filterText">
-					Nenhum item encontrado aplicando os filtros selecionados. <button @click="resetFilters" class="text-blue-500 ml-2">Limpar filtros</button>
-				</template>
-				<template v-else>
-					Tabela sem items. As razões podem variar, mas nenhum resultado foi encontrado pelo sistema.
-				</template>
-			</div>
-		</template>
+			</template>
+			<template v-else>
+				<div
+					class="bg-white pl-2 pr-2 pb-4 pt-4"
+					:key="'empty-container'">
+					<template v-if="isAsyncLoading">
+						Carregando dados...
+					</template>
+					<template v-else-if="filterText">
+						Nenhum item encontrado aplicando os filtros selecionados. <button @click="resetFilters" class="text-blue-500 ml-2">Limpar filtros</button>
+					</template>
+					<template v-else>
+						Tabela sem items. As razões podem variar, mas nenhum resultado foi encontrado pelo sistema.
+					</template>
+				</div>
+			</template>
+
+		</div>
+
+
 
 
 		<!--			@SECTION TABLE FOOTER -->
@@ -213,10 +224,12 @@ import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import LsmInput from "./lsm-input.vue";
 import LsmSelect from "./lsm-select.vue";
+import LsmProgressBar from "./lsm-progress-bar";
 
 export default defineComponent({
 	"name": "LsmTable",
 	"components": {
+		LsmProgressBar,
 		LsmInput,
 		LsmSelect
 	},

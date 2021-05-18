@@ -10,6 +10,7 @@ const categoryHandler = require("./partials/category/_index");
 const googleHandler = require("./partials/google/_index");
 const mainHandler = require("./partials/mainHandler");
 const regularUserHandler = require("./partials/user/_index");
+const locationHandler = require("./partials/location/_index");
 const logsHandler = require("./partials/logs/_index");
 
 module.exports = function (app) {
@@ -49,6 +50,10 @@ module.exports = function (app) {
 
 	app.use(
 		regularUserHandler
+	);
+
+	app.use(
+		locationHandler
 	);
 
 	app.use(

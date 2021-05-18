@@ -9,6 +9,8 @@ import TheCategoryDetails from "../components/sections/categories/the-category-d
 import TheEventsMain from "../components/sections/events/the-events-main.vue";
 import TheUsersMain from "../components/sections/users/the-users-main.vue";
 import TheAdminUserDetails from "../components/sections/users/admin/the-admin-user-details.vue";
+import TheLocationsMain from "../components/sections/locations/the-locations-main.vue";
+import TheLocationDetails from "../components/sections/locations/the-location-details.vue";
 import TheLogsMain from "../components/sections/logs/the-logs-main.vue";
 
 export default createRouter({
@@ -53,6 +55,23 @@ export default createRouter({
 					"name": "app.categories.details",
 					"path": ":categoryId",
 					"component": TheCategoryDetails,
+					"meta": {
+					}
+				}
+			]
+		},
+		{
+			"name": "app.locations",
+			"path": "/localidades",
+			"component": TheLocationsMain,
+			"meta": {
+				"indexed": true
+			},
+			"children": [
+				{
+					"name": "app.locations.details",
+					"path": ":locationId",
+					"component": TheLocationDetails,
 					"meta": {
 					}
 				}
