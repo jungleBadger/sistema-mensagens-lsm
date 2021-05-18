@@ -18,7 +18,6 @@
 	const eslint = require("gulp-eslint");
 	const plumber = require("gulp-plumber");
 	const path = require("path");
-	const cssnext = require("postcss-preset-env");
 	const log = require("fancy-log");
 	const colors = require("ansi-colors");
 	const webpack = require("webpack");
@@ -118,7 +117,7 @@
 								"mode": isProd ? "production" : "development",
 								"cacheId": [packageJson.name, moduleId, process.env.NODE_ENV].join("_"),
 								"clientsClaim": true,
-								"maximumFileSizeToCacheInBytes": 4 * 1024 * 1024,
+								"maximumFileSizeToCacheInBytes": 6 * 1024 * 1024,
 								"cleanupOutdatedCaches": true,
 								"skipWaiting": true,
 								"runtimeCaching": [{
@@ -134,6 +133,7 @@
 								}],
 								"globPatterns": [
 									"dist/css/*.css",
+									"dist/css/*.map",
 									"dist/js/*.js",
 								],
 							}).then(({count, size, warnings}) => {

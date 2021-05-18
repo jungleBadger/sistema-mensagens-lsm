@@ -50,7 +50,13 @@ jobs:
                       else
                         npm run build:all
                       fi
-
+            - run:
+                  name: Generate service workers
+                  working_directory: client
+                  command: |
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        npm run generate-sw
+                      fi
             - run:
                   name: Destroy `etc` and `node_modules` folder
                   working_directory: client

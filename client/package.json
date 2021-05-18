@@ -19,7 +19,8 @@
 		"build:auth:prod": "eslint -c .eslintrc.json auth_module/src/**/*.js auth_module/src/**/*.vue --fix && gulp build -m auth --prod",
 		"build:all": "eslint -c .eslintrc.json **_module/src/**/*.js **_module/src/**/*.vue --fix && gulp build-all",
 		"build:all:prod": "eslint -c .eslintrc.json **_module/src/**/*.js **_module/src/**/*.vue --fix && gulp build-all --prod",
-		"test": "echo 'TBD' && exit 0"
+		"test": "echo 'TBD' && exit 0",
+		"generate-sw": "gulp generate-sw --prod"
 	},
 	"dependencies": {
 		"@vue/compiler-sfc": "^3.0.2",
