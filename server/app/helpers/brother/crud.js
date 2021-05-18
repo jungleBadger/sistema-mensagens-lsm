@@ -58,7 +58,7 @@ module.exports = {
 
 
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
 					409,
 					`Brother ${displayName} already exists.`
@@ -250,7 +250,7 @@ module.exports = {
 			);
 		} catch (e) {
 			console.log(e);
-			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
 					409,
 					`Brother ${newDisplayName} already exists.`

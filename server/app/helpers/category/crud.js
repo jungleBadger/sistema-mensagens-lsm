@@ -58,7 +58,7 @@ module.exports = {
 
 		} catch (e) {
 			console.log(e);
-			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
 					409,
 					`Category ${name} already exists.`
@@ -78,7 +78,8 @@ module.exports = {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
-				`SELECT COUNT(ID) FROM ${TABLE_NAME};`,
+				`SELECT COUNT(ID)
+				 FROM ${TABLE_NAME};`,
 				[],
 				"fetch"
 			))["1"]
@@ -149,7 +150,10 @@ module.exports = {
 	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}
+			 OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
 		);
 
 		return {
@@ -177,7 +181,10 @@ module.exports = {
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? LIMIT 1;`,
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 WHERE ${TABLE_NAME}.ID = ?
+			 LIMIT 1;`,
 			[categoryId]
 		);
 
@@ -209,7 +216,10 @@ module.exports = {
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.NOME = ? LIMIT 1;`,
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 WHERE ${TABLE_NAME}.NOME = ?
+			 LIMIT 1;`,
 			[categoryName]
 		);
 
@@ -245,11 +255,13 @@ module.exports = {
 
 		try {
 			await connectionPool.executePreparedSqlInstruction(
-				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME = ? WHERE ${TABLE_NAME}.ID = ?;`,
+				`UPDATE ${TABLE_NAME}
+				 SET ${TABLE_NAME}.NOME = ?
+				 WHERE ${TABLE_NAME}.ID = ?;`,
 				[newName, categoryId]
 			);
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
 					409,
 					`Category ${newName} already exists.`
@@ -289,18 +301,32 @@ module.exports = {
 			);
 		}
 
-		await connectionPool.executePreparedSqlInstruction(
-			`DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ?;`,
-			[categoryId]
-		);
+		try {
+			await connectionPool.executePreparedSqlInstruction(
+				`DELETE
+				 FROM ${TABLE_NAME}
+				 WHERE ${TABLE_NAME}.ID = ?;`,
+				[categoryId]
+			);
 
-		return await logger.generateLog(
-			"DELETE",
-			categoryId,
-			TABLE_NAME,
-			operator.email,
-			Number(operator.id)
-		);
+			return await logger.generateLog(
+				"DELETE",
+				categoryId,
+				TABLE_NAME,
+				operator.email,
+				Number(operator.id)
+			);
+		} catch (e) {
+			console.log(e);
+			if (e && e.indexOf && e.indexOf("EVENTO_CATEGORIA_ID_FK") > -1) {
+				throw raiseError(
+					409,
+					`This Category is a dependency of an Event.`
+				);
+			} else {
+				throw e;
+			}
+		}
 
 	}
 };

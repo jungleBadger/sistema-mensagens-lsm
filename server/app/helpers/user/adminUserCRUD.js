@@ -79,7 +79,7 @@ module.exports = {
 
 
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf && e.indexOf("SQLSTATE=23505") > -1) {
 				throw raiseError(
 					409,
 					`User ${userEmail} already exists.`

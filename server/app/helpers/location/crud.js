@@ -63,9 +63,8 @@ module.exports = {
 				)
 			};
 
-
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("duplicate values" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
 					409,
 					`Location ${payload.country} - ${payload.state} - ${payload.city} already exists.`
@@ -81,11 +80,12 @@ module.exports = {
 	 * @method retrieveTotalRowsCount
 	 * @return {Promise<Object|Error>} Containing all Brother objects and request metadata.
 	 */
-	async retrieveTotalRowsCount() {
+	async retrieveTotalRowsCount () {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
-				`SELECT COUNT(ID) FROM ${TABLE_NAME};`,
+				`SELECT COUNT(ID)
+				 FROM ${TABLE_NAME};`,
 				[],
 				"fetch"
 			))["1"]
@@ -105,7 +105,7 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<object|Error>} Containing the results.
 	 */
-	async search (filterText, filterColumn = "PAIS", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "PAIS", orderDirection= "ASC") {
+	async search (filterText, filterColumn = "PAIS", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "PAIS", orderDirection = "ASC") {
 		if (!filterText) {
 			throw raiseError(
 				400,
@@ -151,10 +151,13 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all Location objects and request metadata.
 	 */
-	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "PAIS", orderDirection= "ASC") {
+	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "PAIS", orderDirection = "ASC") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}
+			 OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
 		);
 
 		return {
@@ -182,7 +185,10 @@ module.exports = {
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? LIMIT 1;`,
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 WHERE ${TABLE_NAME}.ID = ?
+			 LIMIT 1;`,
 			[locationId]
 		);
 
@@ -195,7 +201,6 @@ module.exports = {
 			return result[0];
 		}
 	},
-
 
 	/**
 	 * Updates a single Brother's Display name.
@@ -266,18 +271,30 @@ module.exports = {
 			);
 		}
 
-		await connectionPool.executePreparedSqlInstruction(
-			`DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ?;`,
-			[locationId]
-		);
-
-		return await logger.generateLog(
-			"DELETE",
-			locationId,
-			TABLE_NAME,
-			operator.email,
-			Number(operator.id)
-		);
+		try {
+			await connectionPool.executePreparedSqlInstruction(
+				`DELETE
+				 FROM ${TABLE_NAME}
+				 WHERE ${TABLE_NAME}.ID = ?;`,
+				[locationId]
+			);
+			return await logger.generateLog(
+				"DELETE",
+				locationId,
+				TABLE_NAME,
+				operator.email,
+				Number(operator.id)
+			);
+		} catch (e) {
+			if (e && e.indexOf && e.indexOf("EVENTO_LOCALIDADE_ID_FK") > -1) {
+				throw raiseError(
+					409,
+					`This location is a dependency of an Event.`
+				);
+			} else {
+				throw e;
+			}
+		}
 
 	}
 

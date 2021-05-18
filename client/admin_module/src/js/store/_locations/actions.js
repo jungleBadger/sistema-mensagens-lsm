@@ -194,13 +194,19 @@ export default {
 			context.commit("locationItems", locations.filter(item => item.id !== locationId));
 			return true;
 		} catch (e) {
+			let error = {
+				"kind": "error",
+				"title": "Houve um erro ao excluir a Categoria.",
+				"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+			}
+
+			if (e.status === 409) {
+				error.subtitle = "Esta Localidade é dependência de um Evento existente."
+			}
+
 			context.commit(
 				"notification/addNotification",
-				{
-					"kind": "error",
-					"title": "Houve um erro excluindo a Localidade.",
-					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
-				},
+				error,
 				{"root": true}
 			);
 			console.log(e);

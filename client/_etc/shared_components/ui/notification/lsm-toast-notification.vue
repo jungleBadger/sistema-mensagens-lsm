@@ -8,11 +8,11 @@
 			'bg-red-600 text-white': notification.kind === 'error'
 		}"
 		style="min-width: 18rem; width: auto"
-		class="cursor-default bg-white h-auto p-1 rounded shadow-lg z-40 bg-opacity-90 mt-2 relative">
+		class="cursor-default bg-white h-auto p-1 rounded shadow-lg z-40 bg-opacity-90 mt-2 p-1.5 relative">
 
 		<div class=" w-full h-full">
 			<button
-				class="absolute w-6 h-6 right-1 top-1"
+				class="absolute w-6 h-6 right-1 top-1.5"
 				@click="handleCloseRequest">
 				<span
 					role="img"
@@ -21,8 +21,8 @@
 					</span>
 
 			</button>
-			<h6 class="font-semibold">{{notification.title}}</h6>
-			<p>{{notification.subtitle}}</p>
+			<h6 class="pl-1 pr-4 font-semibold">{{notification.title}}</h6>
+			<p class="pl-1 pr-1.5">{{notification.subtitle}}</p>
 		</div>
 
 
