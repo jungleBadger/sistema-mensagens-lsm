@@ -151,7 +151,7 @@ jobs:
                       ansible-playbook -i inventory.txt playbook.yml
 
 workflows:
-    test_my_app:
+    lsm-app:
         jobs:
             - build-frontend
             - build-backend
