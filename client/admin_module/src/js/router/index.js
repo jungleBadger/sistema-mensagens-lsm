@@ -7,6 +7,7 @@ import TheBrotherDetails from "../components/sections/brothers/the-brother-detai
 import TheCategoriesMain from "../components/sections/categories/the-categories-main.vue";
 import TheCategoryDetails from "../components/sections/categories/the-category-details.vue";
 import TheEventsMain from "../components/sections/events/the-events-main.vue";
+import TheEventDetails from "../components/sections/events/the-event-details.vue";
 import TheUsersMain from "../components/sections/users/the-users-main.vue";
 import TheAdminUserDetails from "../components/sections/users/admin/the-admin-user-details.vue";
 import TheLocationsMain from "../components/sections/locations/the-locations-main.vue";
@@ -83,7 +84,16 @@ export default createRouter({
 			"component": TheEventsMain,
 			"meta": {
 				"indexed": true
-			}
+			},
+			"children": [
+				{
+					"name": "app.events.details",
+					"path": ":eventId",
+					"component": TheEventDetails,
+					"meta": {
+					}
+				}
+			]
 		},
 		{
 			"name": "app.users",
