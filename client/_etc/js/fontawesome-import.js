@@ -12,9 +12,12 @@ import { faChevronLeft } from "@fortawesome/pro-light-svg-icons/faChevronLeft";
 import { faUndo } from "@fortawesome/pro-light-svg-icons/faUndo";
 import { faSync } from "@fortawesome/pro-light-svg-icons/faSync";
 
+
 import { faArrowDownShortWide } from "@fortawesome/pro-light-svg-icons/faArrowDownShortWide";
 import { faArrowUpShortWide } from "@fortawesome/pro-light-svg-icons/faArrowUpShortWide";
 
+import { faUser } from "@fortawesome/pro-solid-svg-icons/faUser";
+import { faUserCrown } from "@fortawesome/pro-solid-svg-icons/faUserCrown";
 import { faUserTie } from "@fortawesome/pro-solid-svg-icons/faUserTie";
 import { faUserGroupCrown } from "@fortawesome/pro-solid-svg-icons/faUserGroupCrown";
 import { faPodcast } from "@fortawesome/pro-solid-svg-icons/faPodcast";
@@ -46,6 +49,8 @@ library.add(
 	faChevronLeft,
 	faUndo,
 	faSync,
+	faUser,
+	faUserCrown,
 
 	faArrowDownShortWide,
 	faArrowUpShortWide,

@@ -80,7 +80,6 @@ export default {
 
 	},
 
-
 	async updateAdminUser(context, adminUser) {
 		try {
 			await adminUsersFactory.updateAdminUser(adminUser);
@@ -91,7 +90,8 @@ export default {
 					adminUsers.map(item => {
 						return item.id === adminUser.id ? {
 							...item,
-							...adminUser
+							...adminUser,
+							"updatedAt": new Date()
 						} : item;
 					})
 				);

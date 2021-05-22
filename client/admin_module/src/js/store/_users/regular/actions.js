@@ -39,12 +39,14 @@ export default {
 				context.commit("totalRegularUsersCount", regularUsers.length - 1);
 				context.commit("regularUserItems", regularUsers.filter(item => item.id !== regularUser.id));
 			} else {
+
 				context.commit(
 					"regularUserItems",
 					regularUsers.map(item => {
 						return item.id === regularUser.id ? {
 							...item,
-							...regularUser
+							...regularUser,
+							"updatedAt": new Date()
 						} : item;
 					})
 				);

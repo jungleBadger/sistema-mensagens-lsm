@@ -12,7 +12,7 @@
 				:columns-data="tableColumns"
 				:is-async-loading="isLoading"
 				:handle-click="true"
-				order-by="CRIADO_EM"
+				order-by="ATUALIZADO_EM"
 				order-direction="DESC"
 				@paginate="updatePagination"
 				@select="selectItem"
