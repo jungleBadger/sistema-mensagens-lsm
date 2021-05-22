@@ -127,15 +127,6 @@ module.exports = {
 			);
 		}
 
-		console.log([
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME}`,
-			`WHERE ${TABLE_NAME}.ADMINISTRADOR = true AND (LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%')`,
-			extraFilterColumns.map((column) => `OR LOWER(${TABLE_NAME}.${column}) LIKE LOWER('%${filterText}%')`).join(" ") + ")",
-			`ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}`,
-			`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
-			";"
-		].join(" "));
-
 		let [results, countResults] = await Promise.all([
 			connectionPool.executeRawSqlInstruction(
 				[

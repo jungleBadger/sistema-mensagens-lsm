@@ -8,7 +8,8 @@ export default class RegularUser {
 		this.isAdmin = true;
 		this.isPasswordRegistered = props.SENHA_REGISTRADA || props.isPasswordRegistered;
 		this.isEmailConfirmed = props.EMAIL_CONFIRMADO || props.isEmailConfirmed;
-		this.createdAt = new Date(props.CRIADO_EM + " UTC") || props.createdAt;
+		this.createdAt = props.createdAt || new Date(props.CRIADO_EM + " UTC");
+		this.updatedAt = props.updatedAt || new Date(props.ATUALIZADO_EM + " UTC");
 	}
 
 }

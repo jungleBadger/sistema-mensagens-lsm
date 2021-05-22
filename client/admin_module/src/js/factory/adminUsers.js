@@ -50,14 +50,15 @@ export default {
 		);
 	},
 
-	// async updateAdminUser(user = {}) {
-	// 	return await http.patch(
-	// 		`/api/admin/user/${user.id}`,
-	// 		{
-	// 			"displayName": user.displayName
-	// 		}
-	// 	);
-	// },
+	async updateAdminUser(user = {}) {
+		return await http.patch(
+			`/api/common/user/${user.id}`,
+			{
+				"displayName": user.displayName,
+				"isAdmin": user.isAdmin
+			}
+		);
+	},
 
 	async deleteAdminUser(userId) {
 		return await http.delete(

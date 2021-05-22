@@ -8,27 +8,29 @@ export default {
 		state.isLoading = loadingState;
 	},
 
-	totalAdminUsersCount(state, count) {
-		state.totalAdminUsersCount = Number(count);
+	totalRegularUsersCount(state, count) {
+		state.totalRegularUsersCount = Number(count);
 	},
 
-	pagination(state, pagination = {"skip": 0, "limit": 5}) {
+	pagination(state, pagination = {"skip": 0, "limit": 5, "orderBy": "ATUALIZADO_EM", "orderDirection": "DESC"}) {
 		state.pagination = {
 			"skip": pagination.skip,
-			"limit": pagination.limit
+			"limit": pagination.limit,
+			"orderBy": pagination.orderBy,
+			"orderDirection": pagination.orderDirection
 		}
 	},
 
-	adminUserItems(state, adminUsers = []) {
-		console.log(adminUsers);
-		state.adminUserItems = adminUsers.map(adminUser => new RegularUser(adminUser));
+	regularUserItems(state, regularUsers = []) {
+		console.log(regularUsers);
+		state.regularUserItems = regularUsers.map(regularUser => new RegularUser(regularUser));
 	},
 
-	selectedAdminUser(state, adminUser) {
-		state.selectedAdminUser = new RegularUser(adminUser);
+	selectedRegularUser(state, regularUser) {
+		state.selectedRegularUser = new RegularUser(regularUser);
 	},
 
-	unsetSelectedAdminUser(state) {
-		state.selectedAdminUser = null;
+	unsetSelectedRegularUser(state) {
+		state.selectedRegularUser = null;
 	}
 }

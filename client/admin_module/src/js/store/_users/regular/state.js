@@ -2,28 +2,33 @@
 
 export default {
 	"isLoading": true,
-	"totalAdminUsersCount": null,
+	"totalRegularUsersCount": null,
 	"pagination": {
 		"skip": 0,
-		"limit": 20
+		"limit": 20,
+		"orderBy": "ATUALIZADO_EM",
+		"orderDirection": "DESC"
 	},
-	"adminUserItems": [],
+	"regularUserItems": [],
 	"tableColumns": [
 		{
+			"originalId": "EMAIL",
 			"key": "email",
 			"label": "Email",
 			"size": "240px"
 		},
 		{
+			"originalId": "NOME_EXIBICAO",
 			"key": "displayName",
 			"label": "Nome exibição",
 			"size": "240px"
 		},
 		{
-			"key": "createdAt",
-			"label": "Criado em",
+			"originalId": "ATUALIZADO_EM",
+			"key": "updatedAt",
+			"label": "Atualizado em",
 			"type": "date"
 		}
 	],
-	"selectedAdminUser": null
+	"selectedRegularUser": null
 };

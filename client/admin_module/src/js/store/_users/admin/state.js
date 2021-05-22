@@ -6,7 +6,7 @@ export default {
 	"pagination": {
 		"skip": 0,
 		"limit": 20,
-		"orderBy": "CRIADO_EM",
+		"orderBy": "ATUALIZADO_EM",
 		"orderDirection": "DESC"
 	},
 	"adminUserItems": [],
@@ -24,9 +24,9 @@ export default {
 			"size": "240px"
 		},
 		{
-			"originalId": "CRIADO_EM",
-			"key": "createdAt",
-			"label": "Criado em",
+			"originalId": "ATUALIZADO_EM",
+			"key": "updatedAt",
+			"label": "Atualizado em",
 			"type": "date"
 		}
 	],

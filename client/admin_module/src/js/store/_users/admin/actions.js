@@ -82,7 +82,47 @@ export default {
 
 
 	async updateAdminUser(context, adminUser) {
-		return await adminUsersFactory.updateAdminUser(adminUser);
+		try {
+			await adminUsersFactory.updateAdminUser(adminUser);
+			let adminUsers = context.getters["adminUserItems"];
+			if (adminUser.isAdmin) {
+				context.commit(
+					"adminUserItems",
+					adminUsers.map(item => {
+						return item.id === adminUser.id ? {
+							...item,
+							...adminUser
+						} : item;
+					})
+				);
+			} else {
+				context.commit("totalAdminUsersCount", adminUsers.length - 1);
+				context.commit("adminUserItems", adminUsers.filter(item => item.id !== adminUser.id));
+			}
+
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "success",
+					"title": "Sucesso!",
+					"subtitle": "Usuário atualizado com sucesso."
+				},
+				{"root": true}
+			);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": `Houve um erro ao atualizar o usuário ${adminUser.id}.`,
+					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+			console.log(e);
+			return false;
+		}
+
 	},
 
 	async deleteAdminUser(context, adminUserId) {
