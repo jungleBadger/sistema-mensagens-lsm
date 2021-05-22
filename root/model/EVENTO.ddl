@@ -7,9 +7,10 @@ create table EVENTO
 	LOCALIDADE_ID int not null
 		constraint EVENTO_LOCALIDADE_ID_FK
 			references LOCALIDADE (ID),
+	TITULO VARCHAR(128) not null,
 	DATA_INICIO TIMESTAMP not null,
 	DATA_FIM TIMESTAMP not null,
-	TITULO VARCHAR(128) not null,
+	DESCRICAO VARCHAR(256),
 	CRIADO_EM TIMESTAMP default CURRENT_TIMESTAMP not null,
 	ATUALIZADO_EM TIMESTAMP default CURRENT_TIMESTAMP not null
 );
@@ -20,11 +21,13 @@ comment on column EVENTO.CATEGORIA_ID is 'Representa a conexão entre a tabela E
 
 comment on column EVENTO.LOCALIDADE_ID is 'Representa a conexão entre a tabela EVENTO com a tabela LOCALIDADE.';
 
+comment on column EVENTO.TITULO is 'Representa o Título de um evento.';
+
 comment on column EVENTO.DATA_INICIO is 'Representa a data de inicio de um evento.';
 
 comment on column EVENTO.DATA_FIM is 'Representa a data de finalizacao de um evento.';
 
-comment on column EVENTO.TITULO is 'Representa o Título de um evento.';
+comment on column EVENTO.DESCRICAO is 'Representa a descrição opcional de um evento.';
 
 comment on column EVENTO.CRIADO_EM is 'Data de criacao do evento.';
 

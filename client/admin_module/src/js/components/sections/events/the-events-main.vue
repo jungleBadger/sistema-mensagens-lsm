@@ -139,7 +139,7 @@ export default defineComponent({
 
 		async loadEvents() {
 			return await Promise.all([
-				this.$store.dispatch("events/retrievetotalEventsCount"),
+				this.$store.dispatch("events/retrieveTotalEventsCount"),
 				this.$store.dispatch("events/retrieveEvents")
 			]);
 		},

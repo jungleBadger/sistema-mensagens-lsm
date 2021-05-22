@@ -6,20 +6,20 @@ export default {
 		return state.isLoading;
 	},
 
-	totalAdminUsersCount(state) {
-		return state.totalAdminUsersCount;
+	totalRegularUsersCount(state) {
+		return state.totalRegularUsersCount;
 	},
 
 	pagination(state) {
 		return state.pagination
 	},
 
-	adminUserItems(state) {
-		return state.adminUserItems;
+	regularUserItems(state) {
+		return state.regularUserItems;
 	},
 
-	selectedAdminUser(state) {
-		return state.selectedAdminUser;
+	selectedRegularUser(state) {
+		return state.selectedRegularUser;
 	},
 
 	tableColumns(state) {

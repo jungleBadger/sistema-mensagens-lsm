@@ -2,6 +2,7 @@
 
 const Joi = require("joi");
 const raiseError = require("../helpers/errorHandler").raiseError;
+const db2Timestamp = require("../helpers/db2Timestamp");
 
 module.exports = class Location {
 
@@ -18,14 +19,16 @@ module.exports = class Location {
 				"PAIS": Joi.string().max(64).required(),
 				"ESTADO": Joi.string().max(64).required(),
 				"CIDADE": Joi.string().max(64).required(),
-				"DESCRICAO": Joi.string().max(128).optional().allow("")
+				"DESCRICAO": Joi.string().max(128).optional().allow(""),
+				"ATUALIZADO_EM": Joi.string().required()
 			}
 		).validate(
 			{
 				"PAIS": country,
 				"ESTADO": state,
 				"CIDADE": city,
-				"DESCRICAO": description || ""
+				"DESCRICAO": description || "",
+				"ATUALIZADO_EM": db2Timestamp()
 			}
 		);
 

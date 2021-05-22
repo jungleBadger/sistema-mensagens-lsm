@@ -3,12 +3,29 @@
 export default class Event {
 	constructor (props) {
 		this.id = props.ID || props.id;
+		this.categoryId = props.categoryId || props.CATEGORIA_ID;
+		this.locationId = props.locationId || props.LOCALIDADE_ID;
 		this.title = props.title || props.TITULO;
-		this.startDate = props.startDate || (props.DATA_INICIO ? new Date(props.DATA_INICIO + " UTC") : "");
-		this.endDate = props.endDate || (props.DATA_FIM ? new Date(props.DATA_FIM + " UTC") : "");
-		this.location = props.location || props.LOCALIDADE;
-		this.createdAt = props.createdAt || new Date(props.CRIADO_EM + " UTC");
 
+		if (props.startDate) {
+			this.startDate = new Date(props.startDate);
+		} else if (props.DATA_FIM) {
+			this.startDate = new Date(props.DATA_INICIO + " UTC");
+		} else {
+			this.startDate = "";
+		}
+
+		if (props.endDate) {
+			this.endDate = new Date(props.endDate);
+		} else if (props.DATA_FIM) {
+			this.endDate = new Date(props.DATA_FIM + " UTC");
+		} else {
+			this.endDate = "";
+		}
+
+		this.location = props.location || props.LOCALIDADE;
+		this.description = props.description || props.DESCRICAO;
+		this.createdAt = props.createdAt || new Date(props.CRIADO_EM + " UTC");
 	}
 
 }

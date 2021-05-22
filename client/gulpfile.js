@@ -22,6 +22,7 @@
 	const colors = require("ansi-colors");
 	const webpack = require("webpack");
 	const tailwindcss = require("tailwindcss");
+	const tailwindColors = require("tailwindcss/colors");
 	const childProcess = require("child_process");
 	const purgecss = require("@fullhuman/postcss-purgecss");
 
@@ -33,7 +34,7 @@
 	isProd = process.env.NODE_ENV === "production" || process.NODE_ENV === "production";
 
 	let methods = {
-		"errorHandler": function errorHandler(module, error, stack) {
+		"errorHandler": function errorHandler (module, error, stack) {
 			log(colors.red("ERROR FOUND BUILDING THIS ARTIFACT:"), colors.yellow(module));
 			log(stack);
 			log(error);
@@ -43,19 +44,17 @@
 			log(`webpack ${isProdBuild ? "--env.production --env.NODE_ENV=production" : "--env.NODE_ENV=development"} ${isWatcherEnabled ? "--env.ENABLE_WATCH" : ""}`);
 			log(`Webpack building module ${modulePath}`);
 			log(`Build type: ${isProdBuild ? "production" : "development"}`);
-			log(`Watcher enabled: ${isWatcherEnabled ? 'yes' : 'no'}`);
+			log(`Watcher enabled: ${isWatcherEnabled ? "yes" : "no"}`);
 
 			const compiler = webpack(
 				require("./" + modulePath + "/webpack.config.js")({
-					"NODE_ENV": isProdBuild ?  "production" : "development",
+					"NODE_ENV": isProdBuild ? "production" : "development",
 					"production": isProdBuild
 				})
-			)
+			);
 
 			if (isWatcherEnabled) {
-				compiler.watch({
-
-				}, (err, stats) => {
+				compiler.watch({}, (err, stats) => {
 					if (err) {
 						console.log(err);
 					} else {
@@ -85,15 +84,15 @@
 		).pipe(eslint({
 			"fix": true
 		}))
-		.pipe(eslint.format())
-		.pipe(eslint.failAfterError())
-		.on("success", function () {
-			done();
-		})
-		.on("error", function (error) {
-			methods.errorHandler("lint", error, "Check the logs to see where it fails");
-			done(error);
-		});
+			.pipe(eslint.format())
+			.pipe(eslint.failAfterError())
+			.on("success", function () {
+				done();
+			})
+			.on("error", function (error) {
+				methods.errorHandler("lint", error, "Check the logs to see where it fails");
+				done(error);
+			});
 	});
 
 	gulp.task("generate-sw", function (done) {
@@ -104,13 +103,12 @@
 					return new Promise((resolve) => {
 						if (file !== "node_modules" && file.indexOf("_module") > -1) {
 							let moduleId = file.split("_")[0];
-							let modulePath =  [moduleId + "_module"].join();
+							let modulePath = [moduleId + "_module"].join();
 							log(`${colors.blue("SERVICE WORKER MODULE:")} ${moduleId} ${colors.blue("BUILD TYPE:")} ${process.env.NODE_ENV}`);
-
 
 							workboxBuild.generateSW({
 								"swDest": path.join(`service-worker-${moduleId}.js`),
-								"modifyURLPrefix":  {
+								"modifyURLPrefix": {
 									"": `${moduleId}_module/`
 								},
 								"globDirectory": modulePath,
@@ -124,19 +122,23 @@
 									"urlPattern": "https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Source+Sans+Pro&display=swap",
 									"handler": "CacheFirst",
 									"options": {
-										"cacheName": 'google-fonts-stylesheets',
+										"cacheName": "google-fonts-stylesheets",
 										"expiration": {
 											"maxEntries": 5,
-											"maxAgeSeconds": 60 * 60 * 24 * 365,
+											"maxAgeSeconds": 60 * 60 * 24 * 365
 										}
-									},
+									}
 								}],
 								"globPatterns": [
 									"dist/css/*.css",
 									"dist/css/*.map",
-									"dist/js/*.js",
-								],
-							}).then(({count, size, warnings}) => {
+									"dist/js/*.js"
+								]
+							}).then(({
+								count,
+								size,
+								warnings
+							}) => {
 								// Optionally, log any warnings and details.
 								warnings.forEach(console.warn);
 								console.log(`${count} files will be precached, totaling ${size} bytes.`);
@@ -149,9 +151,9 @@
 					});
 				})
 			).then(() => {
-				done()
+				done();
 			}).catch(err => {
-				done(err)
+				done(err);
 			});
 		});
 
@@ -180,7 +182,7 @@
 										`./${modulePath}/src/index.ejs`,
 										`./${modulePath}/src/js/components/**/*.vue`,
 										"./_etc/shared_components/**/*.vue"
-									],
+									]
 								},
 								"options": {
 									"keyframes": true
@@ -192,7 +194,8 @@
 									},
 									"extend": {
 										"colors": {
-											"inherit": "inherit"
+											"inherit": "inherit",
+											"litepie-primary": tailwindColors.lightBlue // color system for light mode
 										}
 									}
 								},
@@ -200,13 +203,16 @@
 									"extend": {
 										"opacity": ["disabled"],
 										"backgroundColor": ["active"],
+										"cursor": ["disabled"],
+										"textOpacity": ["disabled"],
+										"textColor": ["disabled"]
 									}
 								},
 								"plugins": [
 									require("@tailwindcss/forms")
 								]
 							}
-						),
+						)
 					].concat(
 						isProd ? [
 							purgecss({
@@ -216,19 +222,18 @@
 									"./_etc/shared_components/**/*.vue"
 								],
 								defaultExtractor (content) {
-									const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, '')
-									return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || []
+									const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, "");
+									return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || [];
 								},
 								"whitelist": [],
-								"whitelistPatterns": [ /-(leave|enter|appear)(|-(to|from|active))$/, /^(?!(|.*?:)cursor-move).+-move$/, /^router-link(|-exact)-active$/ ],
+								"whitelistPatterns": [/-(leave|enter|appear)(|-(to|from|active))$/, /^(?!(|.*?:)cursor-move).+-move$/, /^router-link(|-exact)-active$/]
 							}),
 							cssnano
-						] : [
-						]
+						] : []
 					)
 				)
 			)
-			.pipe(cond(!isProd, sourcemaps.init({"loadMaps": true})))
+			.pipe(cond(!isProd, sourcemaps.init({ "loadMaps": true })))
 			.pipe(cond(!isProd, sourcemaps.write("./")))
 			.pipe(gulp.dest(modulePath + "/dist/css/"));
 	});
@@ -256,7 +261,7 @@
 
 	gulp.task("build", gulp.parallel("lint", "css", "bundle-code"));
 
-	gulp.task("build-all", async function iterateOverModules(done) {
+	gulp.task("build-all", async function iterateOverModules (done) {
 		await cache.clearAll();
 		fs.readdir("./", function (err, files) {
 			Promise.all(
@@ -266,19 +271,19 @@
 							let module = file.split("_")[0];
 							log(`${colors.blue("MODULE:")} ${module} ${colors.blue("BUILD TYPE:")} ${process.env.NODE_ENV}`);
 							childProcess.exec(
-								`gulp build -m ${module} ${isProd ? '--prod' : ''}`,
+								`gulp build -m ${module} ${isProd ? "--prod" : ""}`,
 								function (error, data) {
 									log(data);
 									if (error) {
 										log(colors.red(`Module [${module}] errored`));
 										log(error);
-										console.log(error.toString())
+										console.log(error.toString());
 										return reject(error);
 									} else {
 										log(colors.green(`Module [${module}] built successfully`));
 										return resolve();
 									}
-								},
+								}
 							);
 						} else {
 							return resolve();
@@ -286,9 +291,9 @@
 					});
 				})
 			).then(() => {
-				done()
+				done();
 			}).catch(err => {
-				done(err)
+				done(err);
 			});
 		});
 	});

@@ -10,6 +10,7 @@ import TheEventsMain from "../components/sections/events/the-events-main.vue";
 import TheEventDetails from "../components/sections/events/the-event-details.vue";
 import TheUsersMain from "../components/sections/users/the-users-main.vue";
 import TheAdminUserDetails from "../components/sections/users/admin/the-admin-user-details.vue";
+import TheRegularUserDetails from "../components/sections/users/regular/the-regular-user-details.vue";
 import TheLocationsMain from "../components/sections/locations/the-locations-main.vue";
 import TheLocationDetails from "../components/sections/locations/the-location-details.vue";
 import TheLogsMain from "../components/sections/logs/the-logs-main.vue";
@@ -105,8 +106,15 @@ export default createRouter({
 			"children": [
 				{
 					"name": "app.users.admin.details",
-					"path": ":adminUserId",
+					"path": "admin/:userId",
 					"component": TheAdminUserDetails,
+					"meta": {
+					}
+				},
+				{
+					"name": "app.users.regular.details",
+					"path": "regular/:userId",
+					"component": TheRegularUserDetails,
 					"meta": {
 					}
 				}

@@ -42,6 +42,7 @@ router.post(
 			201
 		).send(
 			await event.create(
+				req.body,
 				req.user
 			)
 		)
@@ -97,6 +98,7 @@ router.get(
 					"DATA_INICIO",
 					"DATA_FIM",
 					"LOCALIDADE_ID",
+					"CATEGORIA_ID",
 					"CRIADO_EM"
 				],
 				Number(req.query.limit) || 20,
@@ -113,7 +115,6 @@ router.get(
 	"/",
 	isLoggedIn,
 	async (req, res) => {
-		console.log("OIIIIIII");
 		res.status(200).send(
 			await event.retrieveAll(
 				[
@@ -122,6 +123,7 @@ router.get(
 					"DATA_INICIO",
 					"DATA_FIM",
 					"LOCALIDADE_ID",
+					"CATEGORIA_ID",
 					"CRIADO_EM"
 				],
 				Number(req.query.limit) || 20,
@@ -187,6 +189,7 @@ router.patch(
 		).send(
 			await event.update(
 				req.params.eventId,
+				req.body,
 				req.user
 			)
 		)

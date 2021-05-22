@@ -233,7 +233,7 @@ module.exports = {
 
 		try {
 			await connectionPool.executePreparedSqlInstruction(
-				"UPDATE LOCALIDADE SET LOCALIDADE.PAIS = ?, LOCALIDADE.ESTADO = ?, LOCALIDADE.CIDADE = ?, LOCALIDADE.DESCRICAO = ? WHERE LOCALIDADE.ID = ? ",
+				`UPDATE ${TABLE_NAME} SET LOCALIDADE.PAIS = ?, LOCALIDADE.ESTADO = ?, LOCALIDADE.CIDADE = ?, LOCALIDADE.DESCRICAO = ? WHERE LOCALIDADE.ID = ? `,
 				[updatedLocation.model.PAIS, updatedLocation.model.ESTADO, updatedLocation.model.CIDADE, updatedLocation.model.DESCRICAO, locationId]
 			);
 		} catch (e) {

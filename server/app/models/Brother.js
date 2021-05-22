@@ -2,6 +2,7 @@
 
 const Joi = require("joi");
 const raiseError = require("../helpers/errorHandler").raiseError;
+const db2Timestamp = require("../helpers/db2Timestamp");
 
 module.exports = class Brother {
 
@@ -12,11 +13,13 @@ module.exports = class Brother {
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"NOME_EXIBICAO": Joi.string().max(256)
+				"NOME_EXIBICAO": Joi.string().max(256),
+				"ATUALIZADO_EM": Joi.string().required()
 			}
 		).validate(
 			{
-				"NOME_EXIBICAO": displayName
+				"NOME_EXIBICAO": displayName,
+				"ATUALIZADO_EM": db2Timestamp()
 			}
 		);
 

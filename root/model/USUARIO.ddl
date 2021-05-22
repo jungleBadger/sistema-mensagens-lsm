@@ -8,7 +8,7 @@ create table USUARIO
     SENHA_REGISTRADA BOOLEAN   default FALSE              not null,
     EMAIL_CONFIRMADO BOOLEAN   default FALSE              not null,
     CRIADO_EM        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    EDITADO_EM       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ATUALIZADO_EM       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 comment
@@ -39,7 +39,7 @@ comment
 on column USUARIO.CRIADO_EM is 'Data de criacao do usuario.';
 
 comment
-on column USUARIO.EDITADO_EM is 'Data da ultima atualizacao do usuario.';
+on column USUARIO.ATUALIZADO_EM is 'Data da ultima atualizacao do usuario.';
 
 create
 unique index USUARIO_EMAIL_UINDEX

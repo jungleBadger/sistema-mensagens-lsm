@@ -100,11 +100,12 @@ router.get(
 					"NOME_EXIBICAO",
 					"SENHA_REGISTRADA",
 					"EMAIL_CONFIRMADO",
-					"CRIADO_EM"
+					"CRIADO_EM",
+					"ATUALIZADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
-				req.query.orderBy || "CRIADO_EM",
+				req.query.orderBy || "ATUALIZADO_EM",
 				req.query.orderDirection || "DESC"
 			)
 		)
@@ -182,11 +183,12 @@ router.get(
 					"NOME_EXIBICAO",
 					"SENHA_REGISTRADA",
 					"EMAIL_CONFIRMADO",
-					"CRIADO_EM"
+					"CRIADO_EM",
+					"\t\"ATUALIZADO_EM\""
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
-				req.query.orderBy || "ID",
+				req.query.orderBy || "ATUALIZADO_EM",
 				req.query.orderDirection || "DESC"
 			)
 		)
@@ -238,7 +240,8 @@ router.get(
 					"SENHA_REGISTRADA",
 					"EMAIL_CONFIRMADO",
 					"ADMINISTRADOR",
-					"CRIADO_EM"
+					"CRIADO_EM",
+					"ATUALIZADO_EM"
 				]
 			)
 		)

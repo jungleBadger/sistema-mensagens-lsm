@@ -5,7 +5,10 @@ const router = express.Router();
 const regularUser = require("../../../helpers/user/userCRUD");
 const commonUser = require("../../../helpers/user/userCommon");
 const { extractAndLoadAPIKey } = require("../../middlewares/util");
-const { validateJWT } = require("../../middlewares/auth");
+const {
+	validateJWT,
+	isAdmin
+} = require("../../middlewares/auth");
 
 /**
  * @swagger
@@ -43,6 +46,44 @@ router.all(
 	}
 );
 
+/**
+ * @swagger
+ * /api/common/user/:userId/:
+ *   patch:
+ *     tags: [common_user]
+ *     summary: Get regular User by Email.
+ *     produces:
+ *       - application/json
+ *     security:
+ *      - ApiKeyAuth: []
+ *     responses:
+ *       200:
+ *         description: User email has been confirmed.
+ *       400:
+ *         description: Invalid parameters.
+ *       401:
+ *         description: Expired JWT.
+ *       404:
+ *         description: regular User not found.
+ *       422:
+ *         description: Invalid JWT.
+ *       500:
+ *         description: Error handler.
+ */
+router.patch(
+	"/:userId",
+	isAdmin,
+	async (req, res) => {
+		res.status(200).send(
+			await regularUser.updateProfile(
+				req.params.userId,
+				req.body.displayName,
+				req.body.isAdmin,
+				req.user
+			)
+		);
+	}
+);
 
 /**
  * @swagger
@@ -83,7 +124,6 @@ router.post(
 	}
 );
 
-
 /**
  * @swagger
  * /api/common/user/request-reset:
@@ -121,7 +161,5 @@ router.get(
 		res.status(200).send(res.locals.decodedJWT);
 	}
 );
-
-
 
 module.exports = router;

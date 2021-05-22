@@ -8,9 +8,7 @@ export default {
 	async createEvent(event = {}) {
 		return await http.post(
 			`${API_ENDPOINT}/`,
-			{
-				"title": event.title
-			}
+			event
 		);
 	},
 
@@ -55,9 +53,7 @@ export default {
 	async updateEvent(event = {}) {
 		return await http.patch(
 			`${API_ENDPOINT}/${event.id}`,
-			{
-				"title": event.title
-			}
+			event
 		);
 	},
 

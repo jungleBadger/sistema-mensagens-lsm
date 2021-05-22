@@ -2,6 +2,7 @@
 
 const Joi = require("joi");
 const raiseError = require("../helpers/errorHandler").raiseError;
+const db2Timestamp = require("../helpers/db2Timestamp");
 
 module.exports = class AdminUser {
 
@@ -20,7 +21,8 @@ module.exports = class AdminUser {
 				"NOME_EXIBICAO": Joi.string().allow( "").allow(null).default(null).optional(),
 				"ADMINISTRADOR": Joi.boolean().invalid(false),
 				"SENHA_REGISTRADA": Joi.boolean().invalid(true),
-				"EMAIL_CONFIRMADO": Joi.boolean().invalid(false)
+				"EMAIL_CONFIRMADO": Joi.boolean().invalid(false),
+				"ATUALIZADO_EM": Joi.string().required()
 			}
 		).validate(
 			{
@@ -29,7 +31,8 @@ module.exports = class AdminUser {
 				"NOME_EXIBICAO": displayName,
 				"ADMINISTRADOR": true,
 				"SENHA_REGISTRADA": false,
-				"EMAIL_CONFIRMADO": true
+				"EMAIL_CONFIRMADO": true,
+				"ATUALIZADO_EM": db2Timestamp()
 			}
 		);
 

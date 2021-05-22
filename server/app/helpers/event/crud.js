@@ -11,6 +11,8 @@ const connectionPool = new DBConnectionPool(
 	process.env.DB2_PASSWORD
 );
 
+
+
 const TABLE_NAME = "EVENTO";
 const logger = require("../logger");
 
@@ -18,16 +20,22 @@ module.exports = {
 
 	/**
 	 * @method create
+	 * @param {object} payload - Event payload.
 	 * @param {object} operator - Operator object.
 	 * @param {string} operator.id - Operator's ID.
 	 * @param {string} operator.email - Operator's email.
 	 * @return {Promise<Object|Error>} Containing the new User ID.
 	 */
 	async create (
+		payload,
 		operator
 	) {
 		const event = new Event(
-
+			payload.title,
+			payload.startDate,
+			payload.endDate,
+			payload.categoryId,
+			payload.locationId
 		);
 
 		const insertKeys = event.getKeys();
@@ -147,7 +155,7 @@ module.exports = {
 		let results = await connectionPool.executeRawSqlInstruction(
 			[
 				`SELECT ${targetColumns.map(column => `${TABLE_NAME}.${column}`).join(", ")},`,
-				"(L.PAIS concat ' ' concat L.CIDADE concat ' ' concat L.ESTADO) AS LOCALIDADE",
+				"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO) AS LOCALIDADE",
 				`FROM ${TABLE_NAME} JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID`,
 				`ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}`,
 				`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
@@ -198,41 +206,39 @@ module.exports = {
 	 * Updates a single Brother's Display name.
 	 * @method update
 	 * @param {string} eventId - Brother ID to search for.
+	 * @param {object} payload - Event payload.
 	 * @param {object} operator - Operator object.
 	 * @param {string} operator.id - Operator's ID.
 	 * @param {string} operator.email - Operator's email.
 	 * @return {Promise<Object|Error>} Containing the brother object.
 	 */
-	async update (eventId, operator) {
-		if (!eventId) {
+	async update (eventId, payload, operator) {
+		if (!eventId || !payload) {
 			throw raiseError(
 				400,
 				"Missing required properties for updating Event by ID."
 			);
 		}
 
-		const event = new Event(
-
+		const updatedEvent = new Event(
+			payload.title,
+			payload.startDate,
+			payload.endDate,
+			payload.categoryId,
+			payload.locationId
 		);
-		console.log(event);
+
 		await this.retrieveById(eventId);
 
 
 		try {
 			await connectionPool.executePreparedSqlInstruction(
-				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.ATUALIZADO_EM = ? WHERE ${TABLE_NAME}.ID = ?;`,
-				[new Date(), eventId]
+				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.TITULO = ?, ${TABLE_NAME}.DATA_INICIO = ?, ${TABLE_NAME}.DATA_FIM = ?, ${TABLE_NAME}.CATEGORIA_ID = ?, ${TABLE_NAME}.LOCALIDADE_ID = ? WHERE ${TABLE_NAME}.ID = ? `,
+				[updatedEvent.model.TITULO, updatedEvent.model.DATA_INICIO, updatedEvent.model.DATA_FIM, updatedEvent.model.CATEGORIA_ID,  updatedEvent.model.LOCALIDADE_ID, eventId]
 			);
 		} catch (e) {
 			console.log(e);
-			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
-				throw raiseError(
-					409,
-					`Brother ${newDisplayName} already exists.`
-				);
-			} else {
-				throw e;
-			}
+			throw e;
 		}
 
 		return {
@@ -242,8 +248,11 @@ module.exports = {
 				TABLE_NAME,
 				operator.email,
 				Number(operator.id)
-			))
+			)),
+			...(updatedEvent.model)
 		};
+
+
 
 	},
 

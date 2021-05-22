@@ -1,12 +1,13 @@
 "use strict";
 
 import eventsFactory from "../../factory/events";
+import Event from "./model/Event";
 
 export default {
 
-	async createEvent(context, title) {
+	async createEvent(context, event) {
 		try {
-			await eventsFactory.createEvent({title});
+			await eventsFactory.createEvent(event);
 			context.commit(
 				"notification/addNotification",
 				{
@@ -26,7 +27,7 @@ export default {
 			if (e.status === 409) {
 				error = {
 					"title": "Houve um conflito ao criar o Evento.",
-					"subtitle": `Evento ${title} já existe no sistema.`
+					"subtitle": `Evento ${event.title} já existe no sistema.`
 				}
 			}
 
@@ -142,10 +143,10 @@ export default {
 			context.commit(
 				"eventItems",
 				events.map(item => {
-					return item.id === event.id ? {
+					return item.id === event.id ? new Event({
 						...item,
 						...event
-					} : item;
+					}) : item;
 				})
 			);
 			return true;

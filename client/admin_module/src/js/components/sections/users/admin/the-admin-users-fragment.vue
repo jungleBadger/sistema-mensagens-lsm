@@ -2,7 +2,7 @@
 	<main
 		class="w-full flex-1 overflow-hidden"
 		role="main"
-		aria-label="Tabela de Irmãos">
+		aria-label="Tabela de Usuários administradores">
 
 			<lsm-table
 				:is-async-search-enabled="true"
@@ -85,24 +85,13 @@ export default defineComponent({
 	},
 	"methods": {
 
-		openCreateModal() {
-			this.$router.push(
-				{
-					"name": "app.users.admin.details",
-					"params": {
-						"adminUserId": "novo"
-					}
-				}
-			)
-		},
-
 		selectItem(item) {
 			this.$store.commit("users/admin/selectedAdminUser", item);
 			this.$router.push(
 				{
 					"name": "app.users.admin.details",
 					"params": {
-						"adminUserId": item.id
+						"userId": item.id
 					}
 				}
 			)
