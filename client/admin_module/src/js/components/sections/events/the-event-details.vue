@@ -18,8 +18,8 @@
 		<template v-slot:modal-content>
 
 
-			<div class="flex flex-col">
-				<div class="w-80 flex flex-col gap-1 h-20">
+			<div class="flex flex-col gap-2">
+				<div class="w-80 flex flex-col gap-1">
 					<label class="text-gray-700 ">Título</label>
 
 					<lsm-input
@@ -31,19 +31,19 @@
 				</div>
 
 
-				<div class="w-80 flex flex-col gap-1 h-20" :key="parsedDate">
+				<div class="w-80 flex flex-col gap-1" :key="parsedDate">
 					<label class="text-gray-700 ">Data início</label>
 					<litepie-datepicker
-						v-model="testVal2"
+						v-model="datesStructure"
 						as-single
 						use-range>
 						<lsm-input :model-value="parsedDate"></lsm-input>
 					</litepie-datepicker>
 				</div>
 
-				<div class="flex flex-col gap-1 h-20">
+				<div class="flex flex-col gap-1">
 					<label class="text-gray-700 ">Localidade</label>
-					<div class="flex gap-1">
+					<div class="flex gap-1 flex-wrap">
 						<div class="w-80">
 							<lsm-select
 								v-model="locationId"
@@ -54,9 +54,9 @@
 
 						<router-link
 							:to="{'name': 'app.locations'}"
-							class="group relative py-2 px-4 border flex justify-between items-center
-							text-blue-600
-		border-transparent text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
+							class="group relative py-2 px-4 border flex justify-center items-center
+							text-blue-600 border w-44 hover:bg-gray-300 active:bg-gray-400 transition-colors
+	text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
 	focus:ring-indigo-500 transition-colors">Gerenciar localidades
 						</router-link>
 					</div>
@@ -64,9 +64,9 @@
 				</div>
 
 
-				<div class="flex flex-col gap-1 h-20">
+				<div class="flex flex-col gap-1">
 					<label class="text-gray-700 ">Categoria</label>
-					<div class="flex gap-1">
+					<div class="flex gap-1 flex-wrap">
 						<div class="w-80">
 							<lsm-select
 								v-model="categoryId"
@@ -77,9 +77,8 @@
 
 						<router-link
 							:to="{'name': 'app.categories'}"
-							class="group relative py-2 px-4 border flex justify-between items-center
-							text-blue-600
-		border-transparent text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
+							class="group relative py-2 px-4 border flex justify-center items-center w-44 hover:bg-gray-300 active:bg-gray-400 transition-colors
+							text-blue-600 border text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
 	focus:ring-indigo-500 transition-colors">Gerenciar categorias
 						</router-link>
 					</div>
@@ -159,8 +158,7 @@ export default defineComponent({
 		return {
 			"isLoading": false,
 			"isDeleteLoading": false,
-			"testVal": "",
-			"testVal2": [],
+			"datesStructure": [],
 			"locationId": "",
 			"categoryId": "",
 			"title": "",
@@ -181,7 +179,7 @@ export default defineComponent({
 			return this.selectedEvent && this.selectedEvent.id;
 		},
 		parsedDate () {
-			return this.testVal2.map(date => dayjs(date).format("DD/MM/YYYY")).join(" até ");
+			return this.datesStructure.map(date => dayjs(date).format("DD/MM/YYYY")).join(" até ");
 		},
 
 		categories () {
@@ -217,8 +215,8 @@ export default defineComponent({
 				"title": this.title,
 				"categoryId": this.categoryId,
 				"locationId": this.locationId,
-				"startDate": this.testVal2[0],
-				"endDate": this.testVal2[1],
+				"startDate": this.datesStructure[0],
+				"endDate": this.datesStructure[1],
 				"description": this.description
 			});
 
@@ -228,8 +226,8 @@ export default defineComponent({
 					"title": this.title,
 					"categoryId": this.categoryId,
 					"locationId": this.locationId,
-					"startDate": this.testVal2[0],
-					"endDate": this.testVal2[1],
+					"startDate": this.datesStructure[0],
+					"endDate": this.datesStructure[1],
 					"description": this.description
 				});
 			} else {
@@ -237,8 +235,8 @@ export default defineComponent({
 					"title": this.title,
 					"categoryId": this.categoryId,
 					"locationId": this.locationId,
-					"startDate": this.testVal2[0],
-					"endDate": this.testVal2[1],
+					"startDate": this.datesStructure[0],
+					"endDate": this.datesStructure[1],
 					"description": this.description
 				});
 				await Promise.all([
@@ -275,18 +273,15 @@ export default defineComponent({
 			}
 		}
 
-		if (!this.locations || !this.locations.length) {
-			await this.$store.dispatch("locations/retrieveLocations");
-		}
-
-		if (!this.categories || !this.categories.length) {
-			await this.$store.dispatch("categories/retrieveCategories");
-		}
+		await Promise.all([
+			this.$store.dispatch("locations/retrieveLocations", {"skip": 0, "limit": 100}),
+			this.$store.dispatch("categories/retrieveCategories", {"skip": 0, "limit": 100})
+		]);
 
 		if (this.selectedEvent) {
 			this.title = this.selectedEvent.title;
-			this.testVal2[0] = dayjs(this.selectedEvent.startDate);
-			this.testVal2[1] = dayjs(this.selectedEvent.endDate);
+			this.datesStructure[0] = dayjs(this.selectedEvent.startDate);
+			this.datesStructure[1] = dayjs(this.selectedEvent.endDate);
 			this.location = this.selectedEvent.location;
 			this.locationId = this.selectedEvent.locationId;
 			this.categoryId = this.selectedEvent.categoryId;

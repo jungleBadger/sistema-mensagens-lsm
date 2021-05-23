@@ -16,8 +16,8 @@
 
 		<template v-slot:modal-content>
 
-			<div class="flex flex-col w-full">
-				<div class="w-full flex flex-col gap-1 h-20">
+			<div class="flex flex-col gap-2 w-full">
+				<div class="w-full flex flex-col gap-1">
 					<label class="text-gray-700 ">País</label>
 					<lsm-select
 						autofocus
@@ -27,7 +27,7 @@
 				</div>
 
 				<div class="w-full flex gap-2">
-					<div class="flex-1 flex flex-col gap-1 h-20">
+					<div class="flex-1 flex flex-col gap-1">
 						<label class="text-gray-700 ">Estado</label>
 						<lsm-input
 							v-model="state"
@@ -35,7 +35,7 @@
 						</lsm-input>
 					</div>
 
-					<div class="flex-1 flex flex-col gap-1 h-20">
+					<div class="flex-1 flex flex-col gap-1">
 						<label class="text-gray-700 ">Cidade</label>
 						<lsm-input
 							v-model="city"
@@ -46,7 +46,7 @@
 				</div>
 
 				<div class="w-full">
-					<div class="w-96 flex flex-col gap-1 h-20">
+					<div class="w-96 flex flex-col gap-1">
 						<label class="text-gray-700 ">Descrição - opcional</label>
 						<lsm-text-area
 							v-model="description"
