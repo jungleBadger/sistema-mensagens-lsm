@@ -47,7 +47,7 @@ export default {
 	async searchLocations(context, params) {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 		try {
-			let result = await locationsFactory.searchLocations(params.filterText, params.filterColumn, skip, limit, orderBy, orderDirection);
+			let result = await locationsFactory.searchLocations(params.filterText, params.filterColumn, params.skip || skip, params.limit || limit, orderBy, orderDirection);
 			context.commit("totalLocationsCount", result.totalCount);
 			context.commit("locationItems", result.results);
 		} catch (e) {
@@ -82,11 +82,11 @@ export default {
 
 	},
 
-	async retrieveLocations(context) {
+	async retrieveLocations(context, params = {}) {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 
 		try {
-			let locations = await locationsFactory.retrieveLocations(skip, limit, orderBy, orderDirection);
+			let locations = await locationsFactory.retrieveLocations(params.skip || skip, params.limit || limit, orderBy, orderDirection);
 			context.commit("locationItems", locations.results);
 		} catch (e) {
 			context.commit(

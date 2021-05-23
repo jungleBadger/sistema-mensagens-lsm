@@ -52,7 +52,7 @@ export default {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 
 		try {
-			let result = await categoriesFactory.searchCategories(params.filterText, params.filterColumn, skip, limit, orderBy, orderDirection);
+			let result = await categoriesFactory.searchLocations(params.filterText, params.filterColumn, params.skip || skip, params.limit || limit, orderBy, orderDirection);
 			context.commit("totalCategoriesCount", result.totalCount);
 			context.commit("categoryItems", result.results);
 		} catch (e) {
@@ -89,11 +89,11 @@ export default {
 
 	},
 
-	async retrieveCategories(context) {
+	async retrieveCategories(context, params) {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 
 		try {
-			let categories = await categoriesFactory.retrieveCategories(skip, limit, orderBy, orderDirection);
+			let categories = await categoriesFactory.retrieveCategories(params.skip || skip, params.limit || limit, orderBy, orderDirection);
 			context.commit("categoryItems", categories.results);
 		} catch (e) {
 			context.commit(

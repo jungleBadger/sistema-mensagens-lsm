@@ -47,7 +47,7 @@ export default {
 	async searchBrothers(context, params) {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 		try {
-			let result = await brothersFactory.searchBrothers(params.filterText, params.filterColumn, skip, limit, orderBy, orderDirection);
+			let result = await brothersFactory.searchLocations(params.filterText, params.filterColumn, params.skip || skip, params.limit || limit, orderBy, orderDirection);
 			context.commit("totalBrothersCount", result.totalCount);
 			context.commit("brotherItems", result.results);
 		} catch (e) {
@@ -82,11 +82,11 @@ export default {
 
 	},
 
-	async retrieveBrothers(context) {
+	async retrieveBrothers(context, params = {}) {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 
 		try {
-			let brothers = await brothersFactory.retrieveBrothers(skip, limit, orderBy, orderDirection);
+			let brothers = await brothersFactory.retrieveBrothers(params.skip || skip, params.limit || limit, orderBy, orderDirection);
 			context.commit("brotherItems", brothers.results);
 		} catch (e) {
 			context.commit(
