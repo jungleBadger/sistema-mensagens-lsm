@@ -7,6 +7,7 @@ create table MENSAGEM
 	IRMAO_ID int not null
 		constraint MENSAGEM_IRMAO_ID_FK
 			references IRMAO,
+	ORDEM int not null,
 	TITULO VARCHAR(512) not null,
 	DATA_MINISTRADO TIMESTAMP not null,
 	VALOR DECIMAL(10,2) default 1.00 not null,
@@ -24,6 +25,8 @@ comment on column MENSAGEM.ID is 'Representa o ID unico de uma mensagem.';
 comment on column MENSAGEM.EVENTO_ID is 'Representa o relacionamento com a tabela EVENTO. Uma mensagem pertence a um evento.';
 
 comment on column MENSAGEM.IRMAO_ID is 'Representa o relacionamento com a tabela IRMAO. Um irmão ministra N mensagens..';
+
+comment on column MENSAGEM.ORDEM is 'Representa a ordem da mensagem.';
 
 comment on column MENSAGEM.TITULO is 'Representa o título de uma mensagem.';
 
