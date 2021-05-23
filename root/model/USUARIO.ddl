@@ -3,7 +3,7 @@ create table USUARIO
     ID               INTEGER generated always as identity not null,
     EMAIL            VARCHAR(256)                         not null,
     SENHA            VARCHAR(128)                         not null,
-    NOME_EXIBICAO    VARCHAR(64),
+    NOME_EXIBICAO    VARCHAR(512),
     ADMINISTRADOR    BOOLEAN   default FALSE              not null,
     SENHA_REGISTRADA BOOLEAN   default FALSE              not null,
     EMAIL_CONFIRMADO BOOLEAN   default FALSE              not null,

@@ -1,7 +1,7 @@
 create table IRMAO
 (
     ID            int generated always as identity,
-    NOME_EXIBICAO VARCHAR(256)                        not null,
+    NOME_EXIBICAO VARCHAR(512)                        not null,
     CRIADO_EM     timestamp default CURRENT_TIMESTAMP not null,
     ATUALIZADO_EM timestamp default CURRENT_TIMESTAMP not null
 );

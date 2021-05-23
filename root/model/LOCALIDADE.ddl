@@ -1,10 +1,10 @@
 create table LOCALIDADE
 (
 	ID int generated always as identity,
-	PAIS VARCHAR(64) not null,
-	ESTADO VARCHAR(64) not null,
-	CIDADE VARCHAR(64) not null,
-	DESCRICAO VARCHAR(256),
+	PAIS VARCHAR(128) not null,
+	ESTADO VARCHAR(128) not null,
+	CIDADE VARCHAR(128) not null,
+	DESCRICAO VARCHAR(1024),
 	CRIADO_EM TIMESTAMP default CURRENT_TIMESTAMP not null,
 	ATUALIZADO_EM TIMESTAMP default CURRENT_TIMESTAMP not null
 );
