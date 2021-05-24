@@ -63,6 +63,55 @@ router.post(
 	}
 );
 
+/**
+ * @swagger
+ * /api/admin/user/search:
+ *   delete:
+ *     tags: [category]
+ *     summary: Search categories.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Category object updated.
+ *       400:
+ *         description: Request parameter issues.
+ *       401:
+ *         description: Requester not logged in.
+ *       403:
+ *         description: Requester is not an admin User.
+ *       500:
+ *         description: Error handler.
+ */
+router.get(
+	"/search",
+	isAdmin,
+	async (req, res) => {
+		res.status(
+			200
+		).send(
+			await adminUser.search(
+				req.query.filterText,
+				req.query.filterColumn || "EMAIL",
+				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [],
+				req.query.targetColumns ? req.query.targetColumns.split(",") : [
+					"ID",
+					"EMAIL",
+					"NOME_EXIBICAO",
+					"SENHA_REGISTRADA",
+					"EMAIL_CONFIRMADO",
+					"CRIADO_EM",
+					"ATUALIZADO_EM"
+				],
+				Number(req.query.limit) || 20,
+				Number(req.query.skip) || 0,
+				req.query.orderBy || "ATUALIZADO_EM",
+				req.query.orderDirection || "DESC"
+			)
+		)
+	}
+);
+
 router.get(
 	"/count",
 	isAdmin,
@@ -134,11 +183,12 @@ router.get(
 					"NOME_EXIBICAO",
 					"SENHA_REGISTRADA",
 					"EMAIL_CONFIRMADO",
-					"CRIADO_EM"
+					"CRIADO_EM",
+					"\t\"ATUALIZADO_EM\""
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
-				req.query.orderBy || "ID",
+				req.query.orderBy || "ATUALIZADO_EM",
 				req.query.orderDirection || "DESC"
 			)
 		)
@@ -190,7 +240,8 @@ router.get(
 					"SENHA_REGISTRADA",
 					"EMAIL_CONFIRMADO",
 					"ADMINISTRADOR",
-					"CRIADO_EM"
+					"CRIADO_EM",
+					"ATUALIZADO_EM"
 				]
 			)
 		)

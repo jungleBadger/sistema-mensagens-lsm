@@ -26,15 +26,18 @@
 			aria-label="Tabela de Irmãos">
 
 			<lsm-table
+				:is-async-search-enabled="true"
 				:total-items-count="totalCategoriesCount"
 				:items-per-page="pagination.limit"
 				:table-items="categories"
 				:columns-data="tableColumns"
 				:is-async-loading="isLoading"
 				:handle-click="true"
-				sorting-direction="asc"
+				order-by="NOME"
+				order-direction="ASC"
 				@paginate="updatePagination"
-				@select="selectItem">
+				@select="selectItem"
+				@search="handleAsyncSearch">
 			</lsm-table>
 		</main>
 
@@ -72,7 +75,8 @@ export default defineComponent({
 	},
 	"data": function () {
 		return {
-
+			"asyncFilterColumn": "",
+			"asyncFilterText": ""
 		}
 	},
 
@@ -129,32 +133,58 @@ export default defineComponent({
 			)
 		},
 
-		updatePagination(value) {
-			this.pagination = value;
-		},
+
 		async loadCategories() {
-			this.isLoading = true;
-			await Promise.all([
+			return await Promise.all([
 				this.$store.dispatch("categories/retrieveTotalCategoriesCount"),
 				this.$store.dispatch("categories/retrieveCategories")
 			]);
-			this.isLoading = false;
-			return true;
-		}
-	},
+		},
 
-	async mounted () {
-		await this.loadCategories();
-	},
+		async searchCategories() {
+			return await this.$store.dispatch(
+				"categories/searchCategories",
+				{
+					"filterColumn": this.asyncFilterColumn,
+					"filterText": this.asyncFilterText
+				}
+			);
+		},
 
-
-	"watch": {
-		async pagination() {
-			if (!this.isLoading) {
-				await this.loadCategories();
+		async performRelevantQuery() {
+			if (this.isLoading) {
+				return false;
 			}
+			this.isLoading = true;
+			await (this.asyncFilterText ? this.searchCategories() : this.loadCategories());
+			this.isLoading = false;
+		},
 
+		updatePagination(value) {
+			this.pagination = value;
+			return this.performRelevantQuery();
+		},
+
+		handleAsyncSearch(value) {
+
+			this.asyncFilterColumn = value.filteringField;
+			this.asyncFilterText = value.filteringValue;
+			this.pagination = {
+				...this.pagination,
+				"skip": 0
+			};
+
+			return this.performRelevantQuery();
 		}
+
+
+
+	},
+
+	async created () {
+		this.isLoading = true;
+		await this.loadCategories();
+		this.isLoading = false;
 	}
 });
 </script>

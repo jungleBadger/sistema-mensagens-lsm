@@ -1,7 +1,7 @@
 <template>
 	<nav
 		id="lsm-sidemenu"
-		class="bg-white flex flex-col w-12 shadow-sm z-20 bg-white backdrop-filter backdrop-blur-sm bg-opacity-50 md:bg-opacity-100 md:backdrop-filter-none md:backdrop-blur-0 md:bg-white"
+		class="bg-white flex flex-col w-12 shadow-sm z-30 bg-white backdrop-filter backdrop-blur-sm bg-opacity-50 md:bg-opacity-100 md:backdrop-filter-none md:backdrop-blur-0 md:bg-white"
 		:class="{'__is-open': isSideMenuOpen}">
 
 
@@ -86,17 +86,7 @@ export default defineComponent({
 			"required": false,
 			"default": function () {
 				return [
-					{
-						"id": "brothers",
-						"label": "Irmãos",
-						"path": {
-							"name": "app.brothers"
-						},
-						"meta": {
-							"icon": "user-tie"
-						},
-						"children": []
-					},
+
 					{
 						"id": "categories",
 						"label": "Categorias",
@@ -105,6 +95,28 @@ export default defineComponent({
 						},
 						"meta": {
 							"icon": "ball-pile"
+						},
+						"children": []
+					},
+					{
+						"id": "locations",
+						"label": "Localidades",
+						"path": {
+							"name": "app.locations"
+						},
+						"meta": {
+							"icon": "earth-americas"
+						},
+						"children": []
+					},
+					{
+						"id": "brothers",
+						"label": "Irmãos",
+						"path": {
+							"name": "app.brothers"
+						},
+						"meta": {
+							"icon": "user-tie"
 						},
 						"children": []
 					},

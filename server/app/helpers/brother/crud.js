@@ -58,10 +58,10 @@ module.exports = {
 
 
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
 					409,
-					`Irmao ${displayName} already exists.`
+					`Brother ${displayName} already exists.`
 				);
 			} else {
 				throw e;
@@ -82,6 +82,55 @@ module.exports = {
 				[],
 				"fetch"
 			))["1"]
+		};
+	},
+
+	/**
+	 * Search brothers.
+	 * @method search
+	 * @param {string} filterText - Filtering text.
+	 * @param {string} [filterColumn="NOME_EXIBICAO"] - Optional column selector to use in the SELECT statement.
+	 * @param {Array<string>} [extraFilterColumns=[]] - TBD.
+	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @return {Promise<object|Error>} Containing the deletion confirmation.
+	 */
+	async search (filterText, filterColumn = "NOME_EXIBICAO", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
+		if (!filterText) {
+			throw raiseError(
+				400,
+				"Missing required properties for searching Brother."
+			);
+		}
+
+		let {
+			searchQuery,
+			countQuery
+		} = DBConnectionPool.buildSearchQuery(
+			targetColumns, TABLE_NAME, filterColumn, filterText, extraFilterColumns, orderBy, orderDirection, skip, limit
+		);
+
+		let [results, countResults] = await Promise.all([
+			connectionPool.executeRawSqlInstruction(
+				searchQuery,
+				[]
+			),
+			connectionPool.executePreparedSqlInstruction(
+				countQuery,
+				[],
+				"fetch"
+			)
+		]);
+
+		return {
+			"offset": skip + results.length,
+			"orderBy": orderBy,
+			"orderDirection": orderDirection,
+			"totalCount": countResults["1"],
+			"results": results
 		};
 	},
 
@@ -193,10 +242,23 @@ module.exports = {
 
 		await this.retrieveById(brotherId);
 
-		await connectionPool.executePreparedSqlInstruction(
-			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE ${TABLE_NAME}.ID = ?;`,
-			[newDisplayName, brotherId]
-		);
+
+		try {
+			await connectionPool.executePreparedSqlInstruction(
+				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME_EXIBICAO = ? WHERE ${TABLE_NAME}.ID = ?;`,
+				[newDisplayName, brotherId]
+			);
+		} catch (e) {
+			console.log(e);
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
+				throw raiseError(
+					409,
+					`Brother ${newDisplayName} already exists.`
+				);
+			} else {
+				throw e;
+			}
+		}
 
 		return {
 			...(await logger.generateLog(
@@ -208,6 +270,7 @@ module.exports = {
 			)),
 			"NOME_EXIBICAO": newDisplayName
 		};
+
 	},
 
 	/**
@@ -240,5 +303,7 @@ module.exports = {
 			Number(operator.id)
 		);
 
-	}
+	},
+
+
 };

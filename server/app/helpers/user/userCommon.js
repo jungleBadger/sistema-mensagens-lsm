@@ -60,7 +60,7 @@ module.exports = {
 			"subject": resetPasswordEmailObject.subject,
 			"text": resetPasswordEmailObject.text,
 			"html": resetPasswordEmailObject.html(
-				"https://localhost:3030/api/common/user/request-reset",
+				"https://sistema.igrejaemsumare.com.br/api/common/user/request-reset",
 				await generateJWT(
 					{ userEmail },
 					process.env.APP_SECRET,
@@ -74,5 +74,9 @@ module.exports = {
 
 		//@TODO Remove this log statement later - demo purposes only.
 		console.log("Preview URL: %s", nodemailer.getTestMessageUrl(mailResult));
+	},
+
+	async updateUser(id, displayName, isAdmin, operator) {
+		return crud.updateProfile(id, displayName, isAdmin, operator);
 	}
 }

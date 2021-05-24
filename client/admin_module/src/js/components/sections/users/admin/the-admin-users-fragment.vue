@@ -2,18 +2,21 @@
 	<main
 		class="w-full flex-1 overflow-hidden"
 		role="main"
-		aria-label="Tabela de Irmãos">
+		aria-label="Tabela de Usuários administradores">
 
 			<lsm-table
+				:is-async-search-enabled="true"
 				:total-items-count="totalAdminUsersCount"
 				:items-per-page="pagination.limit"
 				:table-items="adminUsers"
 				:columns-data="tableColumns"
 				:is-async-loading="isLoading"
 				:handle-click="true"
-				sorting-direction="asc"
+				order-by="ATUALIZADO_EM"
+				order-direction="DESC"
 				@paginate="updatePagination"
-				@select="selectItem">
+				@select="selectItem"
+				@search="handleAsyncSearch">
 			</lsm-table>
 	</main>
 
@@ -48,88 +51,100 @@ export default defineComponent({
 	},
 	"data": function () {
 		return {
-
+			"asyncFilterColumn": "",
+			"asyncFilterText": ""
 		}
 	},
 	"computed": {
 		totalAdminUsersCount() {
-			return this.$store.getters["adminUsers/totalAdminUsersCount"];
+			return this.$store.getters["users/admin/totalAdminUsersCount"];
 		},
 		"pagination": {
 			get() {
-				return this.$store.getters["adminUsers/pagination"];
+				return this.$store.getters["users/admin/pagination"];
 			},
 			set(val) {
-				this.$store.commit("adminUsers/pagination", val);
+				this.$store.commit("users/admin/pagination", val);
 			}
 		},
 
 		adminUsers() {
-			return this.$store.getters["adminUsers/adminUserItems"];
+			return this.$store.getters["users/admin/adminUserItems"];
 		},
 		"isLoading": {
 			get() {
-				return this.$store.getters["adminUsers/isLoading"];
+				return this.$store.getters["users/admin/isLoading"];
 			},
 			set(val) {
-				this.$store.commit("adminUsers/isLoading", val);
+				this.$store.commit("users/admin/isLoading", val);
 			}
 		},
 		tableColumns() {
-			return this.$store.getters["adminUsers/tableColumns"];
+			return this.$store.getters["users/admin/tableColumns"];
 		}
 	},
 	"methods": {
 
-		openCreateModal() {
+		selectItem(item) {
+			this.$store.commit("users/admin/selectedAdminUser", item);
 			this.$router.push(
 				{
 					"name": "app.users.admin.details",
 					"params": {
-						"adminUserId": "novo"
+						"userId": item.id
 					}
 				}
 			)
 		},
 
-		selectItem(item) {
-			this.$store.commit("adminUsers/selectedAdminUser", item);
-			this.$router.push(
+		async loadAdminUsers() {
+			return await Promise.all([
+				this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
+				this.$store.dispatch("users/admin/retrieveAdminUsers")
+			]);
+		},
+
+		async searchAdminUsers() {
+			return await this.$store.dispatch(
+				"users/admin/searchAdminUsers",
 				{
-					"name": "app.users.admin.details",
-					"params": {
-						"adminUserId": item.id
-					}
+					"filterColumn": this.asyncFilterColumn,
+					"filterText": this.asyncFilterText
 				}
-			)
+			);
+		},
+
+		async performRelevantQuery() {
+			if (this.isLoading) {
+				return false;
+			}
+			this.isLoading = true;
+			await (this.asyncFilterText ? this.searchAdminUsers() : this.loadAdminUsers());
+			this.isLoading = false;
 		},
 
 		updatePagination(value) {
 			this.pagination = value;
+			return this.performRelevantQuery();
 		},
-		async loadAdminUsers() {
-			this.isLoading = true;
-			await Promise.all([
-				this.$store.dispatch("adminUsers/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("adminUsers/retrieveAdminUsers")
-			]);
-			this.isLoading = false;
-			return true;
+
+		handleAsyncSearch(value) {
+
+			this.asyncFilterColumn = value.filteringField;
+			this.asyncFilterText = value.filteringValue;
+			this.pagination = {
+				...this.pagination,
+				"skip": 0
+			};
+
+			return this.performRelevantQuery();
 		}
 	},
 
-	async mounted () {
-		await this.loadAdminUsers();
-	},
-
-
-	"watch": {
-		async pagination() {
-			if (!this.isLoading) {
-				await this.loadAdminUsers();
-			}
-
-		}
+	async created () {
+		this.isLoading = true;
+		await this.loadAdminUsers()
+		this.isLoading = false;
 	}
 });
 </script>

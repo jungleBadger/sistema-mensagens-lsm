@@ -5,7 +5,8 @@
 		class="flex w-full h-full items-center justify-center absolute left-0 top-0 border-0 m-0 p-0 w-full h-full
 		bg-opacity-50 bg-black z-50 p-4 md:p-8 backdrop-filter backdrop-blur-sm">
 		<div
-			class="flex flex-col rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto  ">
+			v-bind="$attrs"
+			class="flex flex-col rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
 
 			<header
 				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm">
@@ -55,6 +56,7 @@ export default {
 	"mixins": [
 		fade
 	],
+	"inheritAttrs": false,
 	"emits": ["close"],
 	"props": {
 
@@ -64,6 +66,10 @@ export default {
 			"default": function () {
 				return uuidv4();
 			}
+		},
+
+		"size": {
+
 		}
 	},
 

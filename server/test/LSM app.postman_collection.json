@@ -1648,6 +1648,55 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/brother/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"brother",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1679,7 +1728,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"{{$randomJobType}}\"\r\n}",
+							"raw": "{\r\n    \"name\": \"{{$randomBankAccountName}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2063,6 +2112,882 @@
 								"api",
 								"logs",
 								"{{categoryLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/category/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "Add location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"locationId\", response.ID);\r",
+									"pm.collectionVariables.set(\"locationLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"country\": \"Brasil\",\r\n    \"state\": \"SP\",\r\n    \"city\": \"{{$randomCity}}\",\r\n    \"description\": \"Some description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/location/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"location",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First creation log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"locationLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"locationId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"LOCALIDADE\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{locationLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{locationLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Location by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"locationId\"));\r",
+									"\r",
+									"    pm.expect(response.PAIS).to.exist\r",
+									"    pm.expect(response.ESTADO).to.exist\r",
+									"    pm.expect(response.CIDADE).to.exist\r",
+									"    pm.expect(response.DESCRICAO).to.exist\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/location/{{locationId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"location",
+								"{{locationId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all locations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.offset).to.exist\r",
+									"    pm.expect(response.orderBy).to.exist\r",
+									"    pm.expect(response.results).to.exist\r",
+									"\r",
+									"    pm.expect(Array.isArray(response.results)).to.eql(true);\r",
+									"    pm.expect(response.results.length >= 1).to.eql(true);\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/location/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"location",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"locationId\", response.ID);\r",
+									"pm.collectionVariables.set(\"locationLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"country\": \"TEST-COUNTRY\",\r\n    \"state\": \"TEST-STATE\",\r\n    \"city\": \"TEST-CITY\",\r\n    \"description\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/location/{{locationId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"location",
+								"{{locationId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First update log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"locationLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"locationId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"LOCALIDADE\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"UPDATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{locationLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{locationLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/location/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"location",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"locationLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/location/{{locationId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"location",
+								"{{locationId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First delete log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"locationLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"locationId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"LOCALIDADE\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{locationLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{locationLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Event",
+			"item": [
+				{
+					"name": "Add event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"eventId\", response.ID);\r",
+									"pm.collectionVariables.set(\"eventLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"{{$randomProductName}}\",\r\n    \"categoryId\": 1,\r\n    \"locationId\": 1,\r\n    \"startDate\": \"Mon May 17 2021 09:44:44 GMT-0300 (Horário Padrão de Brasília)\",\r\n    \"endDate\": \"Mon May 19 2021 09:44:44 GMT-0300 (Horário Padrão de Brasília)\",\r\n    \"description\": \"Some description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/event/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"event",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First creation log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"eventLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"eventId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"EVENTO\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"CREATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{eventLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{eventLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"eventId\", response.ID);\r",
+									"pm.collectionVariables.set(\"eventLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"{{$randomProductName}}\",\r\n    \"categoryId\": 1,\r\n    \"locationId\": 1,\r\n    \"startDate\": \"Mon May 19 2021 09:44:44 GMT-0300 (Horário Padrão de Brasília)\",\r\n    \"endDate\": \"Mon May 21 2021 09:44:44 GMT-0300 (Horário Padrão de Brasília)\",\r\n    \"description\": \"Some description update\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/event/{{eventId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"event",
+								"{{eventId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First update log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"eventLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"eventId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"EVENTO\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"UPDATE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{eventLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{eventLogId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/event/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"event",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"eventId\", response.ID);\r",
+									"pm.collectionVariables.set(\"eventLogId\", response.LOG_ID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/event/{{eventId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"event",
+								"{{eventId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First delete log was generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected model\", function () {\r",
+									"    var response = JSON.parse(responseBody);\r",
+									"    pm.expect(response.ID).to.eql(pm.variables.get(\"eventLogId\"));\r",
+									"    pm.expect(response.REFERENCIA_ID).to.eql(pm.variables.get(\"eventId\"));\r",
+									"    pm.expect(response.REFERENCIA_TABELA).to.eql(\"EVENTO\");\r",
+									"    pm.expect(response.ACAO).to.eql(\"DELETE\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/logs/{{eventLogId}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{eventLogId}}",
 								""
 							]
 						}
@@ -2766,6 +3691,55 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the expected mdoel\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.expect(response.offset).to.exist;\r",
+									"    pm.expect(response.orderBy).to.exist;\r",
+									"    pm.expect(response.orderDirection).to.exist;\r",
+									"    pm.expect(response.totalCount).to.exist;\r",
+									"    pm.expect(response.results).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/logs/search?filterText=test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2897,6 +3871,15 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -3030,6 +4013,22 @@
 		},
 		{
 			"key": "firstNewdminEmail",
+			"value": ""
+		},
+		{
+			"key": "locationId",
+			"value": ""
+		},
+		{
+			"key": "locationLogId",
+			"value": ""
+		},
+		{
+			"key": "eventId",
+			"value": ""
+		},
+		{
+			"key": "eventLogId",
 			"value": ""
 		}
 	]

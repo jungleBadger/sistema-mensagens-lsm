@@ -6,7 +6,7 @@
 
 		<!--			@SECTION TABLE FILTERS -->
 
-		<header class="bg-gray-100 flex gap-2 items-center shadow z-10 p-2 flex-wrap">
+		<header class="bg-gray-100 flex gap-2 items-center shadow z-20 p-2 flex-wrap">
 
 			<div class="w-full md:w-48">
 				<lsm-select
@@ -23,44 +23,45 @@
 				class="flex-1"
 				style="min-width: 240px;">
 				<lsm-input
-					:key="selectedFilteringField"
-					:disabled="isAsyncLoading"
 					v-model="filterText"
 					autofocus
-					placeholder="Digite para filtrar a tabela."
+					:placeholder="isAsyncSearchEnabled ? 'Digite 03 caracteres ou mais para buscar.' : 'Digite para filtrar a tabela.'"
 					type="search">
 				</lsm-input>
-
 			</div>
+
+
 
 		</header>
 
+
 		<!--			@SECTION TABLE BODY -->
 
-		<template v-if="filteredData.length">
-			<div
-				class="bg-white max-h-full overflow-hidden flex flex-col p-0 md:p-1 ml-px ml-px"
-				role="table">
+		<div
+			class="bg-white max-h-full overflow-hidden flex flex-col p-0 md:p-2 md:pt-0 md:pb-0 ml-px ml-px relative"
+			role="table">
 
-				<!--			@SECTION TABLE COLUMNS HEADER -->
+			<lsm-progress-bar v-if="isAsyncLoading"></lsm-progress-bar>
+
+			<template v-if="filteredData.length">
 				<div
-					class="w-full sr-only md:not-sr-only"
+					class="w-full z-10 sr-only md:not-sr-only"
 					role="rowgroup">
 					<div
 						class="w-full flex"
 						role="row">
 						<button
 							v-for="column in columnsData"
-							:id="column.key"
+							:id="`th-${column.key}`"
 							:key="column.key"
 							:aria-label="column.label"
 							:style="{'flex-basis': column.size || 'auto'}"
-							@click="changeSortingOptions(column.key, selectedSortingDirection === 'asc' ? 'desc' : 'asc')"
+							@click="changeSortingOptions(column.originalId || column.key, selectedSortingDirectionCode === 'ASC' ? 'DESC' : 'ASC')"
 							class="flex-1 flex items-center gap-1 hover:bg-gray-200 transition-colors"
 							role="columnheader">
 
-							<template v-if="selectedSortingField === column.key">
-								<template v-if="selectedSortingDirection === 'asc'">
+							<template v-if="selectedSortingField === (column.originalId || column.key)">
+								<template v-if="selectedSortingDirectionCode === 'ASC'">
 									<font-awesome-icon :icon="['fal', 'arrow-up-short-wide']" />
 								</template>
 								<template v-else>
@@ -99,14 +100,16 @@
 					 <span
 						 v-for="column in columnsData"
 						 :key="column.key"
-						 :aria-labelledby="column.key"
+						 :aria-labelledby="`th-${column.key}`"
 						 :style="{'flex-basis': column.size || 'auto'}"
 						 class="flex-1 h-8 overflow-hidden overflow-ellipsis ml-0.5"
 						 role="cell">
 							<template v-if="column.type === 'date' ">
 
 								<i18n-d
-									:format="{ 'key': 'shortWithTime' }"
+									tag="span"
+									locale="pt"
+									format="shortWithTime"
 									:value="item[column.key]"
 								></i18n-d>
 
@@ -118,20 +121,26 @@
 					  </span>
 					</Component>
 				</transition-group>
-			</div>
-		</template>
-		<template v-else>
-			<div
-				class="bg-white pl-2 pr-2 pb-4 pt-4"
-				:key="'empty-container'">
-				<template v-if="filterText">
-					Nenhum item encontrado aplicando os filtros selecionados. <button @click="resetFilters" class="text-blue-500 ml-2">Limpar filtros</button>
-				</template>
-				<template v-else>
-					Tabela sem items. As razões podem variar, mas nenhum resultado foi encontrado pelo sistema.
-				</template>
-			</div>
-		</template>
+			</template>
+			<template v-else>
+				<div
+					class="bg-white pl-2 pr-2 pb-4 pt-4"
+					:key="'empty-container'">
+					<template v-if="isAsyncLoading">
+						Carregando dados...
+					</template>
+					<template v-else-if="filterText">
+						Nenhum item encontrado aplicando os filtros selecionados. <button @click="resetFilters" class="text-blue-500 ml-2">Limpar filtros</button>
+					</template>
+					<template v-else>
+						Tabela sem items. As razões podem variar, mas nenhum resultado foi encontrado pelo sistema.
+					</template>
+				</div>
+			</template>
+
+		</div>
+
+
 
 
 		<!--			@SECTION TABLE FOOTER -->
@@ -215,14 +224,16 @@ import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import LsmInput from "./lsm-input.vue";
 import LsmSelect from "./lsm-select.vue";
+import LsmProgressBar from "./lsm-progress-bar";
 
 export default defineComponent({
 	"name": "LsmTable",
 	"components": {
+		LsmProgressBar,
 		LsmInput,
 		LsmSelect
 	},
-	"emits": ["paginate", "select"],
+	"emits": ["paginate", "select", "search"],
 	"props": {
 
 		"id": {
@@ -242,6 +253,14 @@ export default defineComponent({
 		},
 
 		"isAsyncLoading": {
+			"type": Boolean,
+			"required": false,
+			"default": function () {
+				return false;
+			}
+		},
+
+		"isAsyncSearchEnabled": {
 			"type": Boolean,
 			"required": false,
 			"default": function () {
@@ -278,7 +297,7 @@ export default defineComponent({
 			}
 		},
 
-		"sortingField": {
+		"orderBy": {
 			"type": String,
 			"required": false,
 			"default": function () {
@@ -286,13 +305,13 @@ export default defineComponent({
 			}
 		},
 
-		"sortingDirection": {
+		"orderDirection": {
 			"type": String,
 			"required": false,
 			"default": function () {
 				return "desc";
 			},
-			"validator": value => ["asc", "desc"].indexOf(value) !== -1
+			"validator": value => ["ASC", "DESC"].indexOf(value.toUpperCase()) !== -1
 		}
 
 	},
@@ -319,13 +338,23 @@ export default defineComponent({
 			"filterText": "",
 			"selectedFilteringField": "all",
 
+			// Links to `orderBy` prop
 			"selectedSortingField": "",
+
+			// Links to `orderDirection` prop
 			"selectedSortingDirection": "",
 
-			"currentPage": 1
+			"currentPage": 1,
+
+			"debounce": Date.now()
 		};
 	},
 	"computed": {
+
+		"selectedSortingDirectionCode": function () {
+			return (this.selectedSortingDirection || "" ).toUpperCase();
+		},
+
 		"filteringFields": function () {
 			return [
 				{
@@ -335,35 +364,33 @@ export default defineComponent({
 				...this.columnsData.map(item => {
 					return {
 						"id": item.key,
+						"originalId": item.originalId,
 						"label": item.label
 					}
 				})
 			]
 		},
 		"filteredData": function () {
-			let result = (
-				(this.filterText ?
-						this.tableItems.filter(item => {
-							return JSON.stringify(
-								item,
-								this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
-							).toLowerCase().indexOf(this.filterText.toLowerCase()) > -1;
-						}) :
-						this.tableItems.map(item => item)
-				)
+
+			return (!this.isAsyncSearchEnabled && this.filterText ?
+				this.tableItems.filter(item => {
+					return JSON.stringify(
+						item,
+						this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
+					).toLowerCase().indexOf(this.filterText.toLowerCase()) > -1;
+				}) :
+				this.tableItems.map(item => item)
 			);
 
-			if (this.selectedSortingField) {
-				result.sort((a, b) => {
-					if (this.selectedSortingDirection === "desc") {
-						return a[this.selectedSortingField] < b[this.selectedSortingField] ? 1 : -1;
-					} else {
-						return a[this.selectedSortingField] < b[this.selectedSortingField] ? -1 : 1;
-					}
-				});
-			}
-
-			return result;
+			// if (this.selectedSortingField) {
+			// 	result.sort((a, b) => {
+			// 		if (this.selectedSortingDirectionCode === "DESC") {
+			// 			return a[this.selectedSortingField] < b[this.selectedSortingField] ? 1 : -1;
+			// 		} else {
+			// 			return a[this.selectedSortingField] < b[this.selectedSortingField] ? -1 : 1;
+			// 		}
+			// 	});
+			// }
 		},
 
 		"numberOfPages": function () {
@@ -410,49 +437,52 @@ export default defineComponent({
 			this.filterText = "";
 		},
 
-		changeSortingOptions(field, direction) {
-			this.selectedSortingField = field;
-			this.selectedSortingDirection = direction;
-		},
-
 		emitClick(selectedItem) {
 			if (this.handleClick) {
 				this.$emit("select", selectedItem);
 			}
 		},
 
+
+		emitPaginate(override = {}) {
+			this.$emit("paginate", {
+				"filteringField": this.selectedFilteringField,
+				"orderBy": this.selectedSortingField,
+				"orderDirection": this.selectedSortingDirectionCode,
+				"filteringValue": this.filterText,
+				"skip": this.pageLimits.start - 1,
+				"limit": this.itemsPerPage,
+				...override
+			});
+		},
+
+		// All of the following methods represent data handling changes and re-trigger the pagination event
+		changeSortingOptions(field, direction) {
+			this.selectedSortingField = field;
+			this.selectedSortingDirection = direction;
+			this.emitPaginate();
+		},
+
 		selectPage (event) {
 			this.currentPage = Number(event.target.value);
-			this.$emit("paginate", {
-				"skip": this.pageLimits.start - 1,
-				"limit": this.itemsPerPage
-			});
+			this.emitPaginate();
 		},
 
 		paginateLeft () {
 			this.currentPage -= 1;
-			this.$emit("paginate", {
-				"skip": this.pageLimits.start - 1,
-				"limit": this.itemsPerPage
-			});
+			this.emitPaginate();
 		},
 
 		paginateRight () {
 			this.currentPage += 1;
-			this.$emit("paginate", {
-				"skip": this.pageLimits.start - 1,
-				"limit": this.itemsPerPage
-			});
-
+			this.emitPaginate();
 		},
 
 		updateItemsPerPage (event) {
 			this.currentPage = 1;
-			this.$emit("paginate", {
-				"skip": 0,
+			this.emitPaginate({
 				"limit": Number(event.target.value)
 			});
-
 		}
 	},
 
@@ -465,9 +495,37 @@ export default defineComponent({
 		return {
 			datetimeFormats,
 			numberFormats,
-			"selectedSortingField": ref(props.sortingField),
-			"selectedSortingDirection": ref(props.sortingDirection)
+			"selectedSortingField": ref(props.orderBy),
+			"selectedSortingDirection": ref(props.orderDirection)
 		};
+	},
+
+	"watch": {
+		"filterText": function (newValue) {
+			if (this.isAsyncSearchEnabled) {
+				this.currentPage = 1;
+				this.debounce = Date.now();
+				if (!newValue) {
+					this.$emit("search", {
+						"filteringField": this.selectedFilteringField,
+						"orderBy": this.selectedSortingField,
+						"orderDirection": this.selectedSortingDirectionCode,
+						"filteringValue": ""
+					});
+				} else {
+					setTimeout(() => {
+						if (newValue.length >= 3 && Date.now() - this.debounce >= 300) {
+							this.$emit("search", {
+								"filteringField": this.selectedFilteringField,
+								"orderBy": this.selectedSortingField,
+								"orderDirection": this.selectedSortingDirectionCode,
+								"filteringValue": newValue
+							});
+						}
+					}, 300)
+				}
+			}
+		}
 	}
 });
 </script>

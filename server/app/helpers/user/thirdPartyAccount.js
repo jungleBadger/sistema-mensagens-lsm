@@ -1,8 +1,6 @@
 "use strict";
 
-const User = require("../../models/User");
 const raiseError = require("../errorHandler").raiseError;
-const { generateHash, generateJWT } = require("../security");
 const DBConnectionPool = require("../DBConnectionPool");
 const connectionPool = new DBConnectionPool(
 	process.env.DB2_DB,
@@ -11,11 +9,6 @@ const connectionPool = new DBConnectionPool(
 	process.env.DB2_UID,
 	process.env.DB2_PASSWORD
 );
-
-const mailerTransport = require("../mailer");
-const welcomeEmailObject = require("../../templates/email/welcome");
-const nodemailer = require("nodemailer");
-
 
 module.exports = {
 
@@ -58,7 +51,7 @@ module.exports = {
 			);
 		} catch (e) {
 			console.log(e);
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf && e.indexOf("SQLSTATE=23505") > -1) {
 				throw raiseError(
 					409,
 					`Account already linked.`

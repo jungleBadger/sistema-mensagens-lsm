@@ -16,13 +16,16 @@
 			aria-label="Tabela de Logs">
 
 			<lsm-table
+				:is-async-search-enabled="true"
 				:total-items-count="totalLogsCount"
 				:items-per-page="pagination.limit"
 				:table-items="logs"
 				:columns-data="tableColumns"
 				:is-async-loading="isLoading"
-				sorting-direction="desc"
-				@paginate="updatePagination">
+				order-by="CRIADO_EM"
+				order-direction="desc"
+				@paginate="updatePagination"
+				@search="handleAsyncSearch">
 			</lsm-table>
 		</main>
 
@@ -42,7 +45,8 @@ export default defineComponent({
 	},
 	"data": function () {
 		return {
-
+			"asyncFilterColumn": "",
+			"asyncFilterText": ""
 		}
 	},
 	"computed": {
@@ -74,29 +78,57 @@ export default defineComponent({
 		}
 	},
 	"methods": {
-		updatePagination(value) {
-			this.pagination = value;
-		},
+
+
+
 		async loadLogs() {
-			this.isLoading = true;
-			await Promise.all([
+			return await Promise.all([
 				this.$store.dispatch("logs/retrieveTotalLogsCount"),
 				this.$store.dispatch("logs/retrieveLogs")
 			]);
-			this.isLoading = false;
-		}
-	},
-	async beforeMount () {
-		await this.loadLogs();
-	},
+		},
 
-	"watch": {
-		async pagination() {
-			if (!this.isLoading) {
-				await this.loadLogs();
+		async searchLogs() {
+			return await this.$store.dispatch(
+				"logs/searchLogs",
+				{
+					"filterColumn": this.asyncFilterColumn,
+					"filterText": this.asyncFilterText
+				}
+			);
+		},
+
+		async performRelevantQuery() {
+			if (this.isLoading) {
+				return false;
 			}
+			this.isLoading = true;
+			await (this.asyncFilterText ? this.searchLogs() : this.loadLogs());
+			this.isLoading = false;
+		},
+
+		updatePagination(value) {
+			console.log(value);
+			this.pagination = value;
+			return this.performRelevantQuery();
+		},
+
+		async handleAsyncSearch(value) {
+			this.asyncFilterColumn = value.filteringField;
+			this.asyncFilterText = value.filteringValue;
+			this.pagination = {
+				...this.pagination,
+				"skip": 0
+			};
+
+			return this.performRelevantQuery();
 
 		}
+	},
+	async created() {
+		this.isLoading = true;
+		await this.loadLogs();
+		this.isLoading = false;
 	}
 });
 </script>

@@ -1,7 +1,7 @@
 create table CATEGORIA
 (
 	ID int generated always as identity,
-	NOME VARCHAR(64) not null,
+	NOME VARCHAR(512) not null,
 	CRIADO_EM TIMESTAMP default CURRENT_TIMESTAMP not null,
 	ATUALIZADO_EM TIMESTAMP default CURRENT_TIMESTAMP not null
 );

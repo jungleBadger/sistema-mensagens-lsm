@@ -19,28 +19,40 @@
 
 			<div class="w-full h-auto flex flex-col gap-2">
 				<div class="w-80 flex flex-col gap-1 h-20">
-					<label class="text-gray-700 ">Email</label>
+					<label class="text-gray-700 ">Nome de exibição (opcional)</label>
 
 					<lsm-input
-						v-model="email"
+						v-model="displayName"
 						autofocus
-						placeholder="Digite o e-mail do usuário"
-						type="email"
+						placeholder="Digite nome de exibição"
 						@keyup.enter="submitForm">
 
 					</lsm-input>
 				</div>
 
 				<div class="w-80 flex flex-col gap-1 h-20">
-					<label class="text-gray-700 ">Nome de exibição</label>
+					<label class="text-gray-700 ">Email</label>
 
 					<lsm-input
-						v-model="displayName"
-						placeholder="Digite nome de exibição"
-						@keyup.enter="submitForm">
-
+						:model-value="email"
+						aria-readonly="true"
+						disabled
+						readonly
+						placeholder="Digite o e-mail do usuário"
+						type="email">
 					</lsm-input>
 				</div>
+
+
+				<div class="w-80 flex flex-col gap-1 h-20">
+					<label class="text-gray-700 ">Perfil de administrador</label>
+					<lsm-checkbox
+						:model-value="false"
+						v-model="isAdmin"
+						:label="isAdmin ? 'É administrador' : 'Não é administrador'"
+					></lsm-checkbox>
+				</div>
+
 			</div>
 
 
@@ -48,18 +60,6 @@
 
 		<template v-slot:modal-footer>
 			<div class="w-full h-9 flex items-center justify-end gap-4">
-				<lsm-button
-					v-if="isDocumentExistent"
-					:disabled="isLoading"
-					:is-loading="isDeleteLoading"
-					class="w-24 bg-red-400"
-					icon-id="trash"
-					icon-style="fas"
-					label="Deletar"
-					role="button"
-					kind="danger"
-					@click="deleteItem">
-				</lsm-button>
 				<lsm-button
 					:disabled="isDeleteLoading"
 					:is-loading="isLoading"
@@ -84,25 +84,28 @@ import { defineComponent } from "vue";
 import LsmModal from "../../../../../../../_etc/shared_components/ui/lsm-modal.vue";
 import LsmInput from "../../../../../../../_etc/shared_components/ui/lsm-input";
 import LsmButton from "../../../../../../../_etc/shared_components/ui/lsm-button";
+import LsmCheckbox from "../../../../../../../_etc/shared_components/ui/lsm-checkbox";
 
 export default defineComponent({
 	"name": "TheAdminUserDetails",
 	"components": {
 		LsmButton,
 		LsmInput,
-		LsmModal
+		LsmModal,
+		LsmCheckbox
 	},
 	"data": function () {
 		return {
 			"isLoading": false,
 			"isDeleteLoading": false,
 			"email": "",
-			"displayName": ""
+			"displayName": "",
+			"isAdmin": true
 		};
 	},
 	"computed": {
 		selectedAdminUser () {
-			return this.$store.getters["adminUsers/selectedAdminUser"];
+			return this.$store.getters["users/admin/selectedAdminUser"];
 		},
 
 		isDocumentExistent () {
@@ -118,18 +121,18 @@ export default defineComponent({
 			this.isLoading = true;
 
 			if (this.isDocumentExistent) {
-				await this.$store.dispatch("adminUsers/updateAdminUser", {
+				await this.$store.dispatch("users/admin/updateAdminUser", {
 					"id": this.selectedAdminUser.id,
-					"displayName": this.displayName
+					"displayName": this.displayName,
+					"isAdmin": this.isAdmin
 				});
 			} else {
-				await this.$store.dispatch("adminUsers/createAdminUser", this.displayName);
+				await this.$store.dispatch("users/admin/createAdminUser", this.displayName);
+				await Promise.all([
+					this.$store.dispatch("users/admin/retrieveTotalAdminUsersCount"),
+					this.$store.dispatch("users/admin/retrieveAdminUsers")
+				]);
 			}
-
-			await Promise.all([
-				this.$store.dispatch("adminUsers/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("adminUsers/retrieveAdminUsers")
-			]);
 
 			this.isLoading = false;
 			return this.goToAdminUsersHome();
@@ -139,24 +142,19 @@ export default defineComponent({
 
 			this.isDeleteLoading = true;
 
-			await this.$store.dispatch("adminUsers/deleteAdminUser", this.selectedAdminUser.id);
-
-			await Promise.all([
-				this.$store.dispatch("adminUsers/retrieveTotalAdminUsersCount"),
-				this.$store.dispatch("adminUsers/retrieveAdminUsers")
-			]);
+			await this.$store.dispatch("users/admin/deleteAdminUser", this.selectedAdminUser.id);
 
 			this.isDeleteLoading = false;
 			return this.goToAdminUsersHome();
 		}
 	},
 
-	async mounted () {
-		if (!this.selectedAdminUser && this.$route.params.adminUserId !== "novo") {
+	async created () {
+		if (!this.selectedAdminUser && this.$route.params.userId !== "novo") {
 			this.isLoading = true;
 			this.$store.commit(
-				"adminUsers/selectedAdminUser",
-				await this.$store.dispatch("adminUsers/retrieveAdminUserById", this.$route.params.adminUserId)
+				"users/admin/selectedAdminUser",
+				await this.$store.dispatch("users/admin/retrieveAdminUserById", this.$route.params.userId)
 			);
 			this.isLoading = false;
 		}
@@ -171,7 +169,7 @@ export default defineComponent({
 	},
 
 	unmounted () {
-		this.$store.commit("adminUsers/unsetSelectedAdminUser");
+		this.$store.commit("users/admin/unsetSelectedAdminUser");
 	}
 });
 </script>

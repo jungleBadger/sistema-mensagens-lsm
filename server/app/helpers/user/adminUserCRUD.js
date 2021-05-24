@@ -79,7 +79,7 @@ module.exports = {
 
 
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf && e.indexOf("SQLSTATE=23505") > -1) {
 				throw raiseError(
 					409,
 					`User ${userEmail} already exists.`
@@ -103,6 +103,60 @@ module.exports = {
 				[],
 				"fetch"
 			))["1"]
+		};
+	},
+
+	/**
+	 * Search admin users.
+	 * @method search
+	 * @param {string} filterText - Filtering text.
+	 * @param {string} [filterColumn="NOME_EXIBICAO"] - Optional column selector to use in the SELECT statement.
+	 * @param {Array<string>} [extraFilterColumns=[]] - TBD.
+	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @return {Promise<object|Error>} Containing the deletion confirmation.
+	 */
+	async search (filterText, filterColumn = "NOME_EXIBICAO", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
+		if (!filterText) {
+			throw raiseError(
+				400,
+				"Missing required properties for searching Brother."
+			);
+		}
+
+		let [results, countResults] = await Promise.all([
+			connectionPool.executeRawSqlInstruction(
+				[
+					`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME}`,
+					`WHERE ${TABLE_NAME}.ADMINISTRADOR = true AND (LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%')`,
+					extraFilterColumns.map((column) => `OR LOWER(${TABLE_NAME}.${column}) LIKE LOWER('%${filterText}%')`).join(" ") + ")",
+					`ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}`,
+					`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
+					";"
+				].join(" "),
+				[]
+			),
+			connectionPool.executePreparedSqlInstruction(
+				[
+					`SELECT COUNT(ID) FROM ${TABLE_NAME}`,
+					`WHERE ${TABLE_NAME}.ADMINISTRADOR = true AND (LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%')`,
+					extraFilterColumns.map((column) => `OR LOWER(${TABLE_NAME}.${column}) LIKE LOWER('%${filterText}%')`).join(" ") + ")",
+					";"
+				].join(" "),
+				[],
+				"fetch"
+			)
+		]);
+
+		return {
+			"offset": skip + results.length,
+			"orderBy": orderBy,
+			"orderDirection": orderDirection,
+			"totalCount": countResults["1"],
+			"results": results
 		};
 	},
 

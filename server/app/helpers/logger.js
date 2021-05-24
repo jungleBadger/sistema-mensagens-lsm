@@ -69,6 +69,58 @@ module.exports = {
 	},
 
 	/**
+	 * Search categories.
+	 * @method search
+	 * @param {string} filterText - Filtering text.
+	 * @param {string} [filterColumn="OPERADOR_FANTASIA"] - Optional column selector to use in the SELECT statement.
+	 * @param {Array<string>} [extraFilterColumns=[]] - TBD.
+	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @return {Promise<object|Error>} Containing the deletion confirmation.
+	 */
+	async search (filterText, filterColumn = "OPERADOR_FANTASIA", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
+		if (!filterText) {
+			throw raiseError(
+				400,
+				"Missing required properties for searching Logs."
+			);
+		}
+
+		let {
+			searchQuery,
+			countQuery
+		} = DBConnectionPool.buildSearchQuery(
+			targetColumns, TABLE_NAME, filterColumn, filterText, extraFilterColumns, orderBy, orderDirection, skip, limit
+		);
+
+
+		console.log(searchQuery);
+
+		let [results, countResults] = await Promise.all([
+			connectionPool.executeRawSqlInstruction(
+				searchQuery,
+				[]
+			),
+			connectionPool.executePreparedSqlInstruction(
+				countQuery,
+				[],
+				"fetch"
+			)
+		]);
+
+		return {
+			"offset": skip + results.length,
+			"orderBy": orderBy,
+			"orderDirection": orderDirection,
+			"totalCount": countResults["1"],
+			"results": results
+		};
+	},
+
+	/**
 	 * Retrieves all admin users.
 	 * @method retrieveAll
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.

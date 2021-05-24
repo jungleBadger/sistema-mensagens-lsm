@@ -2,6 +2,7 @@
 
 const Joi = require("joi");
 const raiseError = require("../helpers/errorHandler").raiseError;
+const db2Timestamp = require("../helpers/db2Timestamp");
 
 module.exports = class Category {
 
@@ -12,11 +13,13 @@ module.exports = class Category {
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"NOME": Joi.string().max(64)
+				"NOME": Joi.string().max(64),
+				"ATUALIZADO_EM": Joi.string().required()
 			}
 		).validate(
 			{
-				"NOME": name
+				"NOME": name,
+				"ATUALIZADO_EM": db2Timestamp()
 			}
 		);
 

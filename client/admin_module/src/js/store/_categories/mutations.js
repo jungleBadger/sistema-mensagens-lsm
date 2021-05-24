@@ -8,14 +8,16 @@ export default {
 		state.isLoading = loadingState;
 	},
 
-	totalCategorysCount(state, count) {
+	totalCategoriesCount(state, count) {
 		state.totalCategoriesCount = Number(count);
 	},
 
-	pagination(state, pagination = {"skip": 0, "limit": 5}) {
+	pagination(state, pagination = {"skip": 0, "limit": 5, "orderBy": "NOME", "orderDirection": "ASC"}) {
 		state.pagination = {
 			"skip": pagination.skip,
-			"limit": pagination.limit
+			"limit": pagination.limit,
+			"orderBy": pagination.orderBy,
+			"orderDirection": pagination.orderDirection
 		}
 	},
 

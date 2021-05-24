@@ -12,10 +12,12 @@ export default {
 		state.totalLogsCount = Number(count);
 	},
 
-	pagination(state, pagination = {"skip": 0, "limit": 5}) {
+	pagination(state, pagination = {"skip": 0, "limit": 5, "orderBy": "ID", "orderDirection": "DESC"}) {
 		state.pagination = {
 			"skip": pagination.skip,
-			"limit": pagination.limit
+			"limit": pagination.limit,
+			"orderBy": pagination.orderBy,
+			"orderDirection": pagination.orderDirection
 		}
 	},
 

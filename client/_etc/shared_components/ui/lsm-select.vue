@@ -23,15 +23,12 @@
 			<option
 				v-for="option in options"
 				:key="option.id"
-				:value="option.id">
+				:value="option.originalId || option.id">
 				{{option.label}}
 			</option>
 		</select>
 
-
 	</div>
-
-
 </template>
 <script>
 

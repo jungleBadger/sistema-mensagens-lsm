@@ -27,15 +27,18 @@
 			aria-label="Tabela de Irmãos">
 
 			<lsm-table
+				:is-async-search-enabled="true"
 				:total-items-count="totalBrothersCount"
 				:items-per-page="pagination.limit"
 				:table-items="brothers"
 				:columns-data="tableColumns"
 				:is-async-loading="isLoading"
 				:handle-click="true"
-				sorting-direction="asc"
+				order-by="NOME_EXIBICAO"
+				order-direction="ASC"
 				@paginate="updatePagination"
-				@select="selectItem">
+				@select="selectItem"
+				@search="handleAsyncSearch">
 			</lsm-table>
 		</main>
 
@@ -73,7 +76,8 @@ export default defineComponent({
 	},
 	"data": function () {
 		return {
-
+			"asyncFilterColumn": "",
+			"asyncFilterText": ""
 		}
 	},
 	"computed": {
@@ -129,32 +133,56 @@ export default defineComponent({
 			)
 		},
 
-		updatePagination(value) {
-			this.pagination = value;
-		},
+
+
 		async loadBrothers() {
-			this.isLoading = true;
-			await Promise.all([
+			return await Promise.all([
 				this.$store.dispatch("brothers/retrieveTotalBrothersCount"),
 				this.$store.dispatch("brothers/retrieveBrothers")
 			]);
-			this.isLoading = false;
-			return true;
-		}
-	},
+		},
 
-	async mounted () {
-		await this.loadBrothers();
-	},
+		async searchBrothers() {
+			return await this.$store.dispatch(
+				"brothers/searchBrothers",
+				{
+					"filterColumn": this.asyncFilterColumn,
+					"filterText": this.asyncFilterText
+				}
+			);
+		},
 
-
-	"watch": {
-		async pagination() {
-			if (!this.isLoading) {
-				await this.loadBrothers();
+		async performRelevantQuery() {
+			if (this.isLoading) {
+				return false;
 			}
+			this.isLoading = true;
+			await (this.asyncFilterText ? this.searchBrothers() : this.loadBrothers());
+			this.isLoading = false;
+		},
 
+		updatePagination(value) {
+			this.pagination = value;
+			return this.performRelevantQuery();
+		},
+
+		handleAsyncSearch(value) {
+
+			this.asyncFilterColumn = value.filteringField;
+			this.asyncFilterText = value.filteringValue;
+			this.pagination = {
+				...this.pagination,
+				"skip": 0
+			};
+
+			return this.performRelevantQuery();
 		}
+	},
+
+	async created () {
+		this.isLoading = true;
+		await this.loadBrothers();
+		this.isLoading = false;
 	}
 });
 </script>

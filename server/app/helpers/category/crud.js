@@ -56,13 +56,12 @@ module.exports = {
 				)
 			};
 
-
 		} catch (e) {
 			console.log(e);
-			if (e && e.indexOf && e.indexOf("SQLSTATE=23505" > -1)) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
 					409,
-					`Irmao ${name} already exists.`
+					`Category ${name} already exists.`
 				);
 			} else {
 				throw e;
@@ -75,14 +74,66 @@ module.exports = {
 	 * @method retrieveTotalRowsCount
 	 * @return {Promise<Object|Error>} Containing all Category objects and request metadata.
 	 */
-	async retrieveTotalRowsCount() {
+	async retrieveTotalRowsCount () {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
-				`SELECT COUNT(ID) FROM ${TABLE_NAME};`,
+				`SELECT COUNT(ID)
+				 FROM ${TABLE_NAME};`,
 				[],
 				"fetch"
 			))["1"]
+		};
+	},
+
+	/**
+	 * Search categories.
+	 * @method search
+	 * @param {string} filterText - Filtering text.
+	 * @param {string} [filterColumn="NOME"] - Optional column selector to use in the SELECT statement.
+	 * @param {Array<string>} [extraFilterColumns=[]] - TBD.
+	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @return {Promise<object|Error>} Containing the deletion confirmation.
+	 */
+	async search (filterText, filterColumn = "NOME", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
+		if (!filterText) {
+			throw raiseError(
+				400,
+				"Missing required properties for searching Category."
+			);
+		}
+
+		let {
+			searchQuery,
+			countQuery
+		} = DBConnectionPool.buildSearchQuery(
+			targetColumns, TABLE_NAME, filterColumn, filterText, extraFilterColumns, orderBy, orderDirection, skip, limit
+		);
+
+		console.log(searchQuery);
+
+		let [results, countResults] = await Promise.all([
+			connectionPool.executeRawSqlInstruction(
+				searchQuery,
+				[]
+			),
+			connectionPool.executePreparedSqlInstruction(
+				countQuery,
+				[],
+				"fetch"
+			)
+		]);
+
+		return {
+			"offset": skip + results.length,
+			"orderBy": orderBy,
+			"orderDirection": orderDirection,
+			"totalCount": countResults["1"],
+			"results": results
 		};
 	},
 
@@ -96,10 +147,13 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all admin Users objects and request metadata.
 	 */
-	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
+	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}
+			 OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
 		);
 
 		return {
@@ -127,7 +181,10 @@ module.exports = {
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? LIMIT 1;`,
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 WHERE ${TABLE_NAME}.ID = ?
+			 LIMIT 1;`,
 			[categoryId]
 		);
 
@@ -159,7 +216,10 @@ module.exports = {
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.NOME_EXIBICAO = ? LIMIT 1;`,
+			`SELECT ${targetColumns.join(", ")}
+			 FROM ${TABLE_NAME}
+			 WHERE ${TABLE_NAME}.NOME = ?
+			 LIMIT 1;`,
 			[categoryName]
 		);
 
@@ -191,13 +251,25 @@ module.exports = {
 				"Missing required properties for updating Category by ID."
 			);
 		}
-
 		await this.retrieveById(categoryId);
 
-		await connectionPool.executePreparedSqlInstruction(
-			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.NOME = ? WHERE ${TABLE_NAME}.ID = ?;`,
-			[newName, categoryId]
-		);
+		try {
+			await connectionPool.executePreparedSqlInstruction(
+				`UPDATE ${TABLE_NAME}
+				 SET ${TABLE_NAME}.NOME = ?
+				 WHERE ${TABLE_NAME}.ID = ?;`,
+				[newName, categoryId]
+			);
+		} catch (e) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
+				throw raiseError(
+					409,
+					`Category ${newName} already exists.`
+				);
+			} else {
+				throw e;
+			}
+		}
 
 		return {
 			...(await logger.generateLog(
@@ -209,6 +281,7 @@ module.exports = {
 			)),
 			"NOME": newName
 		};
+
 	},
 
 	/**
@@ -228,18 +301,32 @@ module.exports = {
 			);
 		}
 
-		await connectionPool.executePreparedSqlInstruction(
-			`DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ?;`,
-			[categoryId]
-		);
+		try {
+			await connectionPool.executePreparedSqlInstruction(
+				`DELETE
+				 FROM ${TABLE_NAME}
+				 WHERE ${TABLE_NAME}.ID = ?;`,
+				[categoryId]
+			);
 
-		return await logger.generateLog(
-			"DELETE",
-			categoryId,
-			TABLE_NAME,
-			operator.email,
-			Number(operator.id)
-		);
+			return await logger.generateLog(
+				"DELETE",
+				categoryId,
+				TABLE_NAME,
+				operator.email,
+				Number(operator.id)
+			);
+		} catch (e) {
+			console.log(e);
+			if (e && e.indexOf && e.indexOf("EVENTO_CATEGORIA_ID_FK") > -1) {
+				throw raiseError(
+					409,
+					`This Category is a dependency of an Event.`
+				);
+			} else {
+				throw e;
+			}
+		}
 
 	}
 };
