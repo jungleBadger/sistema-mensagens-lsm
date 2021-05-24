@@ -177,13 +177,6 @@
 					[
 						tailwindcss(
 							{
-								"purge": {
-									"content": [
-										`./${modulePath}/src/index.ejs`,
-										`./${modulePath}/src/js/components/**/*.vue`,
-										"./_etc/shared_components/**/*.vue"
-									]
-								},
 								"options": {
 									"keyframes": true
 								},
@@ -195,7 +188,8 @@
 									"extend": {
 										"colors": {
 											"inherit": "inherit",
-											"litepie-primary": tailwindColors.lightBlue // color system for light mode
+											"litepie-primary": tailwindColors.lightBlue, // color system for light mode,
+											"litepie-secondary": tailwindColors.coolGray  // color system for light mode
 										}
 									}
 								},
@@ -220,7 +214,7 @@
 									`./${modulePath}/src/index.ejs`,
 									`./${modulePath}/src/js/components/**/*.vue`,
 									"./_etc/shared_components/**/*.vue",
-									"./node_modules/litepie-datepicker/**/*.js"
+									"./node_modules/litepie-datepicker/dist/*.js"
 								],
 								defaultExtractor (content) {
 									const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, "");
