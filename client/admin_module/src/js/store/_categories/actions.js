@@ -89,7 +89,7 @@ export default {
 
 	},
 
-	async retrieveCategories(context, params) {
+	async retrieveCategories(context, params = {}) {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 
 		try {
