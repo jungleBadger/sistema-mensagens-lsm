@@ -2,4 +2,4 @@
   synchronize:
       compress: true
       src: /root/project/
-      dest: /home/dcerag/app/web
+      dest: /app/lsm/web
