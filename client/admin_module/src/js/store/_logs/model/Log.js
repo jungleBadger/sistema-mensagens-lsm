@@ -9,7 +9,7 @@ export default class Log {
 		this.action = props.ACAO;
 		this.operator = props.OPERADOR_FANTASIA;
 		this.operatorId = props.OPERADOR_ID;
-		this.createdAt = new Date(props.CRIADO_EM + " UTC");
+		this.createdAt = new Date(props.CRIADO_EM );
 
 	}
 

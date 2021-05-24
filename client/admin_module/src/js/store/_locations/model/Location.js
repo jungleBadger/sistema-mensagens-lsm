@@ -8,6 +8,6 @@ export default class Location {
 		this.city = props.CIDADE || props.city;
 		this.description = props.DESCRICAO || props.description;
 		this.mnemonic = `${this.country} - ${this.state} - ${this.city}`;
-		this.createdAt = props.createdAt || new Date(props.CRIADO_EM + " UTC") ;
+		this.createdAt = props.createdAt || new Date(props.CRIADO_EM ) ;
 	}
 }

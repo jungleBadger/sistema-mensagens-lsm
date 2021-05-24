@@ -8,8 +8,8 @@ export default class AdminUser {
 		this.isAdmin = true;
 		this.isPasswordRegistered = props.SENHA_REGISTRADA || props.isPasswordRegistered;
 		this.isEmailConfirmed = props.EMAIL_CONFIRMADO || props.isEmailConfirmed;
-		this.createdAt = props.createdAt || new Date(props.CRIADO_EM + " UTC");
-		this.updatedAt = props.updatedAt || new Date(props.ATUALIZADO_EM + " UTC");
+		this.createdAt = props.createdAt || new Date(props.CRIADO_EM );
+		this.updatedAt = props.updatedAt || new Date(props.ATUALIZADO_EM );
 	}
 
 }
