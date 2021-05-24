@@ -88,7 +88,7 @@ export default defineComponent({
 	},
 	"computed": {
 		isFormInvalid () {
-			return !this.name || this.isDeleteLoading || !this.selectedCategory || (this.name === this.selectedCategory.name);
+			return !this.name || this.isDeleteLoading;
 		},
 
 		selectedCategory () {
