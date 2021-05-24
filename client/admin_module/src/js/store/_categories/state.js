@@ -20,7 +20,7 @@ export default {
 		{
 			"originalId": "CRIADO_EM",
 			"key": "createdAt",
-			"label": "Criada em",
+			"label": "Criado em",
 			"type": "date"
 		}
 	],

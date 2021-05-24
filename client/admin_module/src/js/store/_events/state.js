@@ -32,6 +32,12 @@ export default {
 			"originalId": "LOCALIDADE",
 			"key": "location",
 			"label": "Localidade"
+		},
+		{
+			"originalId": "CRIADO_EM",
+			"key": "createdAt",
+			"label": "Criado em",
+			"type": "date"
 		}
 	],
 	"selectedEvent": null

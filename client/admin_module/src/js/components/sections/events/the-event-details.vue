@@ -31,12 +31,13 @@
 				</div>
 
 
-				<div class="w-80 flex flex-col gap-1" :key="parsedDate">
+
+				<div class="w-80 flex flex-col gap-1">
 					<label class="text-gray-700 ">Período do evento</label>
 					<litepie-datepicker
 						v-model="datesStructure"
-						as-single
 						i18n="pt-br"
+						as-single
 						use-range>
 						<lsm-input
 							placeholder="Selecione data início e data fim"
