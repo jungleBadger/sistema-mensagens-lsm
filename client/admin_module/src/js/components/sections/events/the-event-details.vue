@@ -19,7 +19,7 @@
 
 
 			<div class="flex flex-col gap-2">
-				<div class="w-80 flex flex-col gap-1">
+				<div class="w-full md:w-80 flex flex-col gap-1">
 					<label class="text-gray-700 ">Título</label>
 
 					<lsm-text-area

@@ -16,7 +16,7 @@
 
 		<template v-slot:modal-content>
 
-			<div class="flex flex-col gap-2 w-full">
+			<div class="flex flex-col gap-2 w-full md:w-96">
 				<div class="w-full flex flex-col gap-1">
 					<label class="text-gray-700 ">País</label>
 					<lsm-select
@@ -46,7 +46,7 @@
 				</div>
 
 				<div class="w-full">
-					<div class="w-96 flex flex-col gap-1">
+					<div class="flex flex-col gap-1">
 						<label class="text-gray-700 ">Descrição - opcional</label>
 						<lsm-text-area
 							max-length="1024"

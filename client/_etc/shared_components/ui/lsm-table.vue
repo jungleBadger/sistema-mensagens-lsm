@@ -131,11 +131,11 @@
 							v-if="enableDeleteButton"
 							role="cell"
 							style="flex-basis: 80px;"
-							class="h-8 overflow-hidden overflow-ellipsis items-center justify-center">
+							class="h-9 md:h-8 overflow-hidden overflow-ellipsis items-center justify-end md:justify-center">
 							<span
 								class="hover-target">
 								<lsm-button
-									class="h-6"
+									class="h-8 md:h-6"
 									@click.stop="emitDeleteRequest(item)"
 									icon-only
 									kind="danger"

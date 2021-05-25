@@ -16,7 +16,7 @@
 
 		<template v-slot:modal-content>
 
-			<div class="w-80 flex flex-col gap-1">
+			<div class="w-full md:w-80 flex flex-col gap-1">
 				<label class="text-gray-700 ">Nome de exibição</label>
 
 				<lsm-text-area
