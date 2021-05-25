@@ -28,6 +28,7 @@ import { faBoxArchive } from "@fortawesome/pro-solid-svg-icons/faBoxArchive";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons/faCheck";
 import { faTrash } from "@fortawesome/pro-solid-svg-icons/faTrash";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons/faPlus";
+import { faTrashXmark } from "@fortawesome/pro-solid-svg-icons/faTrashXmark";
 
 
 import { faLock } from "@fortawesome/pro-solid-svg-icons/faLock";
@@ -64,6 +65,7 @@ library.add(
 	faTrash,
 	faPlus,
 	faEarthAmericas,
+	faTrashXmark,
 
 	faLock,
 	faSpinnerThird,

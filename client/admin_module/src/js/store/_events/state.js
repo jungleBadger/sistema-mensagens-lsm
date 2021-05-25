@@ -6,8 +6,8 @@ export default {
 	"pagination": {
 		"skip": 0,
 		"limit": 20,
-		"orderBy": "ID",
-		"orderDirection": "ASC"
+		"orderBy": "CRIADO_EM",
+		"orderDirection": "DESC"
 	},
 	"eventItems": [],
 	"tableColumns": [

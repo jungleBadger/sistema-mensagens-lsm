@@ -36,10 +36,12 @@
 				:columns-data="tableColumns"
 				:is-async-loading="isLoading"
 				:handle-click="true"
-				order-by="ID"
-				order-direction="ASC"
+				order-by="CRIADO_EM"
+				order-direction="DESC"
+				enable-delete-button
 				@paginate="updatePagination"
 				@select="selectItem"
+				@deleteRequest="openDeleteModal"
 				@search="handleAsyncSearch">
 			</lsm-table>
 		</main>
@@ -128,6 +130,18 @@ export default defineComponent({
 			this.$router.push(
 				{
 					"name": "app.events.details",
+					"params": {
+						"eventId": item.id
+					}
+				}
+			)
+		},
+
+		openDeleteModal(item) {
+			this.$store.commit("events/selectedEvent", item);
+			this.$router.push(
+				{
+					"name": "app.events.delete",
 					"params": {
 						"eventId": item.id
 					}

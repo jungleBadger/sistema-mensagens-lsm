@@ -6,40 +6,38 @@
 		<template v-slot:modal-header>
 			<h3 class="text-gray-800 text-lg font-semibold">
 				<template v-if="isDocumentExistent">
-					Editar Categoria {{ selectedCategory.id }}
-				</template>
-				<template v-else>
-					Criar nova Categoria
+					Remover Categoria {{ selectedCategory.id }}
 				</template>
 			</h3>
 		</template>
 
 		<template v-slot:modal-content>
 
-			<div class="w-80 flex flex-col gap-1">
-				<label class="text-gray-700 ">Nome de exibição</label>
-
-				<lsm-text-area
-					v-model="name"
+			<div class="w-96 flex flex-col gap-1">
+				<label class="text-gray-700 ">Confirme a operação digitando <span class="font-semibold">REMOVER</span> abaixo.</label>
+				<lsm-input
+					v-model="confirmString"
 					autofocus
-					max-length="512"
-					placeholder="Digite nome de exibição"
-					@keyup.enter="submitForm">
-				</lsm-text-area>
+					@keyup.enter="deleteItem"
+					placeholder="Digite o valor de confirmação.">
+				</lsm-input>
 			</div>
+
 		</template>
 
 		<template v-slot:modal-footer>
 			<div class="w-full h-9 flex items-center justify-end gap-4">
 				<lsm-button
+					v-if="isDocumentExistent"
 					:disabled="isFormInvalid"
 					:is-loading="isLoading"
-					class="w-24"
-					icon-id="check"
+					class="w-28 bg-red-400"
+					icon-id="trash"
 					icon-style="fas"
-					label="Salvar"
+					label="Remover"
 					role="button"
-					@click="submitForm">
+					kind="danger"
+					@click="deleteItem">
 				</lsm-button>
 			</div>
 
@@ -54,24 +52,24 @@ import { defineComponent } from "vue";
 
 import LsmModal from "../../../../../../_etc/shared_components/ui/lsm-modal.vue";
 import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button";
-import LsmTextArea from "../../../../../../_etc/shared_components/ui/lsm-text-area";
+import LsmInput from "../../../../../../_etc/shared_components/ui/lsm-input";
 
 export default defineComponent({
-	"name": "TheCategoryDetails",
+	"name": "TheCategoryDeleteConfirmation",
 	"components": {
-		LsmTextArea,
+		LsmInput,
 		LsmButton,
 		LsmModal
 	},
 	"data": function () {
 		return {
 			"isLoading": false,
-			"name": ""
+			"confirmString": ""
 		};
 	},
 	"computed": {
 		isFormInvalid () {
-			return !this.name;
+			return !this.confirmString || (this.confirmString.toUpperCase() !== "REMOVER");
 		},
 
 		selectedCategory () {
@@ -87,29 +85,16 @@ export default defineComponent({
 			return this.$router.push({ "name": "app.categories" });
 		},
 
-		async submitForm () {
+		async deleteItem() {
 			this.isLoading = true;
-
-			if (this.isDocumentExistent) {
-				await this.$store.dispatch("categories/updateCategory", {
-					"id": this.selectedCategory.id,
-					"name": this.name
-				});
-			} else {
-				await this.$store.dispatch("categories/createCategory", this.name);
-				await Promise.all([
-					this.$store.dispatch("categories/retrieveTotalCategoriesCount"),
-					this.$store.dispatch("categories/retrieveCategories")
-				]);
-			}
-
+			await this.$store.dispatch("categories/deleteCategory", this.selectedCategory.id);
 			this.isLoading = false;
 			return this.goToCategoriesHome();
 		}
 	},
 
 	async created () {
-		if (!this.selectedCategory && this.$route.params.categoryId !== "novo") {
+		if (!this.selectedCategory) {
 			this.isLoading = true;
 
 			let category = await this.$store.dispatch("categories/retrieveCategoryById", this.$route.params.categoryId);
@@ -120,15 +105,10 @@ export default defineComponent({
 					category
 				);
 			} else {
-				return await this.$router.replace({ "name": "app.categories" });
+				return await this.$router.replace({"name": "app.categories"});
 			}
 			this.isLoading = false;
 		}
-
-		if (this.selectedCategory) {
-			this.name = this.selectedCategory.name;
-		}
-
 	},
 
 	unmounted () {

@@ -25,8 +25,8 @@
 				</transition>
 			</router-view>
 
-			<lsm-toast-notification-container>s</lsm-toast-notification-container>
 		</main>
+		<lsm-toast-notification-container></lsm-toast-notification-container>
 	</section>
 
 

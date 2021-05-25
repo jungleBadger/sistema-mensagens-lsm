@@ -1,6 +1,7 @@
 <template>
 	<transition-group
-		class="absolute top-0 right-0 z-50 pt-3 pr-3"
+		style="z-index: 99;"
+		class="absolute top-0 right-0 pt-3 pr-3"
 		tag="aside"
 		:css="false"
 		@before-enter="prepareNotification"

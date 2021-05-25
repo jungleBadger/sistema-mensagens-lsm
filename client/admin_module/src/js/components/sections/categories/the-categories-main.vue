@@ -26,6 +26,7 @@
 			aria-label="Tabela de Irmãos">
 
 			<lsm-table
+				enable-delete-button
 				:is-async-search-enabled="true"
 				:total-items-count="totalCategoriesCount"
 				:items-per-page="pagination.limit"
@@ -37,6 +38,7 @@
 				order-direction="ASC"
 				@paginate="updatePagination"
 				@select="selectItem"
+				@deleteRequest="openDeleteModal"
 				@search="handleAsyncSearch">
 			</lsm-table>
 		</main>
@@ -126,6 +128,18 @@ export default defineComponent({
 			this.$router.push(
 				{
 					"name": "app.categories.details",
+					"params": {
+						"categoryId": item.id
+					}
+				}
+			)
+		},
+
+		openDeleteModal(item) {
+			this.$store.commit("categories/selectedCategory", item);
+			this.$router.push(
+				{
+					"name": "app.categories.delete",
 					"params": {
 						"categoryId": item.id
 					}

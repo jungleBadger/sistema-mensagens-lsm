@@ -65,18 +65,6 @@
 		<template v-slot:modal-footer>
 			<div class="w-full h-9 flex items-center justify-end gap-4">
 				<lsm-button
-					v-if="isDocumentExistent"
-					:disabled="isLoading"
-					:is-loading="isDeleteLoading"
-					class="w-24 bg-red-400"
-					icon-id="trash"
-					icon-style="fas"
-					label="Deletar"
-					role="button"
-					kind="danger"
-					@click="deleteItem">
-				</lsm-button>
-				<lsm-button
 					:disabled="isFormInvalid"
 					:is-loading="isLoading"
 					class="w-24"

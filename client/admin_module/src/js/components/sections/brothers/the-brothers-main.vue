@@ -36,7 +36,9 @@
 				:handle-click="true"
 				order-by="NOME_EXIBICAO"
 				order-direction="ASC"
+				enable-delete-button
 				@paginate="updatePagination"
+				@deleteRequest="openDeleteModal"
 				@select="selectItem"
 				@search="handleAsyncSearch">
 			</lsm-table>
@@ -133,7 +135,17 @@ export default defineComponent({
 			)
 		},
 
-
+		openDeleteModal(item) {
+			this.$store.commit("brothers/selectedBrother", item);
+			this.$router.push(
+				{
+					"name": "app.brothers.delete",
+					"params": {
+						"brotherId": item.id
+					}
+				}
+			)
+		},
 
 		async loadBrothers() {
 			return await Promise.all([

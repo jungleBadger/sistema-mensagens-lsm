@@ -37,7 +37,9 @@
 				:handle-click="true"
 				order-by="PAIS"
 				order-direction="ASC"
+				enable-delete-button
 				@paginate="updatePagination"
+				@deleteRequest="openDeleteModal"
 				@select="selectItem"
 				@search="handleAsyncSearch">
 			</lsm-table>
@@ -131,7 +133,19 @@ export default defineComponent({
 						"locationId": item.id
 					}
 				}
-			)
+			);
+		},
+
+		openDeleteModal(item) {
+			this.$store.commit("locations/selectedLocation", item);
+			this.$router.push(
+				{
+					"name": "app.locations.delete",
+					"params": {
+						"locationId": item.id
+					}
+				}
+			);
 		},
 
 		async loadLocations() {

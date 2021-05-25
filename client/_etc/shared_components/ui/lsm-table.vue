@@ -75,6 +75,13 @@
 
 						</button>
 
+						<span
+							v-if="enableDeleteButton"
+							role="columnheader"
+							style="flex-basis: 80px;"
+							class="flex items-center gap-1">
+							<span></span>
+						</span>
 
 					</div>
 				</div>
@@ -92,7 +99,7 @@
 						:is="handleClick ? 'button' : 'div'"
 						v-for="item in filteredData"
 						:key="item.id"
-						class="row-item max-w grid flex-col md:flex-row md:flex border-b-2 border-gray-300 md:border-b-0"
+						class="row-item max-w grid flex-col md:flex-row md:flex border-b-2 border-gray-300 md:border-b-0 hover-trigger"
 						@click="emitClick(item)"
 						:class="{'hover:bg-gray-200 active:bg-gray-300 cursor-pointer': handleClick}"
 						role="row">
@@ -119,6 +126,25 @@
 							</template>
 
 					  </span>
+
+						<span
+							v-if="enableDeleteButton"
+							role="cell"
+							style="flex-basis: 80px;"
+							class="h-8 overflow-hidden overflow-ellipsis items-center justify-center">
+							<span
+								class="hover-target">
+								<lsm-button
+									class="h-6"
+									@click.stop="emitDeleteRequest(item)"
+									icon-only
+									kind="danger"
+									icon-style="fas"
+									icon-id="trash-xmark"
+								></lsm-button>
+							</span>
+
+						</span>
 					</Component>
 				</transition-group>
 			</template>
@@ -225,15 +251,17 @@ import { useI18n } from "vue-i18n";
 import LsmInput from "./lsm-input.vue";
 import LsmSelect from "./lsm-select.vue";
 import LsmProgressBar from "./lsm-progress-bar";
+import LsmButton from "./lsm-button";
 
 export default defineComponent({
 	"name": "LsmTable",
 	"components": {
+		LsmButton,
 		LsmProgressBar,
 		LsmInput,
 		LsmSelect
 	},
-	"emits": ["paginate", "select", "search"],
+	"emits": ["paginate", "select", "search", "deleteRequest"],
 	"props": {
 
 		"id": {
@@ -312,6 +340,14 @@ export default defineComponent({
 				return "desc";
 			},
 			"validator": value => ["ASC", "DESC"].indexOf(value.toUpperCase()) !== -1
+		},
+
+		"enableDeleteButton": {
+			"type": Boolean,
+			"required": false,
+			"default": function () {
+				return false;
+			}
 		}
 
 	},
@@ -437,6 +473,10 @@ export default defineComponent({
 			this.filterText = "";
 		},
 
+		emitDeleteRequest(selectedItem) {
+			this.$emit("deleteRequest", selectedItem);
+		},
+
 		emitClick(selectedItem) {
 			if (this.handleClick) {
 				this.$emit("select", selectedItem);
@@ -531,6 +571,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
+
+.hover-trigger {
+	.hover-target {
+		display: none;
+	}
+
+	&:hover {
+		.hover-target {
+			display: block;
+		}
+
+	}
+}
 
 @media screen and (max-width: 768px) {
 	.row-item:last-child  {

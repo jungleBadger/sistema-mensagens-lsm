@@ -110,18 +110,6 @@
 		<template v-slot:modal-footer>
 			<div class="w-full h-9 flex items-center justify-end gap-4">
 				<lsm-button
-					v-if="isDocumentExistent"
-					:disabled="isLoading"
-					:is-loading="isDeleteLoading"
-					class="w-24 bg-red-400"
-					icon-id="trash"
-					icon-style="fas"
-					kind="danger"
-					label="Deletar"
-					role="button"
-					@click="deleteItem">
-				</lsm-button>
-				<lsm-button
 					:disabled="isFormInvalid"
 					:is-loading="isLoading"
 					class="w-24"
@@ -163,7 +151,6 @@ export default defineComponent({
 	"data": function () {
 		return {
 			"isLoading": false,
-			"isDeleteLoading": false,
 			"datesStructure": [],
 			"locationId": "",
 			"categoryId": "",
@@ -175,7 +162,7 @@ export default defineComponent({
 	},
 	"computed": {
 		isFormInvalid () {
-			return !this.title || this.isDeleteLoading;
+			return !this.title;
 		},
 
 		selectedEvent () {
@@ -217,15 +204,6 @@ export default defineComponent({
 		async submitForm () {
 			this.isLoading = true;
 
-			console.log({
-				"title": this.title,
-				"categoryId": this.categoryId,
-				"locationId": this.locationId,
-				"startDate": this.datesStructure[0],
-				"endDate": this.datesStructure[1],
-				"description": this.description
-			});
-
 			if (this.isDocumentExistent) {
 				await this.$store.dispatch("events/updateEvent", {
 					"id": this.selectedEvent.id,
@@ -252,13 +230,6 @@ export default defineComponent({
 			}
 
 			this.isLoading = false;
-			return this.goToEventsHome();
-		},
-
-		async deleteItem () {
-			this.isDeleteLoading = true;
-			await this.$store.dispatch("events/deleteEvent", this.selectedEvent.id);
-			this.isDeleteLoading = false;
 			return this.goToEventsHome();
 		}
 	},

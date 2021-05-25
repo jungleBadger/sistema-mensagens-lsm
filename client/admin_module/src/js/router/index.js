@@ -4,15 +4,19 @@ import { createRouter, createWebHistory } from "vue-router";
 import TheAppHome from "../components/core/the-app-home.vue";
 import TheBrothersMain from "../components/sections/brothers/the-brothers-main.vue";
 import TheBrotherDetails from "../components/sections/brothers/the-brother-details.vue";
+import TheBrotherDeleteConfirmation from "../components/sections/brothers/the-brother-delete-confirmation.vue";
 import TheCategoriesMain from "../components/sections/categories/the-categories-main.vue";
 import TheCategoryDetails from "../components/sections/categories/the-category-details.vue";
+import TheCategoryDeleteConfirmation from "../components/sections/categories/the-category-delete-confirmation.vue";
 import TheEventsMain from "../components/sections/events/the-events-main.vue";
 import TheEventDetails from "../components/sections/events/the-event-details.vue";
+import TheEventDeleteConfirmation from "../components/sections/events/the-event-delete-confirmation.vue";
 import TheUsersMain from "../components/sections/users/the-users-main.vue";
 import TheAdminUserDetails from "../components/sections/users/admin/the-admin-user-details.vue";
 import TheRegularUserDetails from "../components/sections/users/regular/the-regular-user-details.vue";
 import TheLocationsMain from "../components/sections/locations/the-locations-main.vue";
 import TheLocationDetails from "../components/sections/locations/the-location-details.vue";
+import TheLocationDeleteConfirmation from "../components/sections/locations/the-location-delete-confirmation.vue";
 import TheLogsMain from "../components/sections/logs/the-logs-main.vue";
 
 export default createRouter({
@@ -42,6 +46,13 @@ export default createRouter({
 					"component": TheBrotherDetails,
 					"meta": {
 					}
+				},
+				{
+					"name": "app.brothers.delete",
+					"path": "delete/:brotherId",
+					"component": TheBrotherDeleteConfirmation,
+					"meta": {
+					}
 				}
 			]
 		},
@@ -57,6 +68,13 @@ export default createRouter({
 					"name": "app.categories.details",
 					"path": ":categoryId",
 					"component": TheCategoryDetails,
+					"meta": {
+					}
+				},
+				{
+					"name": "app.categories.delete",
+					"path": "delete/:categoryId",
+					"component": TheCategoryDeleteConfirmation,
 					"meta": {
 					}
 				}
@@ -76,6 +94,13 @@ export default createRouter({
 					"component": TheLocationDetails,
 					"meta": {
 					}
+				},
+				{
+					"name": "app.locations.delete",
+					"path": "delete/:locationId",
+					"component": TheLocationDeleteConfirmation,
+					"meta": {
+					}
 				}
 			]
 		},
@@ -91,6 +116,13 @@ export default createRouter({
 					"name": "app.events.details",
 					"path": ":eventId",
 					"component": TheEventDetails,
+					"meta": {
+					}
+				},
+				{
+					"name": "app.events.delete",
+					"path": "delete/:eventId",
+					"component": TheEventDeleteConfirmation,
 					"meta": {
 					}
 				}
