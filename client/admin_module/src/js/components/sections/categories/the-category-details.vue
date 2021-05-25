@@ -46,7 +46,6 @@
 					kind="danger"
 					@click="deleteItem">
 				</lsm-button>
-
 				<lsm-button
 					:disabled="isFormInvalid"
 					:is-loading="isLoading"
@@ -147,7 +146,7 @@ export default defineComponent({
 			} else {
 				return await this.$router.replace({"name": "app.categories"});
 			}
-
+			this.isLoading = false;
 		}
 
 		if (this.selectedCategory) {
