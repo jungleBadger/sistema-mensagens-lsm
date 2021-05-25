@@ -8,7 +8,7 @@
 
 
 		<main
-			class="overflow-y-hidden flex-1 flex"
+			class="overflow-y-hidden flex-1 flex z-10"
 			style="background-color: #d7e8ef;">
 
 			<the-app-side-menu></the-app-side-menu>

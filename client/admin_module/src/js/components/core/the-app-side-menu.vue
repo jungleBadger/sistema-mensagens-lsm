@@ -1,12 +1,11 @@
 <template>
 	<nav
 		id="lsm-sidemenu"
-		class="bg-white flex flex-col w-12 shadow-sm z-30 bg-white backdrop-filter backdrop-blur-sm bg-opacity-50 md:bg-opacity-100 md:backdrop-filter-none md:backdrop-blur-0 md:bg-white"
+		style="z-index: 51;"
+		class="bg-white flex flex-col w-12 shadow-sm bg-white backdrop-filter backdrop-blur-sm bg-opacity-50 md:bg-opacity-100 md:backdrop-filter-none md:backdrop-blur-0 md:bg-white"
 		:class="{'__is-open': isSideMenuOpen}">
 
-
 		<ul class="flex-1 w-full h-full bg-inherit">
-
 			<router-link
 				class="flex items-baseline h-12 gap-1 cursor-pointer text-gray-600 bg-inherit hover:bg-blue-300 hover:text-gray-800 active:bg-blue-400 transition-colors"
 				title="Ir para o início"

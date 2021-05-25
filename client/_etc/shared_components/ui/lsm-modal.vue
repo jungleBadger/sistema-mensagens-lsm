@@ -3,10 +3,10 @@
 	<div
 		@keydown.esc="closeModal"
 		class="flex w-full max-h-full h-full items-center justify-center absolute left-0 top-0 border-0 m-0 p-0 w-full h-full
-		bg-opacity-50 bg-black z-50 p-4 md:p-8 backdrop-filter backdrop-blur-sm">
+		bg-opacity-50 bg-black z-50 md:p-4 2xl:p-8 backdrop-filter backdrop-blur-sm">
 		<div
 			v-bind="$attrs"
-			class="flex flex-col rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
+			class="flex flex-col md:rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
 
 			<header
 				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm">
