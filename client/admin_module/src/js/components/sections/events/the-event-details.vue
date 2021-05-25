@@ -22,12 +22,13 @@
 				<div class="w-80 flex flex-col gap-1">
 					<label class="text-gray-700 ">Título</label>
 
-					<lsm-input
+					<lsm-text-area
 						v-model="title"
 						autofocus
+						max-length="512"
 						placeholder="Digite o título">
 
-					</lsm-input>
+					</lsm-text-area>
 				</div>
 
 
@@ -90,12 +91,13 @@
 				</div>
 
 
-				<div class="w-80 flex flex-col gap-1 h-20 mb-4">
+				<div class="w-80 flex flex-col gap-1 mb-4">
 					<label class="text-gray-700 ">Descrição</label>
 
 					<lsm-text-area
 						v-model="description"
-						class="resize-none"
+						rows="4"
+						max-length="1024"
 						placeholder="Digite uma descrição">
 
 					</lsm-text-area>

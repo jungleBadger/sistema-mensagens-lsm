@@ -17,16 +17,17 @@
 		<template v-slot:modal-content>
 
 
-			<div class="w-80 flex flex-col gap-1 h-20">
+			<div class="w-80 flex flex-col gap-1">
 				<label class="text-gray-700 ">Nome de exibição</label>
 
-				<lsm-input
+				<lsm-text-area
 					v-model="name"
+					max-length="512"
 					@keyup.enter="submitForm"
 					autofocus
 					placeholder="Digite nome de exibição">
 
-				</lsm-input>
+				</lsm-text-area>
 			</div>
 
 		</template>
@@ -69,14 +70,14 @@
 import { defineComponent } from "vue";
 
 import LsmModal from "../../../../../../_etc/shared_components/ui/lsm-modal.vue";
-import LsmInput from "../../../../../../_etc/shared_components/ui/lsm-input";
 import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button";
+import LsmTextArea from "../../../../../../_etc/shared_components/ui/lsm-text-area";
 
 export default defineComponent({
 	"name": "TheCategoryDetails",
 	"components": {
+		LsmTextArea,
 		LsmButton,
-		LsmInput,
 		LsmModal
 	},
 	"data": function () {

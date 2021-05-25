@@ -49,6 +49,8 @@
 					<div class="w-96 flex flex-col gap-1">
 						<label class="text-gray-700 ">Descrição - opcional</label>
 						<lsm-text-area
+							max-length="1024"
+							rows="4"
 							v-model="description"
 							placeholder="Digite a descriçao da localidade">
 						</lsm-text-area>
