@@ -54,7 +54,7 @@ export default {
 		},
 
 		"maxLength": {
-			"type": Number,
+			"type": [Number, String],
 			"required": false,
 			"default": function() {
 				return null;
