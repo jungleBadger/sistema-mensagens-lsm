@@ -9,7 +9,7 @@
 			class="flex flex-col max-h-full md:rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
 
 			<header
-				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm">
+				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm z-20">
 				<slot name="modal-header">
 
 				</slot>
@@ -27,14 +27,14 @@
 				</button>
 			</header>
 
-			<main class="flex-1 flex p-2 bg-gray-100 w-full overflow-y-auto">
+			<main class="flex-1 flex p-2 bg-gray-100 w-full overflow-y-auto z-10">
 				<slot name="modal-content">
 
 				</slot>
 			</main>
 
 			<footer
-				class="w-full shadow-sm p-2"
+				class="w-full shadow-sm p-2 z-20"
 				style="flex-basis: 42px;">
 				<slot name="modal-footer">
 
