@@ -18,7 +18,10 @@
 				class="w-40 h-10 self-end"
 				icon-style="fas"
 				icon-id="plus"
-				@click="openCreateModal">
+				:href="{
+					'name': 'app.locations.details',
+					'params': {'locationId': 'novo'}
+				}">
 			</lsm-button>
 		</header>
 
@@ -112,17 +115,6 @@ export default defineComponent({
 		}
 	},
 	"methods": {
-
-		openCreateModal() {
-			this.$router.push(
-				{
-					"name": "app.locations.details",
-					"params": {
-						"locationId": "novo"
-					}
-				}
-			)
-		},
 
 		selectItem(item) {
 			this.$store.commit("locations/selectedLocation", item);

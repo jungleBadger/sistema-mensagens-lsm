@@ -16,7 +16,10 @@
 				class="w-40 h-10 self-end"
 				icon-style="fas"
 				icon-id="plus"
-				@click="openCreateModal">
+				:href="{
+					'name': 'app.categories.details',
+					'params': {'categoryId': 'novo'}
+				}">
 			</lsm-button>
 		</header>
 
@@ -111,17 +114,6 @@ export default defineComponent({
 		}
 	},
 	"methods": {
-
-		openCreateModal() {
-			this.$router.push(
-				{
-					"name": "app.categories.details",
-					"params": {
-						"categoryId": "novo"
-					}
-				}
-			)
-		},
 
 		selectItem(item) {
 			this.$store.commit("categories/selectedCategory", item);

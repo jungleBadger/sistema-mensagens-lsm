@@ -1,6 +1,8 @@
 <template>
 
-	<button
+	<Component
+		:is="href ? 'router-link' : 'button'"
+		:to="href"
 		v-bind="$attrs"
 		:aria-disabled="isLoading"
 		:class="{
@@ -32,7 +34,7 @@
 		</template>
 
 
-	</button>
+	</Component>
 
 
 </template>
@@ -88,6 +90,14 @@ export default {
 			},
 			"validator": value => ["regular", "danger"].indexOf(value) !== -1
 
+		},
+
+		"href": {
+			"type": [String, Object],
+			"required": false,
+			"default": function () {
+				return "";
+			}
 		}
 
 	}

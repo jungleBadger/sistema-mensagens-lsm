@@ -14,10 +14,13 @@
 
 			<lsm-button
 				label="Criar Irmão"
+				:href="	{
+					'name': 'app.brothers.details',
+					'params': {'brotherId': 'novo'}
+				}"
 				class="w-40 h-10 self-end"
 				icon-style="fas"
-				icon-id="plus"
-				@click="openCreateModal">
+				icon-id="plus">
 			</lsm-button>
 		</header>
 
@@ -111,17 +114,6 @@ export default defineComponent({
 		}
 	},
 	"methods": {
-
-		openCreateModal() {
-			this.$router.push(
-				{
-					"name": "app.brothers.details",
-					"params": {
-						"brotherId": "novo"
-					}
-				}
-			)
-		},
 
 		selectItem(item) {
 			this.$store.commit("brothers/selectedBrother", item);
