@@ -586,6 +586,11 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 768px) {
+	.hover-trigger {
+		.hover-target {
+			display: block;
+		}
+	}
 	.row-item:last-child  {
 		border-bottom: 0 !important;
 	}
