@@ -2,11 +2,11 @@
 
 	<div
 		@keydown.esc="closeModal"
-		class="flex w-full max-h-full h-full items-center justify-center absolute left-0 top-0 border-0 m-0 p-0 w-full h-full
+		class="flex w-full max-h-full h-full items-center justify-center absolute left-0 top-0 border-0 m-0 p-0 w-full h-full max-w-full overflow-x-auto
 		bg-opacity-50 bg-black z-50 md:p-4 2xl:p-8 backdrop-filter backdrop-blur-sm">
 		<div
 			v-bind="$attrs"
-			class="flex flex-col md:rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
+			class="flex flex-col max-h-full md:rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
 
 			<header
 				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm">
@@ -27,7 +27,7 @@
 				</button>
 			</header>
 
-			<main class="flex-1 flex p-2 bg-gray-100 w-full">
+			<main class="flex-1 flex p-2 bg-gray-100 w-full overflow-y-auto">
 				<slot name="modal-content">
 
 				</slot>
