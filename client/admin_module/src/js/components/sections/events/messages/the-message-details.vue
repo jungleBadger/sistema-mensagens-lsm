@@ -307,7 +307,7 @@ export default defineComponent({
 		},
 
 		"isFormInvalid": function () {
-			return !this.title || !this.currentOrder || !this.brotherId || !this.messageDate || (this.audioFile || this.audioFilePath);
+			return !this.title || !this.currentOrder || !this.brotherId || !this.messageDate || (!this.audioFile && !this.audioFilePath);
 		},
 
 		"selectedEvent": function () {
