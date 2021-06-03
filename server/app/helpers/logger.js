@@ -191,11 +191,13 @@ module.exports = {
 		}
 
 		return (
-			(await connectionPool.executePreparedSqlInstruction(
-			`SELECT REFERENCIA_ID FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.REFERENCIA_TABELA = ? AND ${TABLE_NAME}.ACAO = 'CREATE' ORDER BY REFERENCIA_ID DESC LIMIT 1;`,
-				[referenceTable],
-				"fetch"
-			)).REFERENCIA_ID || 0
+			(
+				(await connectionPool.executePreparedSqlInstruction(
+					`SELECT REFERENCIA_ID FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.REFERENCIA_TABELA = ? AND ${TABLE_NAME}.ACAO = 'CREATE' ORDER BY REFERENCIA_ID DESC LIMIT 1;`,
+					[referenceTable],
+					"fetch"
+				)) || {}
+			).REFERENCIA_ID || 0
 		);
 	},
 	/**
