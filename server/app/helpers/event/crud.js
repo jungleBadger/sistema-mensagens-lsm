@@ -33,7 +33,8 @@ module.exports = {
 			payload.startDate,
 			payload.endDate,
 			payload.categoryId,
-			payload.locationId
+			payload.locationId,
+			payload.description
 		);
 
 		const insertKeys = event.getKeys();
@@ -248,7 +249,8 @@ module.exports = {
 			payload.startDate,
 			payload.endDate,
 			payload.categoryId,
-			payload.locationId
+			payload.locationId,
+			payload.description
 		);
 
 		await this.retrieveById(eventId);
