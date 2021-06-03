@@ -63,7 +63,7 @@
 		"nodemon": "^2.0.7",
 		"nyc": "^15.1.0",
 		"replace": "^1.2.0",
-		"swagger-ui-dist": "^3.49.0",
+		"swagger-ui-dist": "^3.50.0",
 		"yargs-parser": "^20.2.7"
 	},
 	"author": "jungleBadger",
