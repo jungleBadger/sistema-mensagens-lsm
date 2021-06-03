@@ -2,7 +2,7 @@
 	"short": {
 		"year": "numeric",
 		"month": "short",
-		"day": "numeric"
+		"day": "2-digit"
 	},
 	"shortWithTime": {
 		"year": "numeric",
