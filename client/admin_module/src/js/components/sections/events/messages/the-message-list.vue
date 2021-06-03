@@ -2,7 +2,7 @@
 
 	<div>
 
-		<div class="w-full flex flex-col gap-1.5">
+		<div class="w-full flex flex-col gap-2">
 			<div class="flex gap-1 items-center flex-wrap">
 				<label class="flex-1 text-2xl text-gray-700 ">Mensagens</label>
 				<div class="flex gap-2 flex-wrap">
