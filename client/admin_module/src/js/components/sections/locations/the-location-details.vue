@@ -1,6 +1,6 @@
 <template>
 	<lsm-modal
-
+		:is-loading="isLoading"
 		@close="goToLocationsHome">
 
 		<template v-slot:modal-header>
@@ -16,7 +16,7 @@
 
 		<template v-slot:modal-content>
 
-			<div class="flex flex-col gap-2 w-full">
+			<div class="flex flex-col gap-2 w-full md:w-96">
 				<div class="w-full flex flex-col gap-1">
 					<label class="text-gray-700 ">País</label>
 					<lsm-select
@@ -46,9 +46,11 @@
 				</div>
 
 				<div class="w-full">
-					<div class="w-96 flex flex-col gap-1">
+					<div class="flex flex-col gap-1">
 						<label class="text-gray-700 ">Descrição - opcional</label>
 						<lsm-text-area
+							max-length="1024"
+							rows="4"
 							v-model="description"
 							placeholder="Digite a descriçao da localidade">
 						</lsm-text-area>
@@ -61,19 +63,14 @@
 		</template>
 
 		<template v-slot:modal-footer>
-			<div class="w-full h-9 flex items-center justify-end gap-4">
+			<div class="w-full h-9 flex items-center justify-end gap-2">
+
 				<lsm-button
-					v-if="isDocumentExistent"
-					:disabled="isLoading"
-					:is-loading="isDeleteLoading"
-					class="w-24 bg-red-400"
-					icon-id="trash"
-					icon-style="fas"
-					label="Deletar"
-					role="button"
-					kind="danger"
-					@click="deleteItem">
+					kind="tertiary"
+					label="Cancelar"
+					@click="goToLocationsHome">
 				</lsm-button>
+
 				<lsm-button
 					:disabled="isFormInvalid"
 					:is-loading="isLoading"

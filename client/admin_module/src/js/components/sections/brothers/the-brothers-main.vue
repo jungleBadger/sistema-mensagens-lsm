@@ -3,8 +3,8 @@
 		aria-label="Irmãos registrados no sistema"
 		class="w-full h-full overflow-hidden flex flex-col relative">
 
-		<header class="flex mb-3 pl-2 pr-2 pt-2 flex-col md:flex-row md:pl-0 md:pr-0 md:pt-2 gap-2">
-			<div class="flex flex-col gap-2 flex-1">
+		<header class="flex mb-3 pl-2 pr-2 pt-0 flex-col md:flex-row md:pl-0 md:pr-0  gap-2">
+			<div class="flex flex-col gap-0 flex-1">
 
 				<h3 class="text-2xl">Gerenciamento de Irmãos</h3>
 				<h4 class="text-l">
@@ -14,10 +14,13 @@
 
 			<lsm-button
 				label="Criar Irmão"
+				:href="	{
+					'name': 'app.brothers.details',
+					'params': {'brotherId': 'novo'}
+				}"
 				class="w-40 h-10 self-end"
 				icon-style="fas"
-				icon-id="plus"
-				@click="openCreateModal">
+				icon-id="plus">
 			</lsm-button>
 		</header>
 
@@ -36,7 +39,9 @@
 				:handle-click="true"
 				order-by="NOME_EXIBICAO"
 				order-direction="ASC"
+				enable-delete-button
 				@paginate="updatePagination"
+				@deleteRequest="openDeleteModal"
 				@select="selectItem"
 				@search="handleAsyncSearch">
 			</lsm-table>
@@ -110,17 +115,6 @@ export default defineComponent({
 	},
 	"methods": {
 
-		openCreateModal() {
-			this.$router.push(
-				{
-					"name": "app.brothers.details",
-					"params": {
-						"brotherId": "novo"
-					}
-				}
-			)
-		},
-
 		selectItem(item) {
 			this.$store.commit("brothers/selectedBrother", item);
 			this.$router.push(
@@ -133,7 +127,17 @@ export default defineComponent({
 			)
 		},
 
-
+		openDeleteModal(item) {
+			this.$store.commit("brothers/selectedBrother", item);
+			this.$router.push(
+				{
+					"name": "app.brothers.delete",
+					"params": {
+						"brotherId": item.id
+					}
+				}
+			)
+		},
 
 		async loadBrothers() {
 			return await Promise.all([

@@ -7,8 +7,8 @@
 			'bg-yellow-500 text-gray-800': notification.kind === 'warning',
 			'bg-red-600 text-white': notification.kind === 'error'
 		}"
-		style="min-width: 18rem; width: auto"
-		class="cursor-default bg-white h-auto p-1 rounded shadow-lg z-40 bg-opacity-90 mt-2 p-1.5 relative">
+		style="min-width: 18rem; width: auto; z-index: 99;"
+		class="cursor-default bg-white h-auto p-1 rounded shadow-lg bg-opacity-90 mt-2 p-1.5 relative">
 
 		<div class=" w-full h-full">
 			<button

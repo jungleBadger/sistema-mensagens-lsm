@@ -13,7 +13,6 @@ const connectionPool = new DBConnectionPool(
 
 const TABLE_NAME = "LOG_OPERACAO";
 
-
 module.exports = {
 
 	/**
@@ -57,7 +56,7 @@ module.exports = {
 	 * @method retrieveTotalRowsCount
 	 * @return {Promise<Object|Error>} Containing all Log objects and request metadata.
 	 */
-	async retrieveTotalRowsCount() {
+	async retrieveTotalRowsCount () {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
@@ -96,7 +95,6 @@ module.exports = {
 			targetColumns, TABLE_NAME, filterColumn, filterText, extraFilterColumns, orderBy, orderDirection, skip, limit
 		);
 
-
 		console.log(searchQuery);
 
 		let [results, countResults] = await Promise.all([
@@ -130,7 +128,7 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all Log objects and request metadata.
 	 */
-	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
+	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
 
 		let results = await connectionPool.executeRawSqlInstruction(
 			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY;`
@@ -176,6 +174,30 @@ module.exports = {
 		}
 
 	},
+
+	/**
+	 * Retrieves a single Log by ID.
+	 * @method retrieveLatestCreatedIdByReference
+	 * @param {string} referenceTable - Reference Table to search for.
+	 * @return {Promise<Object|Error>} Containing the Log object.
+	 */
+	async retrieveLatestCreatedIdByReference (referenceTable) {
+
+		if (!referenceTable) {
+			throw raiseError(
+				400,
+				"Missing required properties for querying Log by Reference table"
+			);
+		}
+
+		return (
+			(await connectionPool.executePreparedSqlInstruction(
+			`SELECT REFERENCIA_ID FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.REFERENCIA_TABELA = ? AND ${TABLE_NAME}.ACAO = 'CREATE' ORDER BY REFERENCIA_ID DESC LIMIT 1;`,
+				[referenceTable],
+				"fetch"
+			)).REFERENCIA_ID || 0
+		);
+	},
 	/**
 	 * Retrieves all Log from a given operator.
 	 * @method retrieveByOperatorId
@@ -185,7 +207,7 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Array<Object>|Error>} Containing the Log objects.
 	 */
-	async retrieveByOperatorId (operatorId, targetColumns = ["*"], orderBy = "ID", orderDirection= "DESC") {
+	async retrieveByOperatorId (operatorId, targetColumns = ["*"], orderBy = "ID", orderDirection = "DESC") {
 
 		if (!operatorId) {
 			throw raiseError(

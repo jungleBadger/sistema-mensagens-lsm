@@ -1,7 +1,8 @@
 <template>
 	<header
 		id="lsm-header"
-		class="bg-white w-full min-h-12 flex items-center justify-between min-h-12 shadow z-40">
+		style="z-index: 52;"
+		class="bg-white w-full min-h-12 flex items-center justify-between min-h-12 shadow">
 
 		<slot name="app-menu">
 			<button

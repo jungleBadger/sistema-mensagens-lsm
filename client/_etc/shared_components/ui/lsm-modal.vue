@@ -2,14 +2,14 @@
 
 	<div
 		@keydown.esc="closeModal"
-		class="flex w-full h-full items-center justify-center absolute left-0 top-0 border-0 m-0 p-0 w-full h-full
-		bg-opacity-50 bg-black z-50 p-4 md:p-8 backdrop-filter backdrop-blur-sm">
+		class="flex w-full h-full max-h-full max-w-full items-center justify-center fixed overflow-y-auto left-0 top-0 border-0 m-0 p-0
+		bg-opacity-50 bg-black z-50 md:p-12 backdrop-filter backdrop-blur-sm">
 		<div
 			v-bind="$attrs"
-			class="flex flex-col rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
+			class="flex flex-col max-h-full max-w-full md:rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
 
 			<header
-				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm">
+				class="w-full flex items-center gap-2 p-2 justify-between shadow-sm z-20">
 				<slot name="modal-header">
 
 				</slot>
@@ -27,15 +27,18 @@
 				</button>
 			</header>
 
-			<main class="flex-1 flex p-2 bg-gray-100 w-full">
+			<main
+				class="flex-1 flex p-2 bg-gray-100 w-full md:overflow-y-visible box">
+				<lsm-progress-bar v-if="isLoading"></lsm-progress-bar>
 				<slot name="modal-content">
 
 				</slot>
 			</main>
 
 			<footer
-				class="w-full shadow-sm p-2"
-				style="flex-basis: 42px;">
+
+				class="w-full shadow-sm p-2 z-10 bg-white"
+				style="flex-basis: 52px; min-height: 52px;">
 				<slot name="modal-footer">
 
 				</slot>
@@ -50,9 +53,11 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import fade from "../../shared_mixins/fade";
+import LsmProgressBar from "./lsm-progress-bar";
 
 export default {
 	"name": "LsmModal",
+	components: { LsmProgressBar },
 	"mixins": [
 		fade
 	],
@@ -65,6 +70,14 @@ export default {
 			"required": false,
 			"default": function () {
 				return uuidv4();
+			}
+		},
+
+		"isLoading": {
+			"type": Boolean,
+			"required": false,
+			"default": function () {
+				return false;
 			}
 		},
 

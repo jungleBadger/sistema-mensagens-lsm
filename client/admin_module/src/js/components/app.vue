@@ -8,12 +8,13 @@
 
 
 		<main
-			class="overflow-y-hidden flex-1 flex"
+			class="overflow-y-hidden flex-1 flex z-10"
 			style="background-color: #d7e8ef;">
 
 			<the-app-side-menu></the-app-side-menu>
 
 			<router-view
+				style="transform: translate(0);"
 				class="overflow-y-auto p-1 md:p-4 flex-1"
 				v-slot="{ Component }">
 				<transition
@@ -25,8 +26,8 @@
 				</transition>
 			</router-view>
 
-			<lsm-toast-notification-container>s</lsm-toast-notification-container>
 		</main>
+		<lsm-toast-notification-container></lsm-toast-notification-container>
 	</section>
 
 

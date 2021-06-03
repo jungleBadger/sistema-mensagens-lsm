@@ -158,6 +158,62 @@ class DBConnectionPool {
 		});
 	}
 
+	executeOperationsWithinTransaction(operations = []) {
+
+		console.log(operations);
+
+		return new Promise((resolve, reject) => {
+			this.pool.open(
+				this.connectionString,
+
+				(openErr, conn) => {
+
+					conn.beginTransaction((err) => {
+						if (err) {
+							return reject(`Error opening the transaction: ${openErr.message}`);
+						} else {
+
+							if (openErr) {
+								return reject(`Error opening the DB connection: ${openErr.message}`);
+							} else {
+
+								try {
+
+									console.log("akiii");
+									let r = operations.map(operation => conn.querySync(operation));
+									console.log(r);
+									conn.commitTransaction((commitErr) => {
+
+										if (commitErr) {
+											conn.rollbackTransaction(() => {
+												return reject(`Error commiting transaction: ${commitErr.message}`);
+											});
+										} else {
+											console.log("xxxxx");
+											return resolve(true);
+										}
+
+									});
+
+								} catch (e) {
+									conn.rollbackTransaction(() => {
+										return reject(`Error querying the database: ${e.message}`);
+									});
+
+								}
+
+							}
+
+						}
+					});
+
+
+
+				}
+			);
+		});
+	}
+
 }
 
 module.exports = DBConnectionPool;

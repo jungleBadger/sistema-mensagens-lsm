@@ -8,6 +8,7 @@ const authHandler = require("./partials/auth/_index");
 const brotherHandler = require("./partials/brother/_index");
 const categoryHandler = require("./partials/category/_index");
 const eventHandler = require("./partials/event/_index");
+const messageHandler = require("./partials/message/_index");
 const googleHandler = require("./partials/google/_index");
 const mainHandler = require("./partials/mainHandler");
 const regularUserHandler = require("./partials/user/_index");
@@ -123,6 +124,10 @@ module.exports = function (app) {
 
 	app.use(
 		eventHandler
+	);
+
+	app.use(
+		messageHandler
 	);
 
 	app.use(

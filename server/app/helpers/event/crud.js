@@ -11,8 +11,6 @@ const connectionPool = new DBConnectionPool(
 	process.env.DB2_PASSWORD
 );
 
-
-
 const TABLE_NAME = "EVENTO";
 const logger = require("../logger");
 
@@ -61,7 +59,6 @@ module.exports = {
 				)
 			};
 
-
 		} catch (e) {
 			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
 				throw raiseError(
@@ -79,7 +76,7 @@ module.exports = {
 	 * @method retrieveTotalRowsCount
 	 * @return {Promise<Object|Error>} Containing all Brother objects and request metadata.
 	 */
-	async retrieveTotalRowsCount() {
+	async retrieveTotalRowsCount () {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
@@ -103,7 +100,7 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<object|Error>} Containing the deletion confirmation.
 	 */
-	async search (filterText, filterColumn = "TITULO", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
+	async search (filterText, filterColumn = "TITULO", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
 		if (!filterText) {
 			throw raiseError(
 				400,
@@ -111,21 +108,41 @@ module.exports = {
 			);
 		}
 
-		//@ TODO Rework search query to consider joined tables
-		let {
-			searchQuery,
-			countQuery
-		} = DBConnectionPool.buildSearchQuery(
-			targetColumns, TABLE_NAME, filterColumn, filterText, extraFilterColumns, orderBy, orderDirection, skip, limit
-		);
-
 		let [results, countResults] = await Promise.all([
 			connectionPool.executeRawSqlInstruction(
-				searchQuery,
+				[
+					`SELECT ${targetColumns.map(column => `${column}`).join(", ")},`,
+					"COUNT(M.ID) AS TOTAL_MENSAGENS,",
+					"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO) AS LOCALIDADE",
+					`FROM (
+					${TABLE_NAME}
+					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
+					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
+			)`,
+					`WHERE LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
+					`LOWER((L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)) LIKE LOWER('%${filterText}%')`,
+					extraFilterColumns.map((column) => `OR LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" "),
+					`GROUP BY ${targetColumns.map(column => `${column}`).join(", ")},`,
+					"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)",
+					`ORDER BY ${orderBy} ${orderDirection}`,
+					`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
+					";"
+				].join(" "),
 				[]
 			),
 			connectionPool.executePreparedSqlInstruction(
-				countQuery,
+				[
+					`SELECT COUNT(EVENTO.ID)`,
+					`FROM (
+					${TABLE_NAME}
+					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
+					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
+			)`,
+					`WHERE LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
+					`LOWER((L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)) LIKE LOWER('%${filterText}%')`,
+					extraFilterColumns.map((column) => `OR LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" "),
+					";"
+				].join(" "),
 				[],
 				"fetch"
 			)
@@ -150,14 +167,20 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all admin Users objects and request metadata.
 	 */
-	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
-
+	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
 		let results = await connectionPool.executeRawSqlInstruction(
 			[
 				`SELECT ${targetColumns.map(column => `${TABLE_NAME}.${column}`).join(", ")},`,
+				"COUNT(M.ID) AS TOTAL_MENSAGENS,",
 				"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO) AS LOCALIDADE",
-				`FROM ${TABLE_NAME} JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID`,
-				`ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}`,
+				`FROM (
+					${TABLE_NAME}
+					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
+					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
+				)`,
+				`GROUP BY ${targetColumns.map(column => `${TABLE_NAME}.${column}`).join(", ")},`,
+				"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)",
+				`ORDER BY ${orderBy} ${orderDirection}`,
 				`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
 				";"
 			].join(" ")
@@ -230,11 +253,10 @@ module.exports = {
 
 		await this.retrieveById(eventId);
 
-
 		try {
 			await connectionPool.executePreparedSqlInstruction(
-				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.TITULO = ?, ${TABLE_NAME}.DATA_INICIO = ?, ${TABLE_NAME}.DATA_FIM = ?, ${TABLE_NAME}.CATEGORIA_ID = ?, ${TABLE_NAME}.LOCALIDADE_ID = ? WHERE ${TABLE_NAME}.ID = ? `,
-				[updatedEvent.model.TITULO, updatedEvent.model.DATA_INICIO, updatedEvent.model.DATA_FIM, updatedEvent.model.CATEGORIA_ID,  updatedEvent.model.LOCALIDADE_ID, eventId]
+				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.TITULO = ?, ${TABLE_NAME}.DATA_INICIO = ?, ${TABLE_NAME}.DATA_FIM = ?, ${TABLE_NAME}.CATEGORIA_ID = ?, ${TABLE_NAME}.LOCALIDADE_ID = ?, ${TABLE_NAME}.ATUALIZADO_EM = ? WHERE ${TABLE_NAME}.ID = ? `,
+				[updatedEvent.model.TITULO, updatedEvent.model.DATA_INICIO, updatedEvent.model.DATA_FIM, updatedEvent.model.CATEGORIA_ID, updatedEvent.model.LOCALIDADE_ID, updatedEvent.model.ATUALIZADO_EM, eventId]
 			);
 		} catch (e) {
 			console.log(e);
@@ -251,8 +273,6 @@ module.exports = {
 			)),
 			...(updatedEvent.model)
 		};
-
-
 
 	},
 
@@ -286,7 +306,6 @@ module.exports = {
 			Number(operator.id)
 		);
 
-	},
-
+	}
 
 };

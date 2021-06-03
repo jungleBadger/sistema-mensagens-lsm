@@ -3,19 +3,28 @@
 	<div
 		class="max-w-full relative"
 		:key="id">
-		<label class="flex items-center">
+
+
+
+
+
+
+
+
+
+		<label class="flex gap-2 h-10 items-center cursor-pointer hover:bg-gray-200 p-1">
 			<input
 				ref="input"
 				v-bind="$attrs"
 				:id="id"
 				type="checkbox"
-				class="form-checkbox rounded-none border border-gray-300
+				class="h-full cursor-pointer rounded-sm w-10 shadow-sm form-checkbox rounded-none border border-gray-300
 			 focus:outline-none focus:ring-indigo-500
 			focus:border-indigo-500 focus:z-10 sm:text-sm"
 				:value="modelValue"
 				:checked="modelValue"
 				@change="() => $emit('update:modelValue', !modelValue)">
-			<span class="ml-2">{{label}}</span>
+			<span>{{label}}</span>
 		</label>
 
 	</div>
