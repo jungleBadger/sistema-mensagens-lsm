@@ -1,129 +1,177 @@
 <template>
-	<lsm-modal
+	<aside
+		class="w-full h-full absolute left-0 top-0 border-0 m-0 p-0 z-50">
+		<lsm-modal
+			:is-loading="isLoading"
+			class="h-auto"
+			@close="goToEventsHome">
 
-		class="md:w-4/6 h-auto"
-		@close="goToEventsHome">
+			<template v-slot:modal-header>
+				<h3 class="text-gray-800 text-lg font-semibold">
+					<template v-if="isDocumentExistent">
+						Editar Evento {{ selectedEvent.id }}
+					</template>
+					<template v-else>
+						Criar novo Evento
+					</template>
+				</h3>
+			</template>
 
-		<template v-slot:modal-header>
-			<h3 class="text-gray-800 text-lg font-semibold">
-				<template v-if="isDocumentExistent">
-					Editar Evento {{ selectedEvent.id }}
-				</template>
-				<template v-else>
-					Criar novo Evento
-				</template>
-			</h3>
-		</template>
+			<template v-slot:modal-content>
 
-		<template v-slot:modal-content>
+				<div
+					class="w-full flex flex-col lg:flex-row divide-y divide-x-0 lg:divide-y-0 lg:divide-x overflow-hidden gap-2">
 
+					<div class="flex flex-col pr-2 gap-2">
+						<div class="w-full md:w-80 flex flex-col gap-1">
+							<label class="text-gray-700 ">Título</label>
 
-			<div class="flex flex-col gap-2">
-				<div class="w-full md:w-80 flex flex-col gap-1">
-					<label class="text-gray-700 ">Título</label>
+							<lsm-text-area
+								v-model="title"
+								autofocus
+								max-length="512"
+								placeholder="Digite o título">
 
-					<lsm-text-area
-						v-model="title"
-						autofocus
-						max-length="512"
-						placeholder="Digite o título">
-
-					</lsm-text-area>
-				</div>
-
-
-
-				<div class="w-80 flex flex-col gap-1">
-					<label class="text-gray-700 ">Período do evento</label>
-					<litepie-datepicker
-						v-model="datesStructure"
-						i18n="pt-br"
-						as-single
-						use-range>
-						<lsm-input
-							placeholder="Selecione data início e data fim"
-							:model-value="parsedDate"></lsm-input>
-					</litepie-datepicker>
-				</div>
-
-				<div class="flex flex-col gap-1">
-					<label class="text-gray-700 ">Localidade</label>
-					<div class="flex gap-1 flex-wrap">
-						<div class="w-80">
-							<lsm-select
-								v-model="locationId"
-								:options="locations">
-
-							</lsm-select>
+							</lsm-text-area>
 						</div>
 
-						<router-link
-							:to="{'name': 'app.locations'}"
-							class="group relative py-2 px-4 border flex justify-center items-center
-							text-blue-600 border w-44 hover:bg-gray-300 active:bg-gray-400 transition-colors
-	text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
-	focus:ring-indigo-500 transition-colors">Gerenciar localidades
-						</router-link>
+
+						<div class="w-full md:w-80 flex flex-col gap-1">
+							<label class="text-gray-700 ">Período do evento</label>
+							<litepie-datepicker
+								v-model="datesStructure"
+								as-single
+								i18n="pt-br"
+								use-range>
+								<lsm-input
+									:model-value="parsedDate"
+									placeholder="Selecione data início e data fim"></lsm-input>
+							</litepie-datepicker>
+						</div>
+
+						<div class="flex flex-col gap-1">
+							<label class="text-gray-700 ">Localidade</label>
+							<div class="flex gap-2 flex-wrap">
+								<div class="w-80">
+									<lsm-select
+										v-model="locationId"
+										:options="locations">
+									</lsm-select>
+								</div>
+
+
+								<router-link
+									:to="{'name': 'app.locations'}"
+									class="h-10 group relative py-2 px-2 border flex justify-between items-center
+									text-blue-600 border w-44 hover:bg-gray-300 active:bg-gray-400 transition-colors
+									text-sm font-medium rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2
+									focus:ring-indigo-500 transition-colors">
+									<span>
+										Gerenciar localidades
+									</span>
+									<font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
+								</router-link>
+
+							</div>
+
+						</div>
+
+
+						<div class="flex flex-col gap-1">
+							<label class="text-gray-700 ">Categoria</label>
+							<div class="flex gap-2 flex-wrap">
+								<div class="w-80">
+									<lsm-select
+										v-model="categoryId"
+										:options="categories">
+
+									</lsm-select>
+								</div>
+
+								<router-link
+									:to="{'name': 'app.categories'}"
+									class="h-10 group relative py-2 px-2 border flex justify-between items-center
+									text-blue-600 border w-44 hover:bg-gray-300 active:bg-gray-400 transition-colors
+									text-sm font-medium rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2
+									focus:ring-indigo-500 transition-colors">
+									<span>
+										Gerenciar categorias
+									</span>
+									<font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
+								</router-link>
+							</div>
+						</div>
+
+
+						<div class="w-full md:w-80 flex flex-col gap-1">
+							<label class="text-gray-700 ">Descrição</label>
+
+							<lsm-text-area
+								v-model="description"
+								max-length="1024"
+								placeholder="Digite uma descrição"
+								rows="4">
+
+							</lsm-text-area>
+						</div>
+					</div>
+
+
+					<div
+						v-if="selectedEvent"
+						class="flex-1 pl-2 overflow-auto">
+
+
+						<the-message-list
+							:event-id="selectedEvent.id"
+						></the-message-list>
+
 					</div>
 
 				</div>
 
 
-				<div class="flex flex-col gap-1">
-					<label class="text-gray-700 ">Categoria</label>
-					<div class="flex gap-1 flex-wrap">
-						<div class="w-80">
-							<lsm-select
-								v-model="categoryId"
-								:options="categories">
+			</template>
 
-							</lsm-select>
-						</div>
+			<template v-slot:modal-footer>
+				<div class="w-full h-9 flex items-center justify-end gap-2">
 
-						<router-link
-							:to="{'name': 'app.categories'}"
-							class="group relative py-2 px-4 border flex justify-center items-center w-44 hover:bg-gray-300 active:bg-gray-400 transition-colors
-							text-blue-600 border text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
-	focus:ring-indigo-500 transition-colors">Gerenciar categorias
-						</router-link>
-					</div>
+					<lsm-button
+						kind="tertiary"
+						label="Cancelar"
+						@click="goToEventsHome">
+					</lsm-button>
 
+					<lsm-button
+						:disabled="isFormInvalid"
+						:is-loading="isLoading"
+						class="w-24"
+						icon-id="check"
+						icon-style="fas"
+						label="Salvar"
+						role="button"
+						@click="submitForm">
+					</lsm-button>
 				</div>
 
+			</template>
 
-				<div class="w-80 flex flex-col gap-1 mb-4">
-					<label class="text-gray-700 ">Descrição</label>
+		</lsm-modal>
 
-					<lsm-text-area
-						v-model="description"
-						rows="4"
-						max-length="1024"
-						placeholder="Digite uma descrição">
+		<router-view
+			v-slot="{ Component }">
+			<transition
+				:css="false"
+				mode="out-in"
+				@enter="fadeIn"
+				@leave="fadeOut">
+				<component :is="Component"/>
+			</transition>
+		</router-view>
 
-					</lsm-text-area>
-				</div>
-			</div>
+	</aside>
 
 
-		</template>
-
-		<template v-slot:modal-footer>
-			<div class="w-full h-9 flex items-center justify-end gap-4">
-				<lsm-button
-					:disabled="isFormInvalid"
-					:is-loading="isLoading"
-					class="w-24"
-					icon-id="check"
-					icon-style="fas"
-					label="Salvar"
-					role="button"
-					@click="submitForm">
-				</lsm-button>
-			</div>
-
-		</template>
-
-	</lsm-modal>
 </template>
 <script type="text/javascript">
 
@@ -137,10 +185,16 @@ import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button";
 import LsmTextArea from "../../../../../../_etc/shared_components/ui/lsm-text-area";
 import LsmSelect from "../../../../../../_etc/shared_components/ui/lsm-select";
 import dayjs from "dayjs";
+import TheMessageList from "./messages/the-message-list";
+import fade from "../../../../../../_etc/shared_mixins/fade";
 
 export default defineComponent({
 	"name": "TheEventDetails",
+	"mixins": [
+		fade
+	],
 	"components": {
+		TheMessageList,
 		LsmSelect,
 		LitepieDatepicker,
 		LsmTextArea,
@@ -194,9 +248,6 @@ export default defineComponent({
 		}
 	},
 	"methods": {
-		test (ev) {
-			console.log(ev);
-		},
 		goToEventsHome () {
 			return this.$router.push({ "name": "app.events" });
 		},
@@ -210,8 +261,8 @@ export default defineComponent({
 					"title": this.title,
 					"categoryId": this.categoryId,
 					"locationId": this.locationId,
-					"startDate": this.datesStructure[0],
-					"endDate": this.datesStructure[1],
+					"startDate": dayjs(this.datesStructure[0]).startOf("day"),
+					"endDate": dayjs(this.datesStructure[1]).endOf("day"),
 					"description": this.description
 				});
 			} else {
@@ -219,8 +270,8 @@ export default defineComponent({
 					"title": this.title,
 					"categoryId": this.categoryId,
 					"locationId": this.locationId,
-					"startDate": this.datesStructure[0],
-					"endDate": this.datesStructure[1],
+					"startDate": dayjs(this.datesStructure[0]).startOf("day"),
+					"endDate": dayjs(this.datesStructure[1]).endOf("day"),
 					"description": this.description
 				});
 				await Promise.all([
@@ -251,8 +302,14 @@ export default defineComponent({
 		}
 
 		await Promise.all([
-			this.$store.dispatch("locations/retrieveLocations", {"skip": 0, "limit": 100}),
-			this.$store.dispatch("categories/retrieveCategories", {"skip": 0, "limit": 100})
+			this.$store.dispatch("locations/retrieveLocations", {
+				"skip": 0,
+				"limit": 100
+			}),
+			this.$store.dispatch("categories/retrieveCategories", {
+				"skip": 0,
+				"limit": 100
+			})
 		]);
 
 		if (this.selectedEvent) {

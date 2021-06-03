@@ -14,6 +14,7 @@
 			<the-app-side-menu></the-app-side-menu>
 
 			<router-view
+				style="transform: translate(0);"
 				class="overflow-y-auto p-1 md:p-4 flex-1"
 				v-slot="{ Component }">
 				<transition

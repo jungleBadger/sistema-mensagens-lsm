@@ -6,14 +6,14 @@
 
 		<!--			@SECTION TABLE FILTERS -->
 
-		<header class="bg-gray-100 flex gap-2 items-center shadow z-20 p-2 flex-wrap">
+		<header class="bg-gray-300 flex gap-1.5 items-center shadow z-20 p-1.5 flex-wrap">
 
 			<div class="w-full md:w-48">
 				<lsm-select
 					v-model="selectedFilteringField"
+					:disabled="isAsyncLoading"
 					:model-value="selectedFilteringField"
 					:options="filteringFields"
-					:disabled="isAsyncLoading"
 					label="Selecione um campo para filtrar a tabela.">
 				</lsm-select>
 
@@ -24,12 +24,11 @@
 				style="min-width: 240px;">
 				<lsm-input
 					v-model="filterText"
-					autofocus
 					:placeholder="isAsyncSearchEnabled ? 'Digite 03 caracteres ou mais para buscar.' : 'Digite para filtrar a tabela.'"
+					autofocus
 					type="search">
 				</lsm-input>
 			</div>
-
 
 
 		</header>
@@ -56,16 +55,16 @@
 							:key="column.key"
 							:aria-label="column.label"
 							:style="{'flex-basis': column.size || 'auto'}"
-							@click="changeSortingOptions(column.originalId || column.key, selectedSortingDirectionCode === 'ASC' ? 'DESC' : 'ASC')"
 							class="flex-1 flex items-center gap-1 hover:bg-gray-200 transition-colors"
-							role="columnheader">
+							role="columnheader"
+							@click="changeSortingOptions(column.originalId || column.key, selectedSortingDirectionCode === 'ASC' ? 'DESC' : 'ASC')">
 
 							<template v-if="selectedSortingField === (column.originalId || column.key)">
 								<template v-if="selectedSortingDirectionCode === 'ASC'">
-									<font-awesome-icon :icon="['fal', 'arrow-up-short-wide']" />
+									<font-awesome-icon :icon="['fal', 'arrow-up-short-wide']"/>
 								</template>
 								<template v-else>
-									<font-awesome-icon :icon="['fal', 'arrow-down-short-wide']" />
+									<font-awesome-icon :icon="['fal', 'arrow-down-short-wide']"/>
 								</template>
 
 							</template>
@@ -77,9 +76,9 @@
 
 						<span
 							v-if="enableDeleteButton"
+							class="flex items-center gap-1"
 							role="columnheader"
-							style="flex-basis: 80px;"
-							class="flex items-center gap-1">
+							style="flex-basis: 80px;">
 							<span></span>
 						</span>
 
@@ -99,48 +98,51 @@
 						:is="handleClick ? 'button' : 'div'"
 						v-for="item in filteredData"
 						:key="item.id"
-						class="row-item max-w grid flex-col md:flex-row md:flex border-b-2 border-gray-300 md:border-b-0 hover-trigger"
-						@click="emitClick(item)"
 						:class="{'hover:bg-gray-200 active:bg-gray-300 cursor-pointer': handleClick}"
-						role="row">
-
-					 <span
-						 v-for="column in columnsData"
-						 :key="column.key"
-						 :aria-labelledby="`th-${column.key}`"
-						 :style="{'flex-basis': column.size || 'auto'}"
-						 class="flex-1 h-8 overflow-hidden overflow-ellipsis ml-0.5"
-						 role="cell">
+						class="row-item max-w grid flex-col md:flex-row md:flex border-b-2 border-gray-300 md:border-b-0 hover-trigger"
+						role="row"
+						@click="emitClick(item)">
+						<span
+							v-for="column in columnsData"
+							:key="column.key"
+							:aria-labelledby="`th-${column.key}`"
+							:title="item[column.key] || 'Vazio'"
+							:style="{'flex-basis': column.size || 'auto'}"
+							class="flex-1 h-8 overflow-hidden overflow-ellipsis ml-0.5"
+							role="cell">
 							<template v-if="column.type === 'date' ">
-
 								<i18n-d
-									tag="span"
-									locale="pt"
-									format="shortWithTime"
 									:value="item[column.key]"
+									:format="column.parser ? column.parser : 'shortWithTime'"
+									locale="pt"
+									tag="span"
 								></i18n-d>
 
 							</template>
-							<template v-else>
-								{{ item[column.key]  || "-" }}
+							<template v-else-if="column.type === 'boolean' ">
+									<font-awesome-icon :icon="['fal', item[column.key] ? 'check' : 'xmark']"></font-awesome-icon>
 							</template>
-
-					  </span>
+							<template
+								v-else>
+								{{ item[column.key] || "-" }}
+							</template>
+						</span>
 
 						<span
 							v-if="enableDeleteButton"
+							class="h-9 md:h-8 overflow-hidden overflow-ellipsis items-center justify-end md:justify-center"
 							role="cell"
-							style="flex-basis: 80px;"
-							class="h-9 md:h-8 overflow-hidden overflow-ellipsis items-center justify-end md:justify-center">
+							style="flex-basis: 80px;">
 							<span
-								class="hover-target">
+								class="hover-target h-full items-center justify-center">
 								<lsm-button
 									class="h-8 md:h-6"
-									@click.stop="emitDeleteRequest(item)"
-									icon-only
-									kind="danger"
-									icon-style="fas"
+									style="min-width:unset;"
 									icon-id="trash-xmark"
+									icon-only
+									icon-style="fas"
+									kind="danger"
+									@click.stop="emitDeleteRequest(item)"
 								></lsm-button>
 							</span>
 
@@ -150,13 +152,14 @@
 			</template>
 			<template v-else>
 				<div
-					class="bg-white pl-2 pr-2 pb-4 pt-4"
-					:key="'empty-container'">
+					:key="'empty-container'"
+					class="bg-white pl-2 pr-2 pb-4 pt-4">
 					<template v-if="isAsyncLoading">
 						Carregando dados...
 					</template>
 					<template v-else-if="filterText">
-						Nenhum item encontrado aplicando os filtros selecionados. <button @click="resetFilters" class="text-blue-500 ml-2">Limpar filtros</button>
+						Nenhum item encontrado aplicando os filtros selecionados.
+						<button class="text-blue-500 ml-2" @click="resetFilters">Limpar filtros</button>
 					</template>
 					<template v-else>
 						Tabela sem items. As razões podem variar, mas nenhum resultado foi encontrado pelo sistema.
@@ -167,10 +170,8 @@
 		</div>
 
 
-
-
 		<!--			@SECTION TABLE FOOTER -->
-		<footer class="bg-gray-100 flex justify-between gap-2 items-center shadow z-10 p-2 flex-wrap">
+		<footer class="bg-gray-300 flex justify-between gap-1.5 items-center shadow z-10 p-1.5 flex-wrap text-sm">
 
 
 			<div class="flex flex-1 gap-4">
@@ -178,22 +179,22 @@
 					<label>Itens por página</label>
 					<div class="w-16">
 						<lsm-select
+							:disabled="isAsyncLoading"
 							:model-value="itemsPerPage"
 							:options="itemsPerPageOptions"
-							:disabled="isAsyncLoading"
 							label="Quantidade de itens por página:"
 							@change="updateItemsPerPage"
 						></lsm-select>
 					</div>
 				</div>
 
-				<div class="flex gap-1 flex-col items-start md:items-center md:flex-row">
+				<div class="flex gap-1 flex-col items-start md:items-center md:flex-row ">
 					<label>Página selecionada</label>
 					<div class="w-24">
 						<lsm-select
+							:disabled="isAsyncLoading"
 							:model-value="currentPage"
 							:options="pageOptions"
-							:disabled="isAsyncLoading"
 							label="Página selecionada:"
 							@change="selectPage"
 						></lsm-select>
@@ -204,7 +205,7 @@
 
 			<template v-if="pageLimits">
 
-				<div>
+				<div class="text-sm">
 					<button
 						v-if="isPaginationLeftEnabled"
 						class="w-8 h-8"
@@ -218,8 +219,9 @@
 					</button>
 
 
-					<span class="text-lg"><i18n-n :value="pageLimits.start" format="integer"></i18n-n> - <i18n-n :value="pageLimits.end"
-																								 format="integer"></i18n-n> de <i18n-n
+					<span class="text-sm"><i18n-n :value="pageLimits.start" format="integer"></i18n-n> - <i18n-n
+						:value="pageLimits.end"
+						format="integer"></i18n-n> de <i18n-n
 						:value="totalItemsCount" format="integer"></i18n-n></span>
 
 					<button
@@ -388,7 +390,7 @@ export default defineComponent({
 	"computed": {
 
 		"selectedSortingDirectionCode": function () {
-			return (this.selectedSortingDirection || "" ).toUpperCase();
+			return (this.selectedSortingDirection || "").toUpperCase();
 		},
 
 		"filteringFields": function () {
@@ -402,20 +404,20 @@ export default defineComponent({
 						"id": item.key,
 						"originalId": item.originalId,
 						"label": item.label
-					}
+					};
 				})
-			]
+			];
 		},
 		"filteredData": function () {
 
 			return (!this.isAsyncSearchEnabled && this.filterText ?
-				this.tableItems.filter(item => {
-					return JSON.stringify(
-						item,
-						this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
-					).toLowerCase().indexOf(this.filterText.toLowerCase()) > -1;
-				}) :
-				this.tableItems.map(item => item)
+					this.tableItems.filter(item => {
+						return JSON.stringify(
+							item,
+							this.selectedFilteringField === "all" ? null : [this.selectedFilteringField]
+						).toLowerCase().indexOf(this.filterText.toLowerCase()) > -1;
+					}) :
+					this.tableItems.map(item => item)
 			);
 
 			// if (this.selectedSortingField) {
@@ -468,23 +470,22 @@ export default defineComponent({
 	},
 	"methods": {
 
-		resetFilters() {
+		resetFilters () {
 			this.selectedFilteringField = "all";
 			this.filterText = "";
 		},
 
-		emitDeleteRequest(selectedItem) {
+		emitDeleteRequest (selectedItem) {
 			this.$emit("deleteRequest", selectedItem);
 		},
 
-		emitClick(selectedItem) {
+		emitClick (selectedItem) {
 			if (this.handleClick) {
 				this.$emit("select", selectedItem);
 			}
 		},
 
-
-		emitPaginate(override = {}) {
+		emitPaginate (override = {}) {
 			this.$emit("paginate", {
 				"filteringField": this.selectedFilteringField,
 				"orderBy": this.selectedSortingField,
@@ -497,7 +498,7 @@ export default defineComponent({
 		},
 
 		// All of the following methods represent data handling changes and re-trigger the pagination event
-		changeSortingOptions(field, direction) {
+		changeSortingOptions (field, direction) {
 			this.selectedSortingField = field;
 			this.selectedSortingDirection = direction;
 			this.emitPaginate();
@@ -562,7 +563,7 @@ export default defineComponent({
 								"filteringValue": newValue
 							});
 						}
-					}, 300)
+					}, 300);
 				}
 			}
 		}
@@ -579,7 +580,7 @@ export default defineComponent({
 
 	&:hover {
 		.hover-target {
-			display: block;
+			display: flex;
 		}
 
 	}
@@ -591,7 +592,7 @@ export default defineComponent({
 			display: block;
 		}
 	}
-	.row-item:last-child  {
+	.row-item:last-child {
 		border-bottom: 0 !important;
 	}
 }

@@ -1,6 +1,6 @@
 <template>
 	<lsm-modal
-
+		:is-loading="isLoading"
 		@close="goToLocationsHome">
 
 		<template v-slot:modal-header>
@@ -63,7 +63,14 @@
 		</template>
 
 		<template v-slot:modal-footer>
-			<div class="w-full h-9 flex items-center justify-end gap-4">
+			<div class="w-full h-9 flex items-center justify-end gap-2">
+
+				<lsm-button
+					kind="tertiary"
+					label="Cancelar"
+					@click="goToLocationsHome">
+				</lsm-button>
+
 				<lsm-button
 					:disabled="isFormInvalid"
 					:is-loading="isLoading"

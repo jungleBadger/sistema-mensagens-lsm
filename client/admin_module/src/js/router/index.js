@@ -19,6 +19,10 @@ import TheLocationDetails from "../components/sections/locations/the-location-de
 import TheLocationDeleteConfirmation from "../components/sections/locations/the-location-delete-confirmation.vue";
 import TheLogsMain from "../components/sections/logs/the-logs-main.vue";
 
+import TheMessageListOrdering from "../components/sections/events/messages/the-message-list-ordering";
+import TheMessageDetails from "../components/sections/events/messages/the-message-details.vue";
+import TheMessageDeleteConfirmation from "../components/sections/events/messages/the-message-delete-confirmation.vue";
+
 export default createRouter({
 	"base": "/admin",
 	"history": createWebHistory("/admin/"),
@@ -117,7 +121,30 @@ export default createRouter({
 					"path": ":eventId",
 					"component": TheEventDetails,
 					"meta": {
-					}
+					},
+					"children": [
+						{
+							"name": "app.events.organize",
+							"path": "organizar",
+							"component": TheMessageListOrdering,
+							"meta": {
+							}
+						},
+						{
+							"name": "app.events.message.details",
+							"path": "mensagem/:messageId",
+							"component": TheMessageDetails,
+							"meta": {
+							}
+						},
+						{
+							"name": "app.events.message.delete",
+							"path": "mensagem/delete/:messageId",
+							"component": TheMessageDeleteConfirmation,
+							"meta": {
+							}
+						}
+					]
 				},
 				{
 					"name": "app.events.delete",

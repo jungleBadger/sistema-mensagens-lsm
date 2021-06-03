@@ -20,8 +20,9 @@
 
 [role="table"] [role="cell"],
 [role="table"] [role="columnheader"] {
-	display: inline-flex;
+	display: inline-block;
 	padding: 0.125em 0.25em;
+	text-align: left;
 	width: 8em;
 }
 

@@ -70,7 +70,7 @@ export default {
 				setHeaders(
 					xhttp,
 					opts
-				).send(JSON.stringify(requestParams));
+				).send(opts.sendRawObject ? requestParams : JSON.stringify(requestParams));
 			} else {
 				reject("AJAX Calls not supported on this browser");
 			}

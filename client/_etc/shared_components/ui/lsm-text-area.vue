@@ -20,9 +20,8 @@
 			@input="(event) => $emit('update:modelValue', event.target.value)"
 		/>
 		<span
-			class="float-right text-gray-500"
-			v-if="maxLength && modelValue && modelValue.length">{{modelValue.length}}/{{maxLength}}</span>
-
+			class="float-right text-gray-500 absolute right-0"
+			v-if="maxLength">{{(modelValue || []).length}}/{{maxLength}}</span>
 	</div>
 
 

@@ -20,18 +20,26 @@ export default {
 			"originalId": "DATA_INICIO",
 			"key": "startDate",
 			"label": "Data inicio",
-			"type": "date"
+			"type": "date",
+			"parser": "short"
 		},
 		{
 			"originalId": "DATA_FIM",
 			"key": "endDate",
 			"label": "Data fim",
-			"type": "date"
+			"type": "date",
+			"parser": "short"
 		},
 		{
 			"originalId": "LOCALIDADE",
 			"key": "location",
 			"label": "Localidade"
+		},
+		{
+			"originalId": "TOTAL_MENSAGENS",
+			"key": "totalMessages",
+			"label": "Mensagens",
+			"size": "120px"
 		},
 		{
 			"originalId": "CRIADO_EM",

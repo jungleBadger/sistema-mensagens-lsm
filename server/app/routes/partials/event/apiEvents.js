@@ -93,13 +93,14 @@ router.get(
 				req.query.filterColumn || "TITULO",
 				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [],
 				req.query.targetColumns ? req.query.targetColumns.split(",") : [
-					"ID",
-					"TITULO",
-					"DATA_INICIO",
-					"DATA_FIM",
-					"LOCALIDADE_ID",
-					"CATEGORIA_ID",
-					"CRIADO_EM"
+					"EVENTO.ID",
+					"EVENTO.TITULO",
+					"EVENTO.DATA_INICIO",
+					"EVENTO.DATA_FIM",
+					"EVENTO.LOCALIDADE_ID",
+					"EVENTO.CATEGORIA_ID",
+					"EVENTO.CRIADO_EM",
+					"EVENTO.ATUALIZADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
@@ -124,7 +125,8 @@ router.get(
 					"DATA_FIM",
 					"LOCALIDADE_ID",
 					"CATEGORIA_ID",
-					"CRIADO_EM"
+					"CRIADO_EM",
+					"ATUALIZADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,

@@ -3,8 +3,8 @@
 		aria-label="Irmãos registrados no sistema"
 		class="w-full h-full overflow-hidden flex flex-col relative">
 
-		<header class="flex mb-3 pl-2 pr-2 pt-2 flex-col md:flex-row md:pl-0 md:pr-0 md:pt-2 gap-2">
-			<div class="flex flex-col gap-2 flex-1">
+		<header class="flex mb-3 pl-2 pr-2 pt-0 flex-col md:flex-row md:pl-0 md:pr-0  gap-2">
+			<div class="flex flex-col gap-0 flex-1">
 
 				<h3 class="text-2xl">Gerenciamento de Irmãos</h3>
 				<h4 class="text-l">

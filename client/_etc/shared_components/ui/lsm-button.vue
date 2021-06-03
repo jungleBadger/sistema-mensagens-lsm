@@ -5,14 +5,17 @@
 		:to="href"
 		v-bind="$attrs"
 		:aria-disabled="isLoading"
+		style="min-width: 90px;"
 		:class="{
-			'bg-blue-600 hover:bg-blue-700 active:bg-blue-500': !iconOnly && kind === 'regular',
+			'bg-white text-gray-800 border border-gray-800 hover:bg-gray-200 active:bg-gray-300': !iconOnly && kind === 'tertiary',
+			'bg-gray-800 hover:bg-blue-700 active:bg-blue-500': !iconOnly && kind === 'secondary',
+			'bg-blue-600 hover:bg-blue-700 active:bg-blue-500': !iconOnly && kind === 'primary',
 			'bg-red-600 hover:bg-red-700 active:bg-red-500': !iconOnly && kind === 'danger',
 			'bg-white hover:bg-gray-100 active:bg-gray-200': iconOnly
 		}"
 		:disabled="isLoading"
-		class="group relative py-2 px-4 border flex justify-between items-center
-		border-transparent text-sm font-medium rounded text-white focus:outline-none focus:ring-2 focus:ring-offset-2
+		class="group relative py-2 px-2 border flex justify-between items-center
+		border-transparent text-sm font-medium rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2
 	focus:ring-indigo-500 disabled:opacity-50 transition-colors">
 
 
@@ -26,7 +29,7 @@
 		<template v-else-if="iconId">
 			<font-awesome-icon
 				:class="{
-					'text-blue-500': iconOnly && kind === 'regular',
+					'text-blue-500': iconOnly && kind === 'primary',
 					'text-red-500': iconOnly && kind === 'danger'
 				}"
 				:icon="[iconStyle, iconId]">
@@ -86,9 +89,9 @@ export default {
 			"type": String,
 			"required": false,
 			"default": function () {
-				return "regular";
+				return "primary";
 			},
-			"validator": value => ["regular", "danger"].indexOf(value) !== -1
+			"validator": value => ["primary", "secondary", "tertiary", "danger"].indexOf(value) !== -1
 
 		},
 
