@@ -18,7 +18,7 @@ module.exports = class AdminUser {
 				"ID": Joi.number().optional(),
 				"EMAIL": Joi.string().email().required(),
 				"SENHA": Joi.string().min(8).max(128).required(),
-				"NOME_EXIBICAO": Joi.string().allow( "").allow(null).default(null).optional(),
+				"NOME_EXIBICAO": Joi.string().max(512).allow( "").allow(null).default(null).optional(),
 				"ADMINISTRADOR": Joi.boolean().invalid(false),
 				"SENHA_REGISTRADA": Joi.boolean().invalid(true),
 				"EMAIL_CONFIRMADO": Joi.boolean().invalid(false),

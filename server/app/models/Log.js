@@ -15,7 +15,7 @@ module.exports = class User {
 		let schemaValidationResult = Joi.object(
 			{
 				"REFERENCIA_ID": Joi.alternatives([Joi.string(), Joi.number()]).required(),
-				"REFERENCIA_TABELA": Joi.string().max(128).required(),
+				"REFERENCIA_TABELA": Joi.string().max(64).required(),
 				"ACAO": Joi.alternatives().try("CREATE", "UPDATE", "DELETE"),
 				"OPERADOR_FANTASIA": Joi.string().required(),
 				"OPERADOR_ID": Joi.number().integer().allow(null)

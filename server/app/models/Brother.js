@@ -13,7 +13,7 @@ module.exports = class Brother {
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"NOME_EXIBICAO": Joi.string().max(256),
+				"NOME_EXIBICAO": Joi.string().max(512),
 				"ATUALIZADO_EM": Joi.string().required()
 			}
 		).validate(

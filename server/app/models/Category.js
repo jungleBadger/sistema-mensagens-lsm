@@ -13,7 +13,7 @@ module.exports = class Category {
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"NOME": Joi.string().max(64),
+				"NOME": Joi.string().max(512),
 				"ATUALIZADO_EM": Joi.string().required()
 			}
 		).validate(
