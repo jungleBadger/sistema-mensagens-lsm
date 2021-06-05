@@ -117,14 +117,18 @@
 					</div>
 
 
-					<div
-						v-if="selectedEvent"
-						class="flex-1 pl-2 overflow-auto">
+					<div class="flex-1 pl-2 overflow-auto">
 
 
 						<the-message-list
+							v-if="selectedEvent"
 							:event-id="selectedEvent.id"
 						></the-message-list>
+						<div
+							class="bg-white p-2 shadow-sm "
+							v-else>
+							Crie o evento para adicionar mensagens.
+						</div>
 
 					</div>
 
@@ -266,8 +270,9 @@ export default defineComponent({
 					"endDate": dayjs(this.datesStructure[1]).endOf("day"),
 					"description": this.description
 				});
+				return this.goToEventsHome();
 			} else {
-				await this.$store.dispatch("events/createEvent", {
+				let newEvent = await this.$store.dispatch("events/createEvent", {
 					"title": this.title,
 					"categoryId": this.categoryId,
 					"locationId": this.locationId,
@@ -277,12 +282,19 @@ export default defineComponent({
 				});
 				await Promise.all([
 					this.$store.dispatch("events/retrieveTotalEventsCount"),
-					this.$store.dispatch("events/retrieveEvents")
+					this.$store.dispatch("events/retrieveEvents"),
+					this.$router.replace({
+						"name": "app.events.details",
+						"params": {
+							"eventId": newEvent.ID
+						}
+					})
 				]);
+
 			}
 
 			this.isLoading = false;
-			return this.goToEventsHome();
+
 		}
 	},
 
