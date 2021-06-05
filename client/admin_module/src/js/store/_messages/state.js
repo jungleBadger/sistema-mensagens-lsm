@@ -20,6 +20,27 @@ export default {
 			"size": "80px"
 		},
 		{
+			"originalId": "HABILITADO",
+			"key": "isEnabled",
+			"label": "Habilitado",
+			"size": "80px",
+			"type": "boolean"
+		},
+		{
+			"originalId": "CAMINHO_ARQUIVO_AUDIO",
+			"key": "audioFilePath",
+			"label": "Audio",
+			"size": "80px",
+			"type": "boolean"
+		},
+		{
+			"originalId": "CAMINHO_ARQUIVO_ESBOCO",
+			"key": "pdfFilePath",
+			"label": "Esboço",
+			"size": "80px",
+			"type": "boolean"
+		},
+		{
 			"originalId": "TITULO",
 			"key": "title",
 			"label": "Título",
@@ -36,20 +57,6 @@ export default {
 			"originalId": "IRMAO_NOME",
 			"key": "brotherName",
 			"label": "Irmão"
-		},
-		{
-			"originalId": "CAMINHO_ARQUIVO_AUDIO",
-			"key": "audioFilePath",
-			"label": "Audio",
-			"size": "80px",
-			"type": "boolean"
-		},
-		{
-			"originalId": "CAMINHO_ARQUIVO_ESBOCO",
-			"key": "pdfFilePath",
-			"label": "Esboço",
-			"size": "80px",
-			"type": "boolean"
 		}
 		// {
 		// 	"originalId": "CRIADO_EM",
