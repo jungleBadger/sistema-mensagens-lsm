@@ -12,8 +12,6 @@
 			</template>
 
 			<template v-slot:modal-content>
-
-
 				<div
 					v-if="localMessages.length"
 					class="w-full flex flex-col overflow-hidden gap-2">
@@ -194,8 +192,10 @@ export default defineComponent({
 					})
 				}
 			);
-			this.isLoading = false;
 			await this.$store.dispatch("messages/retrieveMessagesByEventId", this.$route.params.eventId);
+
+			this.isLoading = false;
+			this.goToParentEventDetails();
 		},
 		resetMessagesOrder () {
 			this.localMessages = this.messages.map(message => message);
