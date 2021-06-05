@@ -36,8 +36,8 @@
 
 			<footer
 
-				class="w-full shadow-sm p-2 z-10 bg-white"
-				style="flex-basis: 52px; min-height: 52px;">
+				class="w-full shadow-sm p-2 bg-white"
+				style="z-index: -1; flex-basis: 52px; min-height: 52px;">
 				<slot name="modal-footer">
 
 				</slot>
