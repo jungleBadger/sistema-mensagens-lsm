@@ -6,7 +6,7 @@
 			@close="goToParentEventDetails">
 
 			<template v-slot:modal-header>
-				<h3 class="text-gray-800 text-lg font-semibold">
+				<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 					Organizar ordem das mensagens
 				</h3>
 			</template>

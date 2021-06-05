@@ -4,9 +4,9 @@
 		@close="goToRegularUsersHome">
 
 		<template v-slot:modal-header>
-			<h3 class="text-gray-800 text-lg font-semibold">
+			<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 				<template v-if="isDocumentExistent">
-					Editar Usuário {{ selectedRegularUser.id }}
+					Editar Usuário '{{ selectedRegularUser.email }}'
 				</template>
 				<template v-else>
 					Criar novo Usuário
@@ -162,9 +162,6 @@ export default defineComponent({
 			);
 			this.isLoading = false;
 		}
-
-		console.log(this.selectedRegularUser);
-
 		if (this.selectedRegularUser) {
 			this.email = this.selectedRegularUser.email;
 			this.displayName = this.selectedRegularUser.displayName;

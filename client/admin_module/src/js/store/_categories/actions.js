@@ -147,9 +147,9 @@ export default {
 			context.commit(
 				"categoryItems",
 				categories.map(item => {
-					return item.id === categories.id ? {
+					return item.id === category.id ? {
 						...item,
-						...categories
+						...category
 					} : item;
 				})
 			);

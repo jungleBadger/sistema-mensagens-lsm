@@ -5,9 +5,9 @@
 		@close="goToAdminUsersHome">
 
 		<template v-slot:modal-header>
-			<h3 class="text-gray-800 text-lg font-semibold">
+			<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 				<template v-if="isDocumentExistent">
-					Editar Usuário administrador {{ selectedAdminUser.id }}
+					Editar Usuário administrador '{{ selectedAdminUser.email }}'
 				</template>
 				<template v-else>
 					Criar novo Usuário administrador

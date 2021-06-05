@@ -4,9 +4,9 @@
 		@close="goToLocationsHome">
 
 		<template v-slot:modal-header>
-			<h3 class="text-gray-800 text-lg font-semibold">
+			<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 				<template v-if="isDocumentExistent">
-					Editar Localidade {{ selectedLocation.id }}
+					Editar Localidade '{{ selectedLocation.mnemonic }}'
 				</template>
 				<template v-else>
 					Criar nova Localidade
@@ -15,7 +15,6 @@
 		</template>
 
 		<template v-slot:modal-content>
-
 			<div class="flex flex-col gap-2 w-full md:w-96">
 				<div class="w-full flex flex-col gap-1">
 					<label class="text-gray-700 ">País</label>
@@ -45,7 +44,7 @@
 					</div>
 				</div>
 
-				<div class="w-full">
+				<div class="w-full mb-4">
 					<div class="flex flex-col gap-1">
 						<label class="text-gray-700 ">Descrição - opcional</label>
 						<lsm-text-area

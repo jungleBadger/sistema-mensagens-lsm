@@ -4,9 +4,9 @@
 		@close="goToBrothersHome">
 
 		<template v-slot:modal-header>
-			<h3 class="text-gray-800 text-lg font-semibold">
+			<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 				<template v-if="isDocumentExistent">
-					Editar Irmão {{ selectedBrother.id }}
+					Editar Irmão {{ selectedBrother.displayName }}
 				</template>
 				<template v-else>
 					Criar novo Irmão
@@ -17,8 +17,8 @@
 		<template v-slot:modal-content>
 
 
-			<div class="w-full md:w-80 flex flex-col gap-1">
-				<label class="text-gray-700 ">Nome de exibição</label>
+			<div class="w-full md:w-80 flex flex-col gap-1 mb-4">
+				<label class="text-gray-700  ">Nome de exibição</label>
 
 				<lsm-text-area
 					v-model="displayName"

@@ -7,9 +7,9 @@
 			@close="goToEventsHome">
 
 			<template v-slot:modal-header>
-				<h3 class="text-gray-800 text-lg font-semibold">
+				<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 					<template v-if="isDocumentExistent">
-						Editar Evento {{ selectedEvent.id }}
+						Editar Evento '{{ selectedEvent.title }}'
 					</template>
 					<template v-else>
 						Criar novo Evento
