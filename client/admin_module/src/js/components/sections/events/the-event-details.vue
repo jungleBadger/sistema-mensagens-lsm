@@ -165,7 +165,8 @@
 				mode="out-in"
 				@enter="fadeIn"
 				@leave="fadeOut">
-				<component :is="Component"/>
+				<component
+					:is="Component"/>
 			</transition>
 		</router-view>
 

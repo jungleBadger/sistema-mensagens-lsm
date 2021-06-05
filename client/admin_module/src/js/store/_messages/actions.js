@@ -220,7 +220,7 @@ export default {
 					"messageItemsByEventId",
 					messages.map(item => {
 						return item.id === message.id ? new Message({
-							...item,
+							...message,
 							...parsedResult,
 							"brotherName": message.brotherName
 						}) : item;
