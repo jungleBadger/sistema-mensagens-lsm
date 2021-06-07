@@ -7,7 +7,7 @@ export default {
 
 	async createEvent(context, event) {
 		try {
-			await eventsFactory.createEvent(event);
+			let createdEvent = await eventsFactory.createEvent(event);
 			context.commit(
 				"notification/addNotification",
 				{
@@ -17,7 +17,13 @@ export default {
 				},
 				{"root": true}
 			);
-			return true;
+
+			context.commit("selectedEvent", {
+				...event,
+				...createdEvent
+			});
+
+			return createdEvent;
 		} catch (e) {
 			let error = {
 				"title": "Houve um erro ao criar o Evento.",

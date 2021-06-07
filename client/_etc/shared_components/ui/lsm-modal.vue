@@ -6,6 +6,7 @@
 		bg-opacity-50 bg-black z-50 md:p-12 backdrop-filter backdrop-blur-sm">
 		<div
 			v-bind="$attrs"
+			style="transform: translate(0);"
 			class="flex flex-col max-h-full max-w-full md:rounded shadow-lg bg-white w-full h-full transition-none md:w-auto md:h-auto ">
 
 			<header
@@ -28,17 +29,15 @@
 			</header>
 
 			<main
+				style="transform: translate(0);"
 				class="flex-1 flex p-2 bg-gray-100 w-full md:overflow-y-visible box">
-				<lsm-progress-bar v-if="isLoading"></lsm-progress-bar>
-				<slot name="modal-content">
-
-				</slot>
+				<slot name="modal-content"></slot>
 			</main>
 
 			<footer
 
-				class="w-full shadow-sm p-2 z-10 bg-white"
-				style="flex-basis: 52px; min-height: 52px;">
+				class="w-full shadow-sm p-2 bg-white"
+				style="z-index: -1; flex-basis: 52px; min-height: 52px;">
 				<slot name="modal-footer">
 
 				</slot>
@@ -71,18 +70,6 @@ export default {
 			"default": function () {
 				return uuidv4();
 			}
-		},
-
-		"isLoading": {
-			"type": Boolean,
-			"required": false,
-			"default": function () {
-				return false;
-			}
-		},
-
-		"size": {
-
 		}
 	},
 

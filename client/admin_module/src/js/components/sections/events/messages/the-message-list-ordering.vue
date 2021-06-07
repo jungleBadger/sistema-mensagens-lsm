@@ -6,14 +6,12 @@
 			@close="goToParentEventDetails">
 
 			<template v-slot:modal-header>
-				<h3 class="text-gray-800 text-lg font-semibold">
+				<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 					Organizar ordem das mensagens
 				</h3>
 			</template>
 
 			<template v-slot:modal-content>
-
-
 				<div
 					v-if="localMessages.length"
 					class="w-full flex flex-col overflow-hidden gap-2">
@@ -194,8 +192,10 @@ export default defineComponent({
 					})
 				}
 			);
-			this.isLoading = false;
 			await this.$store.dispatch("messages/retrieveMessagesByEventId", this.$route.params.eventId);
+
+			this.isLoading = false;
+			this.goToParentEventDetails();
 		},
 		resetMessagesOrder () {
 			this.localMessages = this.messages.map(message => message);

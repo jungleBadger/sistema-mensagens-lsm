@@ -16,10 +16,10 @@ module.exports = class Location {
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"PAIS": Joi.string().max(64).required(),
-				"ESTADO": Joi.string().max(64).required(),
-				"CIDADE": Joi.string().max(64).required(),
-				"DESCRICAO": Joi.string().max(128).optional().allow(""),
+				"PAIS": Joi.string().max(128).required(),
+				"ESTADO": Joi.string().max(128).required(),
+				"CIDADE": Joi.string().max(128).required(),
+				"DESCRICAO": Joi.string().max(1024).optional().allow(""),
 				"ATUALIZADO_EM": Joi.string().required()
 			}
 		).validate(

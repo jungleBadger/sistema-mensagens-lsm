@@ -97,5 +97,5 @@ client/assets/TMP.csv
 .DS_Store
 
 /server/dist
-/uploads/**/*.mp3
-/uploads/**/*.pdf
+/server/uploads/**/*.mp3
+/server/uploads/**/*.pdf

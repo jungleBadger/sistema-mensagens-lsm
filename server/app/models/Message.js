@@ -27,8 +27,8 @@ module.exports = class Message {
 				"EVENTO_ID": Joi.number().required(),
 				"DATA_MINISTRADO": Joi.string().required(),
 				"VALOR": Joi.number().required(),
-				"CAMINHO_ARQUIVO_AUDIO": Joi.string().required(),
-				"CAMINHO_ARQUIVO_ESBOCO": Joi.string().allow("").optional(),
+				"CAMINHO_ARQUIVO_AUDIO": Joi.string().max(512).required(),
+				"CAMINHO_ARQUIVO_ESBOCO": Joi.string().max(512).allow("").optional(),
 				"HABILITADO": Joi.boolean().required(),
 				"ATUALIZADO_EM": Joi.string().required()
 			}

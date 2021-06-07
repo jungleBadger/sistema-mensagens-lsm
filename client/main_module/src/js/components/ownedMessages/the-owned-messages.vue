@@ -1,6 +1,8 @@
 <template>
-	<div>
-		HOME - Em construção
+	<div class="w-full h-full bg-red-500 pl-8 pr-8">
+		Minhas mensagens
+		<div>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
@@ -8,14 +10,10 @@
 
 "use strict";
 import { defineComponent } from "vue";
-import {useI18n} from "vue-i18n";
 
 export default defineComponent({
-	"name": "AppHome",
-	setup() {
-		return {
-			...useI18n()
-		}
+	"name": "TheOwnedMessages",
+	"computed": {
 	}
 });
 </script>

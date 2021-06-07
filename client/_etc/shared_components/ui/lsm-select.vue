@@ -11,7 +11,7 @@
 
 		<select
 			ref="input"
-			class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
+			class="appearance-none rounded-none relative block w-full pl-3 pr-8 py-2 border border-gray-300
 			placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 h-10
 			focus:border-indigo-500 focus:z-10 sm:text-sm"
 			v-bind="$attrs"

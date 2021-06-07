@@ -1,13 +1,12 @@
 <template>
 	<lsm-modal
-		:is-loading="isLoading"
 		class="h-auto"
 		@close="goToParentEventDetails">
 
 		<template v-slot:modal-header>
-			<h3 class="text-gray-800 text-lg font-semibold">
+			<h3 class="text-gray-800 text-lg font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis" style="max-width: calc(100% - 48px);">
 				<template v-if="isDocumentExistent">
-					Editar Mensagem {{ selectedMessage.id }}
+					Editar Mensagem {{ selectedMessage.title }}
 				</template>
 				<template v-else>
 					Criar nova Mensagem
@@ -18,6 +17,7 @@
 		<template v-slot:modal-content>
 
 			<div class="flex flex-col w-full gap-2">
+				<lsm-progress-bar v-if="isLoading"></lsm-progress-bar>
 
 				<div class="flex gap-2 flex-wrap">
 
@@ -255,10 +255,12 @@ import LsmTextArea from "../../../../../../../_etc/shared_components/ui/lsm-text
 import LsmSelect from "../../../../../../../_etc/shared_components/ui/lsm-select";
 import LsmCheckbox from "../../../../../../../_etc/shared_components/ui/lsm-checkbox";
 import dayjs from "dayjs";
+import LsmProgressBar from "../../../../../../../_etc/shared_components/ui/lsm-progress-bar";
 
 export default defineComponent({
 	"name": "TheMessageDetails",
 	"components": {
+		LsmProgressBar,
 		LsmCheckbox,
 		LsmSelect,
 		LitepieDatepicker,
@@ -323,7 +325,7 @@ export default defineComponent({
 		},
 
 		"currentOrder": function () {
-			return this.totalMessagesCountByEventId + 1;
+			return this.isDocumentExistent ? this.selectedMessage.order : this.totalMessagesCountByEventId + 1;
 		},
 
 		"brothers": function () {
@@ -425,7 +427,7 @@ export default defineComponent({
 					"messages/selectedMessage",
 					message
 				);
-				this.isLoading = false;
+
 			} else {
 
 				return await this.$router.replace({
@@ -435,6 +437,9 @@ export default defineComponent({
 					}
 				});
 			}
+
+			this.isLoading = false;
+
 		}
 
 		await Promise.all([

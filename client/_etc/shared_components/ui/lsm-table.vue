@@ -108,7 +108,7 @@
 							:aria-labelledby="`th-${column.key}`"
 							:title="item[column.key] || 'Vazio'"
 							:style="{'flex-basis': column.size || 'auto'}"
-							class="flex-1 h-8 overflow-hidden overflow-ellipsis ml-0.5"
+							class="flex-1 h-8 overflow-hidden overflow-ellipsis ml-0.5 whitespace-nowrap"
 							role="cell">
 							<template v-if="column.type === 'date' ">
 								<i18n-d

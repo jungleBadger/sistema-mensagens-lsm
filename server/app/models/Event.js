@@ -13,14 +13,16 @@ module.exports = class Event {
 		startDate,
 		endDate,
 		categoryId,
-		locationId
+		locationId,
+		description
 	) {
 		let schemaValidationResult = Joi.object(
 			{
-				"TITULO": Joi.string().max(128).required(),
+				"TITULO": Joi.string().max(512).required(),
 				"DATA_INICIO": Joi.string().required(),
 				"DATA_FIM": Joi.string().required(),
 				"CATEGORIA_ID": Joi.number().required(),
+				"DESCRICAO": Joi.string().max(1024).allow("").optional(),
 				"LOCALIDADE_ID": Joi.number().required(),
 				"ATUALIZADO_EM": Joi.string().required()
 			}
@@ -29,6 +31,7 @@ module.exports = class Event {
 				"TITULO": title,
 				"DATA_INICIO": db2Timestamp(startDate),
 				"DATA_FIM": db2Timestamp(endDate),
+				"DESCRICAO": description || "",
 				"CATEGORIA_ID": categoryId,
 				"LOCALIDADE_ID": locationId,
 				"ATUALIZADO_EM": db2Timestamp()
