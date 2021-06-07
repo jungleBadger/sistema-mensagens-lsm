@@ -13,7 +13,7 @@
 		</div>
 
 
-		<div >
+		<div v-if="isLoggedIn">
 			<lsm-button
 				kind="danger"
 				v-if="isAlreadyInCart"
@@ -51,6 +51,9 @@ export default defineComponent({
 	"computed": {
 		"currentCart": function () {
 			return this.$store.getters["shoppingCart/currentCart"];
+		},
+		"isLoggedIn": function () {
+			return this.$store.getters["utilities/userInfo"].id;
 		},
 		"isAlreadyInCart": function () {
 			return this.currentCart.find(orderItem => orderItem.messageId === this.message.id);
