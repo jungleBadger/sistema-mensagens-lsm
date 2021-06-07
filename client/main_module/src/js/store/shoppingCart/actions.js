@@ -13,7 +13,7 @@ export default {
 				"notification/addNotification",
 				{
 					"kind": "error",
-					"title": `Houve um erro ao estabelecer o carrinho de compras.`,
+					"title": "Houve um erro ao estabelecer o carrinho de compras.",
 					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}
@@ -30,7 +30,7 @@ export default {
 				"notification/addNotification",
 				{
 					"kind": "error",
-					"title": `Houve um erro ao tentar adicionar o item no carrinho.`,
+					"title": "Houve um erro ao tentar adicionar o item no carrinho.",
 					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}
@@ -47,7 +47,7 @@ export default {
 				"notification/addNotification",
 				{
 					"kind": "error",
-					"title": `Houve um erro ao tentar remover o item do carrinho.`,
+					"title": "Houve um erro ao tentar remover o item do carrinho.",
 					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}
@@ -71,7 +71,7 @@ export default {
 						"notification/addNotification",
 						{
 							"kind": "error",
-							"title": `Houve um erro ao carregar o carrinho de compras.`,
+							"title": "Houve um erro ao carregar o carrinho de compras.",
 							"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 						},
 						{"root": true}
@@ -93,7 +93,7 @@ export default {
 				"notification/addNotification",
 				{
 					"kind": "error",
-					"title": `Houve um erro ao tentar limpar o carrinho.`,
+					"title": "Houve um erro ao tentar limpar o carrinho.",
 					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}

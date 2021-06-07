@@ -23,7 +23,7 @@ export default createRouter({
 			"path": "/checkout",
 			"component": TheShoppingCart,
 			"meta": {
-				"indexed": true,
+				"indexed": true
 			}
 		},
 		{
@@ -31,7 +31,7 @@ export default createRouter({
 			"path": "/minhas-mensagens",
 			"component": TheOwnedMessages,
 			"meta": {
-				"indexed": true,
+				"indexed": true
 			}
 		}
 	]
