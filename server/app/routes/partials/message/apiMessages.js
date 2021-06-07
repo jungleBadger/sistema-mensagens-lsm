@@ -4,15 +4,13 @@ const express = require("express");
 const router = express.Router();
 const message = require("../../../helpers/message/crud");
 const {
-	isAdmin,
-	isLoggedIn
+	isAdmin
 } = require("../../middlewares/auth");
 
 const multer = require("multer");
 const { raiseError } = require("../../../helpers/errorHandler");
 const { handleExpressError } = require("../../../helpers/errorHandler");
 const fs = require("fs").promises;
-const fsregular = require("fs");
 
 const upload = multer(
 	{
@@ -139,7 +137,7 @@ router.post(
 
 router.get(
 	"/count",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await message.retrieveTotalRowsCount()
@@ -169,7 +167,7 @@ router.get(
  */
 router.get(
 	"/search",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -194,7 +192,7 @@ router.get(
 
 router.get(
 	"/",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await message.retrieveAll(
@@ -214,7 +212,7 @@ router.get(
 
 router.get(
 	"/:messageId",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await message.retrieveById(
@@ -342,14 +340,13 @@ router.delete(
 	}
 );
 
-
 //
 // @SECTION - EVENT MESSAGE ENDPOINTS
 //
 
 router.get(
 	"/count/:eventId",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await message.retrieveTotalRowsByEventCount(req.params.eventId)
@@ -361,13 +358,13 @@ router.get("/test/x", async (req, res) => {
 	return res.download(req.query.filePath);
 });
 
-router.patch("/organize/:eventId", async(req, res) => {
+router.patch("/organize/:eventId", async (req, res) => {
 	return res.status(200).send(await message.organizeMessages(req.body.messages));
 });
 
 router.get(
 	"/list/:eventId",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await message.retrieveAllByEventId(

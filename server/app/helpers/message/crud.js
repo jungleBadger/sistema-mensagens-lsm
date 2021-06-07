@@ -223,8 +223,6 @@ module.exports = {
 			);
 		}
 
-		console.log(payload);
-
 		const updatedMessage = new Message(
 			payload.order,
 			payload.title,

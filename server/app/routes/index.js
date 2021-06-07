@@ -14,6 +14,8 @@ const mainHandler = require("./partials/mainHandler");
 const regularUserHandler = require("./partials/user/_index");
 const locationHandler = require("./partials/location/_index");
 const logsHandler = require("./partials/logs/_index");
+const ordersHandler = require("./partials/orders/_index");
+
 
 
 const multer = require("multer");
@@ -140,6 +142,10 @@ module.exports = function (app) {
 
 	app.use(
 		locationHandler
+	);
+
+	app.use(
+		ordersHandler
 	);
 
 	app.use(

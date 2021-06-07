@@ -42,7 +42,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	"name": "TheAppSideMenu",
+	"name": "TheAppHeader",
 	"computed": {
 		"isSideMenuOpen": {
 			get() {

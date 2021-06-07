@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const event = require("../../../helpers/event/crud");
-const { isAdmin, isLoggedIn } = require("../../middlewares/auth");
+const { isAdmin } = require("../../middlewares/auth");
 
 /**
  * @swagger
@@ -52,7 +52,7 @@ router.post(
 
 router.get(
 	"/count",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await event.retrieveTotalRowsCount()
@@ -83,7 +83,7 @@ router.get(
  */
 router.get(
 	"/search",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(
 			200
@@ -114,7 +114,7 @@ router.get(
 
 router.get(
 	"/",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await event.retrieveAll(
@@ -139,7 +139,7 @@ router.get(
 
 router.get(
 	"/:eventId",
-	isLoggedIn,
+	isAdmin,
 	async (req, res) => {
 		res.status(200).send(
 			await event.retrieveById(
