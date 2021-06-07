@@ -29,6 +29,9 @@ comment on column PEDIDO_ITEM.ATUALIZADO_EM is 'Representa a data de atualiza√ß√
 create unique index PEDIDO_ITEM_ID_UINDEX
 	on PEDIDO_ITEM (ID);
 
+create unique index PEDIDO_ITEM_PEDIDO_ID_MENSAGEM_ID_UINDEX
+	on PEDIDO_ITEM (PEDIDO_ID, MENSAGEM_ID);
+
 alter table PEDIDO_ITEM
 	add constraint PEDIDO_ITEM_PK
 		primary key (ID);
