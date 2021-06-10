@@ -30,3 +30,5 @@ alter table PROVEDOR_SOCIAL
     add constraint PROVEDOR_SOCIAL_PK
         primary key (ID);
 
+
+INSERT into PROVEDOR_SOCIAL(NOME, LOGIN_HABILITADO, REGISTRO_HABILITADO) VALUES ('google-oauth-2', true, true);
