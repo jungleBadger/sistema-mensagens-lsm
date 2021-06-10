@@ -15,12 +15,10 @@
 "use strict";
 
 import { defineComponent } from "vue";
-import LsmHeader from "../../../../_etc/shared_components/lsm-header"
 
 export default defineComponent({
 	"name": "LsmApp",
 	"components": {
-		LsmHeader
 	},
 	async beforeCreate () {
 		return await Promise.all([
