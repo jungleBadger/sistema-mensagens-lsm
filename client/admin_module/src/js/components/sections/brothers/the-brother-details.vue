@@ -22,7 +22,7 @@
 
 				<lsm-text-area
 					v-model="displayName"
-					@keyup.enter="submitForm"
+					@keyup.enter.exact="submitForm"
 					autofocus
 					max-length="512"
 					placeholder="Digite nome de exibição">

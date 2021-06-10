@@ -38,7 +38,7 @@
 						<label class="text-gray-700 ">Cidade</label>
 						<lsm-input
 							v-model="city"
-							@keyup.enter="submitForm"
+							@keyup.enter.exact="submitForm"
 							placeholder="Digite nome da Cidade">
 						</lsm-input>
 					</div>
@@ -50,8 +50,10 @@
 						<lsm-text-area
 							max-length="1024"
 							rows="4"
+
 							v-model="description"
-							placeholder="Digite a descriçao da localidade">
+							placeholder="Digite a descriçao da localidade"
+							@keyup.enter.exact="submitForm">
 						</lsm-text-area>
 					</div>
 				</div>

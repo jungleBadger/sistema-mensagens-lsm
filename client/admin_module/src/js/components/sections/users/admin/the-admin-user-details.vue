@@ -26,7 +26,7 @@
 						v-model="displayName"
 						autofocus
 						placeholder="Digite nome de exibição"
-						@keyup.enter="submitForm">
+						@keyup.enter.exact="submitForm">
 
 					</lsm-input>
 				</div>

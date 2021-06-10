@@ -25,7 +25,7 @@
 						v-model="displayName"
 						autofocus
 						placeholder="Digite nome de exibição"
-						@keyup.enter="submitForm">
+						@keyup.enter.exact="submitForm">
 
 					</lsm-input>
 				</div>
@@ -37,7 +37,7 @@
 						v-model="email"
 						placeholder="Digite o e-mail do usuário"
 						type="email"
-						@keyup.enter="submitForm">
+						@keyup.enter.exact="submitForm">
 
 					</lsm-input>
 				</div>

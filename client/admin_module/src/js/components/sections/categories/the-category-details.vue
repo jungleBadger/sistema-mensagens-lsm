@@ -24,7 +24,7 @@
 					autofocus
 					max-length="512"
 					placeholder="Digite nome de exibição"
-					@keyup.enter="submitForm">
+					@keyup.enter.exact="submitForm">
 				</lsm-text-area>
 			</div>
 		</template>
