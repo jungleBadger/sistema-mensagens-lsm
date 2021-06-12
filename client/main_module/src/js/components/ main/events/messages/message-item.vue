@@ -64,7 +64,7 @@ export default defineComponent({
 			await this.$store.dispatch("shoppingCart/addItemToCart", this.message.id);
 		},
 		async removeItemFromCart() {
-			await this.$store.dispatch("shoppingCart/removeItemFromCart", this.isAlreadyInCart.id);
+			await this.$store.dispatch("shoppingCart/removeItemFromCart", this.isAlreadyInCart.orderItemId);
 		}
 	},
 	async mounted () {

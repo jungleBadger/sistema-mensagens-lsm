@@ -12,6 +12,6 @@ export default {
 	},
 
 	removeItemFromCurrentCart(context, itemId) {
-		context.currentCart = context.currentCart.filter(orderItem => orderItem.id !== itemId);
+		context.currentCart = context.currentCart.filter(orderItem => orderItem.orderItemId !== itemId);
 	}
 }

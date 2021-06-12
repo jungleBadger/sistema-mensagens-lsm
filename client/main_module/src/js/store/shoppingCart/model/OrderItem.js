@@ -2,8 +2,9 @@
 
 export default class OrderItem {
 	constructor (props) {
-		this.id = props.ID || props.id;
+		this.orderItemId = props.PEDIDO_ITEM_ID || props.orderItemId;
 		this.messageId = props.messageId || props.MENSAGEM_ID;
+		this.messageTitle = props.messageTitle || props.MENSAGEM_TITULO;
 		this.orderId = props.orderId || props.PEDIDO_ID;
 		this.orderStatusId = props.orderStatusId || props.STATUS_ID;
 		this.appliedValue = Number(props.appliedValue || props.VALOR_APLICADO).toFixed(2);

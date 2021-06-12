@@ -13,12 +13,23 @@ module.exports = {
 	},
 
 	async validateJWT(req, res, next) {
-		console.log("OIII")
 		let decodedJWT = await validateJWT(res.locals.apiKey);
-		console.log(decodedJWT)
 		if (decodedJWT) {
 			res.locals.decodedJWT = decodedJWT;
 		}
 		next();
-	}
+	},
+
+
+	validateRequestReferer(req, res, next) {
+
+		console.log(req.header(""));
+		return next();
+		// return function (targetReferer) {
+		// 	if (targetReferer === req.header("Referer"))
+		// 	return next();
+		// }
+
+	},
+
 };
