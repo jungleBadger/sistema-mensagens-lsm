@@ -21,7 +21,7 @@ router.get("/:orderId/cancel", (req, res) => {
 	return res.status(200).send("ok");
 });
 
-router.get("/:orderId/update", async (req, res) => {
+router.post("/:orderId/update", async (req, res) => {
 	await fs.writeFile(`./${Date.now()}_request.log`, JSON.stringify({
 		"headers": req.headers,
 		"body": req.body,
