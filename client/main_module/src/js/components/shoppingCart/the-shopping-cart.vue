@@ -72,25 +72,25 @@
 						id="url_success"
 						name="url_success"
 						type="hidden"
-						:value="`https://localhost:3030/api/order/${orderId}/accept`">
+						:value="`${integrationURL}/${orderId}/accept`">
 
 					<input
 						id="transaction_url_notification"
 						name="transaction[url_notification]"
 						type="hidden"
-						:value="`https://localhost:3030/api/order/${orderId}/update`">
+						:value="`${integrationURL}/${orderId}/update`">
 
 					<input
 						id="url_notification"
 						name="url_notification"
 						type="hidden"
-						:value="`https://localhost:3030/api/order/${orderId}/update`">
+						:value="`${integrationURL}/${orderId}/update`">
 
 					<input
 						id="url_cancel"
 						name="url_cancel"
 						type="hidden"
-						:value="`https://localhost:3030/api/order/${orderId}/cancel`">
+						:value="`${integrationURL}/${orderId}/cancel`">
 				</form>
 
 				<lsm-button
@@ -104,8 +104,7 @@
 
 
 		</main>
-
-
+		{{integrationURL}}
 		<div v-for="item in cartItems" class="flex gap-2">
 			<span>{{ item.id }}</span>
 			<span>{{ item.messageId }}</span>
@@ -125,6 +124,11 @@ import LsmButton from "../../../../../_etc/shared_components/ui/lsm-button";
 export default defineComponent({
 	"name": "TheShoppingCart",
 	"components": { LsmButton },
+	setup() {
+		return {
+			"integrationURL": `${window.location.protocol || "https:"}//${window.location.host || "localhost:3030"}/api/order`
+		}
+	},
 	"computed": {
 
 		"cartItems": function () {
@@ -146,7 +150,7 @@ export default defineComponent({
 		},
 
 		async setOrderToPending() {
-			// await this.$store.dispatch("shoppingCart/setOrderToPending", this.orderId);
+			await this.$store.dispatch("shoppingCart/setOrderToPending", this.orderId);
 			this.$refs.yapayForm.submit();
 		}
 	}
