@@ -2,6 +2,7 @@
 
 
 import shoppingCartFactory from "../../factory/shoppingCart";
+import ordersFactory from "../../factory/orders";
 
 export default {
 
@@ -59,7 +60,7 @@ export default {
 	async retrieveCartItems(context) {
 		try {
 			let currentCart = await shoppingCartFactory.retrieveCartItems();
-			context.commit("currentCart", currentCart.filter(orderItem => orderItem.ID));
+			context.commit("currentCart", currentCart.filter(orderItem => orderItem.PEDIDO_ITEM_ID));
 			return true;
 		} catch (e) {
 			if (e) {
@@ -94,6 +95,23 @@ export default {
 				{
 					"kind": "error",
 					"title": "Houve um erro ao tentar limpar o carrinho.",
+					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+	},
+
+
+	async setOrderToPending(context, orderId) {
+		try {
+			await ordersFactory.setOrderToPending(orderId);
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro ao tentar finalizar compra.",
 					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}
