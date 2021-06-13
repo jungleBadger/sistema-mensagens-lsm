@@ -62,10 +62,10 @@ module.exports = {
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
 					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID)`,
 					"WHERE M.HABILITADO = TRUE AND M.CAMINHO_ARQUIVO_AUDIO > '' AND",
-					`LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
+					`(LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
 					`LOWER((L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)) LIKE LOWER('%${filterText}%')`,
 					extraFilterColumns.map((column) => `OR LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" "),
-					`GROUP BY ${targetColumns.map(column => `${column}`).join(", ")},`,
+					`) GROUP BY ${targetColumns.map(column => `${column}`).join(", ")},`,
 					"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)",
 					`ORDER BY ${orderBy} ${orderDirection}`,
 					`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
@@ -75,16 +75,16 @@ module.exports = {
 			),
 			connectionPool.executePreparedSqlInstruction(
 				[
-					`SELECT COUNT(EVENTO.ID)`,
+					`SELECT COUNT FROM (SELECT DISTINCT EVENTO.ID`,
 					`FROM (
 					${TABLE_NAME}
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
 					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID)`,
 					"WHERE M.HABILITADO = TRUE AND M.CAMINHO_ARQUIVO_AUDIO > '' AND",
-					`LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
+					`(LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
 					`LOWER((L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)) LIKE LOWER('%${filterText}%')`,
 					extraFilterColumns.map((column) => `OR LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" "),
-					";"
+					"));"
 				].join(" "),
 				[],
 				"fetch"

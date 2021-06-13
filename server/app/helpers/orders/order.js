@@ -18,6 +18,80 @@ const shoppingCart = require("./shoppingCart");
 module.exports = {
 
 
+	/**
+	 * @method setOrderToPending
+	 * @desc Set an open order to pending status.
+	 * @param {string} orderId
+	 * @param {string} userId
+	 * @return {Promise<Object|Error>}
+	 */
+	async setOrderToPending (orderId, userId) {
+
+		await connectionPool.executePreparedSqlInstruction(
+			[
+				"UPDATE PEDIDO P SET P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ? AND P.USUARIO_ID = ?"
+			].join(" "),
+			['PENDENTE', Number(orderId), Number(userId)]
+		);
+	},
+
+	/**
+	 * @method fetchPendingOrders
+	 * @param {string} userId
+	 * @return {Promise<Object|Error>}
+	 */
+	async fetchPendingOrders(userId) {
+		if (!userId) {
+			throw raiseError(
+				400,
+				"Missing required properties for fetching user's pending orders."
+			);
+		}
+
+		let result = await connectionPool.executePreparedSqlInstruction(
+			[
+				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, PI.ID AS PEDIDO_ITEM_ID, PI.MENSAGEM_ID, M.TITULO AS MENSAGEM_TITULO, PI.VALOR_APLICADO, PI.CRIADO_EM, M.HABILITADO",
+				"FROM PEDIDO P",
+				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
+				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
+				"FULL JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
+				"WHERE P.USUARIO_ID = ?",
+				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?);"
+			].join(" "),
+			[userId, 'PENDENTE']
+		);
+
+		return result || [];
+	},
+
+	/**
+	 * @method fetchPendingOrders
+	 * @param {string} userId
+	 * @return {Promise<Object|Error>}
+	 */
+	async fetchRejectedOrders(userId) {
+		if (!userId) {
+			throw raiseError(
+				400,
+				"Missing required properties for fetching user's pending orders."
+			);
+		}
+
+		let result = await connectionPool.executePreparedSqlInstruction(
+			[
+				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, PI.ID AS PEDIDO_ITEM_ID, PI.MENSAGEM_ID, M.TITULO AS MENSAGEM_TITULO, PI.VALOR_APLICADO, PI.CRIADO_EM, M.HABILITADO",
+				"FROM PEDIDO P",
+				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
+				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
+				"FULL JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
+				"WHERE P.USUARIO_ID = ?",
+				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?);"
+			].join(" "),
+			[userId, 'REJEITADO']
+		);
+
+		return result || [];
+	},
 
 	async processOrder(orderId, yapayObject = {}) {
 

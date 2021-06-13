@@ -17,7 +17,7 @@
 					action="https://tc-intermediador-sandbox.yapay.com.br/payment/transaction"
 					method="POST"
 					name="form_pagamento"
-					target="blank">
+					target="_self">
 
 					<input
 						id="token_account"
@@ -70,22 +70,16 @@
 
 
 					<input
-						id="url_success"
-						name="url_success"
+						id="url_process"
+						name="url_process"
 						type="hidden"
-						:value="integrationURL">
-
-					<input
-						id="url_cancel"
-						name="url_cancel"
-						type="hidden"
-						:value="integrationURL">
+						:value="`https://sistema.igrejaemsumare.com.br/pedidos`">
 
 					<input
 						id="url_notification"
 						name="url_notification"
 						type="hidden"
-						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/test`">
+						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`">
 
 
 				</form>
@@ -148,6 +142,7 @@ export default defineComponent({
 		},
 
 		async setOrderToPending() {
+			await this.$store.dispatch("shoppingCart/setOrderToPending", this.orderId);
 			this.$refs.yapayForm.submit();
 		}
 	},

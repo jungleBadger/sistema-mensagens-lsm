@@ -10,7 +10,13 @@ export default {
 		try {
 			let result = await eventsFactory.searchEvents(params.filterText, params.filterColumn, skip, limit, orderBy, orderDirection);
 			context.commit("totalEventsCount", result.totalCount);
-			context.commit("eventItems", result.results);
+
+			if (params.isPagination) {
+				context.commit("eventItems", result.results);
+			} else {
+				context.commit("replaceEventItems", result.results);
+			}
+
 		} catch (e) {
 			context.commit(
 				"notification/addNotification",
@@ -43,12 +49,17 @@ export default {
 
 	},
 
-	async retrieveEvents(context) {
+	async retrieveEvents(context, params = {}) {
 		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
 
 		try {
 			let events = await eventsFactory.retrieveEvents(skip, limit, orderBy, orderDirection);
-			context.commit("eventItems", events.results);
+			if (params.isPagination) {
+				context.commit("eventItems", events.results);
+			} else {
+				context.commit("replaceEventItems", events.results);
+			}
+
 		} catch (e) {
 			context.commit(
 				"notification/addNotification",

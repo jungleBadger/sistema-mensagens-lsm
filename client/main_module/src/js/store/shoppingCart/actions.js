@@ -60,6 +60,7 @@ export default {
 	async retrieveCartItems(context) {
 		try {
 			let currentCart = await shoppingCartFactory.retrieveCartItems();
+			console.log(currentCart);
 			context.commit("currentCart", currentCart.filter(orderItem => orderItem.PEDIDO_ITEM_ID));
 			return true;
 		} catch (e) {
@@ -113,6 +114,24 @@ export default {
 				{
 					"kind": "error",
 					"title": "Houve um erro ao tentar validar a ordem.",
+					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+	},
+
+
+	async setOrderToPending(context, orderId) {
+		try {
+			await ordersFactory.setOrderToPending(orderId);
+		} catch (e) {
+			console.log(e);
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro ao tentar finalizar compra.",
 					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}

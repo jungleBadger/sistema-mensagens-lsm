@@ -2,6 +2,7 @@
 	<div class="w-full h-full bg-red-500 pl-8 pr-8">
 		Minhas mensagens
 		<div>
+			{{pendingOrders}}
 		</div>
 	</div>
 </template>
@@ -14,6 +15,13 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	"name": "TheOwnedMessages",
 	"computed": {
+		"pendingOrders": function () {
+			return this.$store.getters["orders/pending/orders"];
+		}
+
+	},
+	async beforeCreate () {
+		await this.$store.dispatch("orders/pending/fetchPendingOrdersOrders");
 	}
 });
 </script>

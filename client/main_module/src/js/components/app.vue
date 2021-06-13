@@ -46,12 +46,15 @@
 				<router-view
 					style="transform: translate(0); background-color: rgb(215, 232, 239);"
 					v-slot="{ Component }">
+
 					<transition
 						@enter="fadeIn"
 						@leave="fadeOut"
 						mode="out-in"
 						:css="false">
-						<component :is="Component" />
+						<keep-alive>
+							<component :is="Component" />
+						</keep-alive>
 					</transition>
 				</router-view>
 			</template>
@@ -101,6 +104,7 @@ export default defineComponent({
 		let result = await this.$store.dispatch("utilities/getUserInfo");
 		if (result && result.id) {
 			let cartStatus = await this.$store.dispatch("shoppingCart/retrieveCartItems");
+			console.log(cartStatus);
 			if (!cartStatus) {
 				await this.$store.dispatch("shoppingCart/createCart");
 			}
