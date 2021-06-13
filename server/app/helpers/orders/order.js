@@ -10,10 +10,81 @@ const connectionPool = new DBConnectionPool(
 	process.env.DB2_UID,
 	process.env.DB2_PASSWORD
 );
-
+const fs = require("fs").promises;
+const logger = require("../logger");
+const Transaction = require("../../models/yapay/Transaction");
+const shoppingCart = require("./shoppingCart");
 
 module.exports = {
 
+
+
+	async processOrder(orderId, yapayObject = {}) {
+
+		await Promise.all([
+			this.storeOrderTransaction({
+				"orderId": orderId,
+				"transactionId": yapayObject.transaction.transaction_id,
+				"transactionToken": yapayObject.token_transaction,
+				"transactionDate": yapayObject.transaction.date_transaction
+			}),
+			fs.writeFile(`./${Date.now()}_request.log`, JSON.stringify({
+				yapayObject,
+				orderId
+			}, null, 4))
+		]);
+
+		if (yapayObject.transaction.status_name === "Aprovada") {
+			await this.setOrderToApproved(orderId);
+		} else {
+			await this.setOrderToCancelled(orderId);
+		}
+	},
+
+
+	async storeOrderTransaction(params = {}) {
+		const transaction = new Transaction(
+			params.orderId,
+			params.transactionId,
+			params.transactionToken,
+			params.transactionDate
+		);
+
+		const insertKeys = transaction.getKeys();
+
+		try {
+
+			return {
+				...(
+					await logger.generateLog(
+						"CREATE",
+						(await connectionPool.executePreparedSqlInstruction(
+							[
+								`(SELECT ID FROM FINAL TABLE (insert INTO PEDIDO_YAPAY_TRANSACAO (${insertKeys.join(", ")})`,
+								`values (${insertKeys.map(() => "?").join(", ")})))`
+							].join(" "),
+							transaction.getValues(),
+							"fetch"
+						)).ID,
+						"PEDIDO_YAPAY_TRANSACAO",
+						"system",
+						-1
+					)
+				)
+			};
+
+
+		} catch (e) {
+			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
+				throw raiseError(
+					409,
+					`Brother ${displayName} already exists.`
+				);
+			} else {
+				throw e;
+			}
+		}
+	},
 
 	/**
 	 * @method setOrderToPending
@@ -22,30 +93,46 @@ module.exports = {
 	 * @param {string} userId
 	 * @return {Promise<Object|Error>}
 	 */
-	async setOrderToPending (orderId, userId) {
+	async validateOrder (orderId, userId) {
 
-		let doubleCheckOrderStatus = await connectionPool.executePreparedSqlInstruction(
+		await shoppingCart.removeDisabledItems(orderId, userId);
+		return await shoppingCart.retrieveUserCart(userId);
+	},
+
+
+
+
+	/**
+	 * @method setOrderToApproved
+	 * @desc Set an open order to pending status.
+	 * @param {string} orderId
+	 * @return {Promise<Object|Error>}
+	 */
+	async setOrderToApproved (orderId) {
+
+		await connectionPool.executePreparedSqlInstruction(
 			[
-				"SELECT ID, CRIADO_EM FROM PEDIDO WHERE PEDIDO.ID = ? AND PEDIDO.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE PEDIDO_STATUS.NOME_EXIBICAO = ?) AND PEDIDO.USUARIO_ID = ?;"
+				"UPDATE PEDIDO P SET P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
 			].join(" "),
-			[Number(orderId), 'ABERTO', Number(userId)]
+			['CONCLUIDO', Number(orderId)]
 		);
+	},
 
-		if (doubleCheckOrderStatus && doubleCheckOrderStatus[0]) {
-			await connectionPool.executePreparedSqlInstruction(
-				[
-					"UPDATE PEDIDO P SET P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ? AND P.USUARIO_ID = ?"
-				].join(" "),
-				['PENDENTE', Number(orderId), Number(userId)]
-			);
-			return orderId;
-		} else {
-			throw raiseError(
-				404,
-				"Order not found."
-			);
-		}
 
+	/**
+	 * @method setOrderToApproved
+	 * @desc Set an open order to pending status.
+	 * @param {string} orderId
+	 * @return {Promise<Object|Error>}
+	 */
+	async setOrderToCancelled (orderId) {
+
+		await connectionPool.executePreparedSqlInstruction(
+			[
+				"UPDATE PEDIDO P SET P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
+			].join(" "),
+			['REJEITADO', Number(orderId)]
+		);
 	}
 
 };

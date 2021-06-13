@@ -39,17 +39,23 @@
 		</the-app-header>
 
 		<main class="w-full flex-1 overflow-hidden">
-			<router-view
-				style="transform: translate(0); background-color: rgb(215, 232, 239);"
-				v-slot="{ Component }">
-				<transition
-					@enter="fadeIn"
-					@leave="fadeOut"
-					mode="out-in"
-					:css="false">
-					<component :is="Component" />
-				</transition>
-			</router-view>
+			<template v-if="isLoading">
+				Carregando
+			</template>
+			<template v-else>
+				<router-view
+					style="transform: translate(0); background-color: rgb(215, 232, 239);"
+					v-slot="{ Component }">
+					<transition
+						@enter="fadeIn"
+						@leave="fadeOut"
+						mode="out-in"
+						:css="false">
+						<component :is="Component" />
+					</transition>
+				</router-view>
+			</template>
+
 
 		</main>
 
@@ -73,6 +79,11 @@ export default defineComponent({
 	"mixins": [
 		fade
 	],
+	"data": function () {
+		return {
+			"isLoading": false
+		}
+	},
 	"components": {
 		LsmToastNotificationContainer,
 		TheAppHeader
@@ -86,6 +97,7 @@ export default defineComponent({
 		}
 	},
 	async beforeCreate () {
+		this.isLoading = true;
 		let result = await this.$store.dispatch("utilities/getUserInfo");
 		if (result && result.id) {
 			let cartStatus = await this.$store.dispatch("shoppingCart/retrieveCartItems");
@@ -99,6 +111,10 @@ export default defineComponent({
 				});
 			}
 		}
+		await this.$nextTick(() => {
+			this.isLoading = false;
+		});
+
 	}
 });
 </script>

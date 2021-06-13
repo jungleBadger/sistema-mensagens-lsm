@@ -5,9 +5,9 @@ const API_ENDPOINT = `${window.location.protocol || "https:"}//${window.location
 
 export default {
 
-	async setOrderToPending(orderId) {
+	async validateOrder(orderId) {
 		return await http.patch(
-			`${API_ENDPOINT}/${orderId}/pending`
+			`${API_ENDPOINT}/${orderId}/validate`
 		);
 	}
 

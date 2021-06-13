@@ -21,9 +21,9 @@ const connectionPool = new DBConnectionPool(
 // check cart - open order already exists?
    //EXISTS
       // add/remove item
-
-const TABLE_NAME = "PEDIDO";
-const PEDIDO_ITEM_TABLE_NAME = "PEDIDO_ITEM";
+//
+// const TABLE_NAME = "PEDIDO";
+// const PEDIDO_ITEM_TABLE_NAME = "PEDIDO_ITEM";
 
 module.exports = {
 
@@ -83,7 +83,6 @@ module.exports = {
 	 * @return {Promise<Object|Error>}
 	 */
 	async addItemToCart (itemId, userId) {
-		console.log([userId, 'ABERTO', itemId]);
 		let result = await connectionPool.executePreparedSqlInstruction(
 			[
 				"(SELECT ID, PEDIDO_ID, VALOR_APLICADO, CRIADO_EM FROM FINAL TABLE (INSERT INTO PEDIDO_ITEM (PEDIDO_ID, MENSAGEM_ID)",
@@ -129,6 +128,36 @@ module.exports = {
 	},
 
 	/**
+	 * @method removeDisabledItems
+	 * @desc Remove disabled items from a given cart.
+	 * @param {string} orderId
+	 * @param {string} userId
+	 * @return {Promise<Object|Error>}
+	 */
+	async removeDisabledItems (orderId, userId) {
+
+		console.log([
+			"DELETE FROM PEDIDO_ITEM PI WHERE MENSAGEM_ID IN (",
+			"SELECT M.ID AS MENSAGEM_ID FROM PEDIDO JOIN PEDIDO P on PEDIDO.ID = PI.PEDIDO_ID  JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
+			"WHERE PEDIDO.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE PEDIDO_STATUS.NOME_EXIBICAO = ?)",
+			"AND PI.PEDIDO_ID = ? AND P.USUARIO_ID = ? AND M.HABILITADO = FALSE",
+			");"
+		].join(" "));
+		console.log(orderId);
+		console.log(userId);
+		return await connectionPool.executePreparedSqlInstruction(
+			[
+				"DELETE FROM PEDIDO_ITEM PI WHERE MENSAGEM_ID IN (",
+					"SELECT M.ID AS MENSAGEM_ID FROM PEDIDO JOIN PEDIDO P on PEDIDO.ID = PI.PEDIDO_ID  JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
+					"WHERE PEDIDO.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE PEDIDO_STATUS.NOME_EXIBICAO = ?)",
+					"AND PI.PEDIDO_ID = ? AND P.USUARIO_ID = ? AND M.HABILITADO = FALSE",
+				");"
+			].join(" "),
+			['ABERTO', Number(orderId), Number(userId)]
+		);
+	},
+
+	/**
 	 * @method retrieveUserCart
 	 * @param {string} userId - ID to search for.
 	 * @return {Promise<Object|Error>}
@@ -149,7 +178,7 @@ module.exports = {
 				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
 				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
 				"FULL JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
-				"WHERE P.USUARIO_ID = ?",
+				"WHERE P.USUARIO_ID = ? AND M.HABILITADO = true",
 				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?);"
 			].join(" "),
 			[userId, 'ABERTO']

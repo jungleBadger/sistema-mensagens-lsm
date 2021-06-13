@@ -103,15 +103,15 @@ export default {
 	},
 
 
-	async setOrderToPending(context, orderId) {
+	async validateOrder(context, orderId) {
 		try {
-			await ordersFactory.setOrderToPending(orderId);
+			await ordersFactory.validateOrder(orderId);
 		} catch (e) {
 			context.commit(
 				"notification/addNotification",
 				{
 					"kind": "error",
-					"title": "Houve um erro ao tentar finalizar compra.",
+					"title": "Houve um erro ao tentar validar a ordem.",
 					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}

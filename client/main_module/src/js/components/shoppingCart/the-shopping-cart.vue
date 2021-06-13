@@ -33,6 +33,7 @@
 
 
 					<template v-if="orderId">
+						FORM
 						<input
 							id="order_number"
 							name="order_number"
@@ -69,28 +70,17 @@
 
 
 					<input
-						id="url_success"
-						name="url_success"
+						id="url_process"
+						name="url_process"
 						type="hidden"
-						:value="`${integrationURL}/${orderId}/accept`">
-
-					<input
-						id="transaction_url_notification"
-						name="transaction[url_notification]"
-						type="hidden"
-						:value="`${integrationURL}/${orderId}/update`">
+						:value="integrationURL">
 
 					<input
 						id="url_notification"
 						name="url_notification"
 						type="hidden"
-						:value="`${integrationURL}/${orderId}/update`">
+						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`">
 
-					<input
-						id="url_cancel"
-						name="url_cancel"
-						type="hidden"
-						:value="`${integrationURL}/${orderId}/cancel`">
 				</form>
 
 				<lsm-button
@@ -107,6 +97,7 @@
 		{{integrationURL}}
 		<div v-for="item in cartItems" class="flex gap-2">
 			<span>{{ item.id }}</span>
+			<span>{{ item.messageTitle }}</span>
 			<span>{{ item.messageId }}</span>
 			<span>{{ item.appliedValue }}</span>
 
@@ -150,9 +141,14 @@ export default defineComponent({
 		},
 
 		async setOrderToPending() {
-			await this.$store.dispatch("shoppingCart/setOrderToPending", this.orderId);
 			this.$refs.yapayForm.submit();
 		}
+	},
+	async mounted() {
+		if (this.orderId) {
+			await this.$store.dispatch("shoppingCart/validateOrder", this.orderId);
+		}
+
 	}
 });
 </script>
