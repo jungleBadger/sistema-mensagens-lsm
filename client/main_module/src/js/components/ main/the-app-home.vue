@@ -1,5 +1,10 @@
 <template>
 	<div class="w-full h-full px-8 pt-4">
+
+		<header>
+			<h4 class="text-2xl">Sistema de Mensagens LSM</h4>
+		</header>
+
 		<the-event-list></the-event-list>
 	</div>
 </template>

@@ -67,7 +67,6 @@ router.get(
 router.get(
 	"/",
 	async (req, res) => {
-		console.log("OIII");
 		res.status(200).send(
 			await event.retrieveAll(
 				[

@@ -170,6 +170,15 @@ module.exports = {
 				"Missing required properties for fetching user shopping cart."
 			);
 		}
+		console.log(	[
+			"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, PI.ID AS PEDIDO_ITEM_ID, PI.MENSAGEM_ID, M.TITULO AS MENSAGEM_TITULO, PI.VALOR_APLICADO, PI.CRIADO_EM",
+			"FROM PEDIDO P",
+			"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
+			"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
+			"FULL JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
+			"WHERE P.USUARIO_ID = ? AND M.HABILITADO = true",
+			"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?);"
+		].join(" "));
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			[

@@ -6,6 +6,21 @@ const { isLoggedIn } = require("../../middlewares/auth");
 const order = require("../../../helpers/orders/order");
 const fs = require("fs").promises;
 
+
+router.patch("/:orderId/pending",
+	isLoggedIn,
+	async (req, res) => {
+		return res.status(200).send(await order.setOrderToPending(req.params.orderId, req.user.id));
+	}
+);
+
+router.get("/pending",
+	isLoggedIn,
+	async (req, res) => {
+		return res.status(200).send(await order.fetchPendingOrders(req.user.id));
+	}
+);
+
 router.patch("/:orderId/validate",
 	isLoggedIn,
 	async (req, res) => {
@@ -22,8 +37,6 @@ router.post("/:orderId/update", async (req, res) => {
 		console.log(e);
 		return res.status(200).send("ok");
 	}
-
-
 });
 
 router.post("/:orderId/test", async (req, res) => {

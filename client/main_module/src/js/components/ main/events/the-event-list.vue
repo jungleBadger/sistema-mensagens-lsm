@@ -18,6 +18,17 @@
 				:event="event"
 			></event-item>
 		</div>
+
+		<div v-if="hasNextPage">
+			{{pagination}}
+			{{eventsCount}}
+			<lsm-button @click="updatePagination"></lsm-button>
+		</div>
+
+
+		<span>oi</span>
+
+
 	</div>
 </template>
 <script type="text/javascript">
@@ -28,10 +39,11 @@ import { defineComponent } from "vue";
 import {useI18n} from "vue-i18n";
 import EventItem from "./event-item";
 import LsmInput from "../../../../../../_etc/shared_components/ui/lsm-input";
+import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button";
 
 export default defineComponent({
 	"name": "TheEventList",
-	components: { LsmInput, EventItem },
+	components: { LsmButton, LsmInput, EventItem },
 	setup() {
 		return {
 			...useI18n()
@@ -45,6 +57,9 @@ export default defineComponent({
 		}
 	},
 	"computed": {
+		"eventsCount": function () {
+			return this.$store.getters["events/totalEventsCount"];
+		},
 		"events": function () {
 			return this.$store.getters["events/eventItems"];
 		},
@@ -55,6 +70,9 @@ export default defineComponent({
 			set(val) {
 				this.$store.commit("events/pagination", val);
 			}
+		},
+		"hasNextPage": function () {
+			return this.eventsCount > (this.pagination.skip + this.pagination.limit);
 		},
 		"isLoading": {
 			get() {
@@ -67,10 +85,13 @@ export default defineComponent({
 	},
 
 	async beforeMount () {
-		this.isLoading = true;
-		await this.loadEvents();
-		this.lastUpdate = Date.now();
-		this.isLoading = false;
+		if (!this.events || !this.events.length) {
+			this.isLoading = true;
+			await this.loadEvents();
+			this.lastUpdate = Date.now();
+			this.isLoading = false;
+		}
+
 	},
 	"watch": {
 		"filterText": function (newValue) {
@@ -98,35 +119,41 @@ export default defineComponent({
 		}
 	},
 	"methods": {
-		async loadEvents() {
+		async loadEvents(isPagination) {
 			return await Promise.all([
 				this.$store.dispatch("events/retrieveTotalEventsCount"),
-				this.$store.dispatch("events/retrieveEvents")
+				this.$store.dispatch("events/retrieveEvents", {
+					isPagination
+				})
 			]);
 		},
 
-		async searchEvents() {
+		async searchEvents(isPagination) {
 			return await this.$store.dispatch(
 				"events/searchEvents",
 				{
 					"filterColumn": this.asyncFilterColumn,
-					"filterText": this.asyncFilterText
+					"filterText": this.asyncFilterText,
+					isPagination
 				}
 			);
 		},
-		async performRelevantQuery() {
+		async performRelevantQuery(isPagination) {
 			if (this.isLoading) {
 				return false;
 			}
 			this.isLoading = true;
-			await (this.asyncFilterText ? this.searchEvents() : this.loadEvents());
+			await (this.asyncFilterText ? this.searchEvents(isPagination) : this.loadEvents(isPagination));
 			this.lastUpdate = Date.now();
 			this.isLoading = false;
 		},
 
-		updatePagination(value) {
-			this.pagination = value;
-			return this.performRelevantQuery();
+		updatePagination() {
+			this.pagination = {
+				...this.pagination,
+				"skip": this.pagination.skip + 1
+			};
+			return this.performRelevantQuery(true);
 		},
 
 		handleAsyncSearch(value) {

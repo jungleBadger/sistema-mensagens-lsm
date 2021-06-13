@@ -23,6 +23,10 @@ export default {
 	},
 
 	eventItems(state, events = []) {
+		state.eventItems = state.eventItems.concat(events.map(event => new Event(event)));
+	},
+
+	replaceEventItems(state, events = []) {
 		state.eventItems = events.map(event => new Event(event));
 	},
 
