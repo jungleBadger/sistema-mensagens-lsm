@@ -13,6 +13,8 @@ router.patch("/:orderId/validate",
 );
 
 router.post("/:orderId/update", async (req, res) => {
+	console.log("OIIII");
+	console.log(req.body);
 	return res.status(200).send(await order.processOrder(req.params.orderId, req.body));
 });
 
