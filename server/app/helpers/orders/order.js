@@ -142,7 +142,7 @@ module.exports = {
 						)).ID,
 						"PEDIDO_YAPAY_TRANSACAO",
 						"system",
-						-1
+						null
 					)
 				)
 			};

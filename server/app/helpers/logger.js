@@ -22,7 +22,7 @@ module.exports = {
 	 * @param {string} referenceId - Reference ID to be logged. E.g: An event's ID.
 	 * @param {string} referenceTable - Reference Table that the entity belongs to. E.g: `EVENTOS`
 	 * @param {string} operatorAlias - Log operator alias, usually an e-mail or `system`
-	 * @param {number} [operatorId] - Optional operator foreign key reference to the `USUARIOS` table
+	 * @param {number|null} [operatorId] - Optional operator foreign key reference to the `USUARIOS` table
 	 * @return {Promise<{'LOG_ID': string, 'ID': string}|Error>} Result.
 	 */
 	async generateLog (
