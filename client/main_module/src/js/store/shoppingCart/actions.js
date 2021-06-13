@@ -105,7 +105,8 @@ export default {
 
 	async validateOrder(context, orderId) {
 		try {
-			await ordersFactory.validateOrder(orderId);
+			let currentCart = await ordersFactory.validateOrder(orderId);
+			context.commit("currentCart", currentCart.filter(orderItem => orderItem.PEDIDO_ITEM_ID));
 		} catch (e) {
 			context.commit(
 				"notification/addNotification",
