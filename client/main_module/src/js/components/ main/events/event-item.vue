@@ -6,6 +6,7 @@
 			{{event.totalMessages}}
 		</h6>
 		<div class="flex flex-col gap-1">
+			{{event.messages}}
 			<message-item
 				v-for="(message, index) in event.messages"
 				:key="message.id"
@@ -31,13 +32,8 @@ export default defineComponent({
 			"required": true
 		}
 	},
-	"computed": {
-	},
 	async mounted () {
-		console.log("retrieve messages");
-		console.log(this.event.id);
-		let a = await this.$store.dispatch("events/retrieveMessagesByEventId", this.event.id);
-		console.log(a);
+		await this.$store.dispatch("events/retrieveMessagesByEventId", this.event.id);
 	}
 });
 </script>

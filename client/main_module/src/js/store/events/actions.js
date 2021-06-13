@@ -104,7 +104,7 @@ export default {
 			context.commit("appendMessagesToEvent", {
 				"eventId": eventId,
 				"messages": messages.results
-			})
+			});
 			return messages;
 		} catch (e) {
 			context.commit(

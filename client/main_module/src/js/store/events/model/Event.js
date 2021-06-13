@@ -8,6 +8,7 @@ export default class Event {
 		this.title = props.title || props.TITULO;
 		this.totalMessages = props.totalMessages || props.TOTAL_MENSAGENS || 0;
 		this.messages = props.messages || [];
+		this.loadedAt = this.id + Date.now();
 
 		if (props.startDate) {
 			this.startDate = new Date(props.startDate);

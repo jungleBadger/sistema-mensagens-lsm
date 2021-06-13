@@ -35,6 +35,7 @@ export default {
 		if (event) {
 			event.messages = params.messages.map(message => new Message(message));
 		}
+
 	},
 
 	selectedEvent(state, event) {

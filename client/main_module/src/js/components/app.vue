@@ -52,7 +52,7 @@
 						@leave="fadeOut"
 						mode="out-in"
 						:css="false">
-						<keep-alive>
+						<keep-alive include="AppHome">
 							<component :is="Component" />
 						</keep-alive>
 					</transition>
@@ -103,8 +103,9 @@ export default defineComponent({
 		this.isLoading = true;
 		let result = await this.$store.dispatch("utilities/getUserInfo");
 		if (result && result.id) {
-			let cartStatus = await this.$store.dispatch("shoppingCart/retrieveCartItems");
-			console.log(cartStatus);
+			let [cartStatus] = await Promise.all([
+				this.$store.dispatch("shoppingCart/retrieveCartItems")
+			]);
 			if (!cartStatus) {
 				await this.$store.dispatch("shoppingCart/createCart");
 			}

@@ -2,6 +2,7 @@
 	<div
 		style="background-color: rgb(215, 232, 239);"
 		class="h-full w-full flex flex-col overflow-hidden gap-1">
+
 		<div class="shadow">
 			<lsm-input
 				v-model="filterText"
@@ -10,18 +11,23 @@
 				placeholder="Digite para procurar eventos e mensagens"
 				label="Procurar eventos e mensagens"></lsm-input>
 		</div>
-		<div class="overflow-auto  flex-1 w-full flex flex-col gap-2 divide-y" v-if="lastUpdate">
+		<div class="overflow-auto flex-1 w-full flex flex-col gap-2 divide-y">
 
 			<event-item
 				v-for="event in events"
-				:key="event.id + lastUpdate"
+				:key="event.loadedAt"
 				:event="event"
 			></event-item>
 		</div>
 
+
 		<div v-if="hasNextPage">
-			{{pagination}}
-			{{eventsCount}}
+			<h3>PAGINATION</h3>
+			<div>
+
+				{{pagination}}
+				{{eventsCount}}
+			</div>
 			<lsm-button @click="updatePagination"></lsm-button>
 		</div>
 
@@ -53,7 +59,7 @@ export default defineComponent({
 		return {
 			"filterText": "",
 			"debounce": "",
-			"lastUpdate": ""
+			"lastUpdated": Date.now()
 		}
 	},
 	"computed": {
@@ -88,7 +94,6 @@ export default defineComponent({
 		if (!this.events || !this.events.length) {
 			this.isLoading = true;
 			await this.loadEvents();
-			this.lastUpdate = Date.now();
 			this.isLoading = false;
 		}
 
@@ -144,7 +149,6 @@ export default defineComponent({
 			}
 			this.isLoading = true;
 			await (this.asyncFilterText ? this.searchEvents(isPagination) : this.loadEvents(isPagination));
-			this.lastUpdate = Date.now();
 			this.isLoading = false;
 		},
 
