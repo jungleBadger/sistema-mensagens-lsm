@@ -70,8 +70,14 @@
 
 
 					<input
-						id="url_process"
-						name="url_process"
+						id="url_success"
+						name="url_success"
+						type="hidden"
+						:value="integrationURL">
+
+					<input
+						id="url_cancel"
+						name="url_cancel"
 						type="hidden"
 						:value="integrationURL">
 
@@ -81,11 +87,6 @@
 						type="hidden"
 						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`">
 
-					<input
-						id="transaction_url_notification"
-						name="transaction[url_notification]"
-						type="hidden"
-						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`">
 
 				</form>
 
