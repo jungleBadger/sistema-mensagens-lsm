@@ -23,7 +23,15 @@ module.exports = {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
-				`SELECT COUNT(ID) FROM ${TABLE_NAME};`,
+				[
+					`SELECT COUNT FROM (SELECT DISTINCT EVENTO.ID`,
+					`FROM (
+					${TABLE_NAME}
+					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
+					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID)`,
+					"WHERE M.HABILITADO = TRUE AND M.CAMINHO_ARQUIVO_AUDIO > ''",
+					");"
+				].join(" "),
 				[],
 				"fetch"
 			))["1"]
