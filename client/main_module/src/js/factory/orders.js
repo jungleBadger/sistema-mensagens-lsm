@@ -12,6 +12,20 @@ export default {
 	},
 
 
+	async fetchProcessedOrders() {
+		return await http.get(
+			`${API_ENDPOINT}/processed`
+		);
+	},
+
+
+	async fetchRejectedOrders() {
+		return await http.get(
+			`${API_ENDPOINT}/rejected`
+		);
+	},
+
+
 	async setOrderToPending(orderId) {
 		return await http.patch(
 			`${API_ENDPOINT}/${orderId}/pending`

@@ -5,8 +5,8 @@ import ordersFactory from "../../../factory/orders";
 
 export default {
 
-	async fetchPendingOrders (context) {
-		let result = await ordersFactory.fetchPendingOrders();
+	async fetchRejectedOrders (context) {
+		let result = await ordersFactory.fetchRejectedOrders();
 		context.commit("orders", result);
 		return result;
 	}

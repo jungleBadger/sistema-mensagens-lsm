@@ -19,7 +19,7 @@
 					<div class="pr-2 flex flex-1 gap-4 items-center justify-end">
 						<template v-if="userInfo && userInfo.id">
 							<router-link :to="{'name': 'app.owned'}">
-								Minhas mensagens
+								Minhas mensagens e pedidos
 							</router-link>
 
 							<router-link :to="{'name': 'app.checkout'}">

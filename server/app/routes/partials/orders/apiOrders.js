@@ -21,6 +21,20 @@ router.get("/pending",
 	}
 );
 
+router.get("/processed",
+	isLoggedIn,
+	async (req, res) => {
+		return res.status(200).send(await order.fetchProcessedOrders(req.user.id));
+	}
+);
+
+router.get("/rejected",
+	isLoggedIn,
+	async (req, res) => {
+		return res.status(200).send(await order.fetchRejectedOrders(req.user.id));
+	}
+);
+
 router.patch("/:orderId/validate",
 	isLoggedIn,
 	async (req, res) => {

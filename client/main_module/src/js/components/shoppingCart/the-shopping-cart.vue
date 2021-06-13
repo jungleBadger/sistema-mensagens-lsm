@@ -73,7 +73,7 @@
 						id="url_process"
 						name="url_process"
 						type="hidden"
-						:value="`https://sistema.igrejaemsumare.com.br/pedidos`">
+						:value="`https://sistema.igrejaemsumare.com.br/app/minhas-mensagens`">
 
 					<input
 						id="url_notification"
