@@ -81,6 +81,12 @@
 						type="hidden"
 						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`">
 
+					<input
+						id="transaction_url_notification"
+						name="transaction[url_notification]"
+						type="hidden"
+						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`">
+
 				</form>
 
 				<lsm-button
@@ -117,7 +123,7 @@ export default defineComponent({
 	"components": { LsmButton },
 	setup() {
 		return {
-			"integrationURL": `${window.location.protocol || "https:"}//${window.location.host || "localhost:3030"}/api/order`
+			"integrationURL": `${window.location.protocol || "https:"}//${window.location.host || "localhost:3030"}/`
 		}
 	},
 	"computed": {
