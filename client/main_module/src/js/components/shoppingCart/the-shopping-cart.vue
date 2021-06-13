@@ -85,7 +85,7 @@
 						id="url_notification"
 						name="url_notification"
 						type="hidden"
-						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`">
+						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/test`">
 
 
 				</form>
