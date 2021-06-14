@@ -33,7 +33,9 @@ export default {
 	appendMessagesToEvent(state, params) {
 		let event = state.eventItems.find(event => event.id === params.eventId);
 		if (event) {
-			event.messages = params.messages.map(message => new Message(message));
+			let messages = params.messages.map(message => new Message(message));
+			event.messages = messages;
+			state.messagesByEvent[event.id] = messages;
 		}
 
 	},

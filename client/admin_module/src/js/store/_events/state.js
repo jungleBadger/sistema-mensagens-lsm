@@ -33,7 +33,12 @@ export default {
 		{
 			"originalId": "LOCALIDADE",
 			"key": "location",
-			"label": "Localidade"
+			"label": "Cidade"
+		},
+		{
+			"originalId": "CATEGORIA",
+			"key": "categoryName",
+			"label": "Categoria"
 		},
 		{
 			"originalId": "TOTAL_MENSAGENS",

@@ -113,17 +113,18 @@ module.exports = {
 			connectionPool.executeRawSqlInstruction(
 				[
 					`SELECT ${targetColumns.map(column => `${column}`).join(", ")},`,
-					"COUNT(M.ID) AS TOTAL_MENSAGENS,",
+					"COUNT(M.ID) AS TOTAL_MENSAGENS, C.NOME AS CATEGORIA_NOME,",
 					"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO) AS LOCALIDADE",
 					`FROM (
 					${TABLE_NAME}
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
+					JOIN CATEGORIA C on ${TABLE_NAME}.CATEGORIA_ID = C.ID
 					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
 			)`,
 					`WHERE LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
 					`LOWER((L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)) LIKE LOWER('%${filterText}%')`,
 					extraFilterColumns.map((column) => `OR LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" "),
-					`GROUP BY ${targetColumns.map(column => `${column}`).join(", ")},`,
+					`GROUP BY C.NOME, ${targetColumns.map(column => `${column}`).join(", ")},`,
 					"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)",
 					`ORDER BY ${orderBy} ${orderDirection}`,
 					`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
@@ -172,14 +173,15 @@ module.exports = {
 		let results = await connectionPool.executeRawSqlInstruction(
 			[
 				`SELECT ${targetColumns.map(column => `${TABLE_NAME}.${column}`).join(", ")},`,
-				"COUNT(M.ID) AS TOTAL_MENSAGENS,",
+				"COUNT(M.ID) AS TOTAL_MENSAGENS, C.NOME AS CATEGORIA_NOME,",
 				"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO) AS LOCALIDADE",
 				`FROM (
 					${TABLE_NAME}
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
+					JOIN CATEGORIA C on ${TABLE_NAME}.CATEGORIA_ID = C.ID
 					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
 				)`,
-				`GROUP BY ${targetColumns.map(column => `${TABLE_NAME}.${column}`).join(", ")},`,
+				`GROUP BY C.NOME, ${targetColumns.map(column => `${TABLE_NAME}.${column}`).join(", ")},`,
 				"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)",
 				`ORDER BY ${orderBy} ${orderDirection}`,
 				`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,

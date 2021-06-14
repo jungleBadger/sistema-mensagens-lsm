@@ -1,16 +1,28 @@
 <template>
 	<div
 		style="flex-basis: 40px;"
-		class="flex gap-2 w-full">
+		class="flex gap-2 w-full items-center">
 
-		<div class="flex flex-1 ">
-			<span class="font-mono">
-				{{messageIndex}}
-			</span>
-			<span class="overflow-hidden break-all">
-				{{message.title}}
-			</span>
-		</div>
+		<header class="flex flex-col flex-1 font-sans-alternative gap-1 text-sm">
+			<h5 class="flex flex-1 gap-1">
+				<i18n-n
+					:value="messageIndex"
+					locale="pt"
+					format="integer"
+					tag="span"
+				></i18n-n>
+				-
+				<span class="overflow-hidden break-all">{{message.title}}</span>
+			</h5>
+			<h6>
+				Por {{message.brotherName}} em <i18n-d
+				:value="message.messageDate"
+				key="short"
+				locale="pt"
+				tag="span"
+			></i18n-d>
+			</h6>
+		</header>
 
 
 		<div v-if="isLoggedIn">

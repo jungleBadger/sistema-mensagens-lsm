@@ -9,5 +9,6 @@ export default {
 		"orderBy": "DATA_INICIO",
 		"orderDirection": "DESC"
 	},
-	"eventItems": []
+	"eventItems": [],
+	"messagesByEvent": {}
 };

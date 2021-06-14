@@ -1,8 +1,9 @@
 <template>
 	<div class="w-full h-full px-8 pt-4">
 
-		<header>
+		<header class="w-full mb-2">
 			<h4 class="text-2xl">Sistema de Mensagens LSM</h4>
+			<span>Você pode explorar Eventos e Mensagens abaixo. Monte seu carrinho com as mensagens desejadas.</span>
 		</header>
 
 		<the-event-list></the-event-list>

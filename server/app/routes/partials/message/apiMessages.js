@@ -39,8 +39,6 @@ const upload = multer(
 					);
 				}
 
-				console.log(req.method);
-
 				let guessedID = `${req.locals.referenceTimestamp}_${((await message.guessTheCurrentId()) + (req.method === "PATCH" ? 0 : 1))}`;
 				const initialPath = `uploads/${new Date(req.locals.referenceTimestamp).getFullYear()}/eventos/${req.query.eventId}/mensagens/${guessedID}`;
 				let completePath = file.originalname.indexOf(".pdf") > -1 ? `${initialPath}/esbocos` : `${initialPath}/audios`;
@@ -370,17 +368,17 @@ router.get(
 			await message.retrieveAllByEventId(
 				req.params.eventId,
 				[
-					"MENSAGEM.ID",
-					"MENSAGEM.ORDEM",
-					"MENSAGEM.TITULO",
-					"MENSAGEM.DATA_MINISTRADO",
-					"MENSAGEM.EVENTO_ID",
-					"MENSAGEM.IRMAO_ID",
-					"MENSAGEM.VALOR",
-					"MENSAGEM.CAMINHO_ARQUIVO_AUDIO",
-					"MENSAGEM.CAMINHO_ARQUIVO_ESBOCO",
-					"MENSAGEM.HABILITADO",
-					"MENSAGEM.CRIADO_EM",
+					"ID",
+					"ORDEM",
+					"TITULO",
+					"DATA_MINISTRADO",
+					"EVENTO_ID",
+					"IRMAO_ID",
+					"VALOR",
+					"CAMINHO_ARQUIVO_AUDIO",
+					"CAMINHO_ARQUIVO_ESBOCO",
+					"HABILITADO",
+					"CRIADO_EM",
 					"I.NOME_EXIBICAO AS IRMAO_NOME"
 				],
 				Number(req.query.limit) || 20,

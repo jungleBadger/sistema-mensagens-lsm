@@ -183,7 +183,8 @@
 								"darkMode": "class",
 								"theme": {
 									"fontFamily": {
-										"sans": ["'Source Sans Pro'", "sans-serif;"]
+										"sans": ["'Source Sans Pro'", "sans-serif;"],
+										"sans-alternative": ["'Open Sans'", "sans-serif;"],
 									},
 									"extend": {
 										"colors": {

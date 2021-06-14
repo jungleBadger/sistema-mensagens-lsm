@@ -3,11 +3,11 @@
 		style="background-color: rgb(215, 232, 239);"
 		class="h-full w-full flex flex-col overflow-hidden gap-1">
 
-		<div class="shadow">
+		<div>
 			<lsm-input
 				v-model="filterText"
 				autofocus
-				class="border-0"
+				class="border-0 rounded-lg shadow"
 				placeholder="Digite para procurar eventos e mensagens"
 				label="Procurar eventos e mensagens"></lsm-input>
 		</div>
@@ -15,7 +15,7 @@
 
 			<event-item
 				v-for="event in events"
-				:key="event.loadedAt"
+				:key="event.id"
 				:event="event"
 			></event-item>
 		</div>
