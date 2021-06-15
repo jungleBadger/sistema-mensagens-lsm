@@ -351,6 +351,14 @@ module.exports = {
 	 */
 	async retrieveAllByEventId (eventId, targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
 
+		console.log([
+			`SELECT ${targetColumns.map(column => `${column}`).join(", ")}`,
+			`FROM ${TABLE_NAME} JOIN IRMAO I ON ${TABLE_NAME}.IRMAO_ID = I.ID`,
+			`WHERE ${TABLE_NAME}.EVENTO_ID = ${Number(eventId)}`,
+			`ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}`,
+			`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
+			";"
+		].join(" "));
 		let results = await connectionPool.executeRawSqlInstruction(
 			[
 				`SELECT ${targetColumns.map(column => `${column}`).join(", ")}`,
@@ -361,6 +369,8 @@ module.exports = {
 				";"
 			].join(" ")
 		);
+
+
 
 		return {
 			"offset": skip + results.length,

@@ -1,11 +1,10 @@
 <template>
 
 	<section class="flex flex-col flex-1 w-full h-full">
-		<the-app-header>
-
+		<the-app-header class="md:pl-12 md:pr-12 pl-2 pr-2">
 			<template v-slot:app-buttons>
 				<div class="flex gap-4 w-full">
-					<div class="pl-2">
+					<div class="pl-2 hidden sm:block">
 						<router-link
 							:to="{'name': 'app.home'}">
 							<img
@@ -16,14 +15,27 @@
 							/>
 						</router-link>
 					</div>
-					<div class="pr-2 flex flex-1 gap-4 items-center justify-end">
+					<div class="pr-2 flex flex-1 gap-6 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap">
 						<template v-if="userInfo && userInfo.id">
-							<router-link :to="{'name': 'app.owned'}">
-								Minhas mensagens e pedidos
+
+							<router-link
+								class="header-link"
+								:to="{'name': 'app.owned'}">
+								<font-awesome-icon :icon="['fas', 'user-music']"/> Meus pedidos e mensagens
 							</router-link>
 
-							<router-link :to="{'name': 'app.checkout'}">
-								Carrinho ({{cartItemsLength}})
+							<router-link
+								class="header-link"
+								:to="{'name': 'app.owned'}">
+								<font-awesome-icon :icon="['fas', 'user-gear']"/> Perfil
+
+							</router-link>
+
+							<router-link
+								class="header-link"
+								:to="{'name': 'app.checkout'}">
+
+								<font-awesome-icon :icon="['fas', 'cart-shopping']"/> Carrinho ({{cartItemsLength}})
 							</router-link>
 						</template>
 						<template v-else>
@@ -31,20 +43,16 @@
 						</template>
 					</div>
 
-
-
 				</div>
 			</template>
-
 		</the-app-header>
 
-		<main class="w-full flex-1 overflow-hidden">
+		<main class="w-full flex-1 overflow-hidden bg-white">
 			<template v-if="isLoading">
 				Carregando
 			</template>
 			<template v-else>
 				<router-view
-					style="transform: translate(0); background-color: rgb(215, 232, 239);"
 					v-slot="{ Component }">
 
 					<transition
@@ -125,4 +133,13 @@ export default defineComponent({
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">
 
+.header-link {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	&:hover {
+		font-weight: 600;
+
+	}
+}
 </style>
+

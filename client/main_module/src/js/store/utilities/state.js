@@ -2,5 +2,6 @@
 
 export default {
 	"userInfo": {},
-	"isSideMenuOpen": ""
+	"isSideMenuOpen": "",
+	"isAdvancedFiltersModalOpen": false
 };

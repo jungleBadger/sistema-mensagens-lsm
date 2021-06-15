@@ -6,7 +6,14 @@
 				{{event.title}}
 			</h4>
 
-			<h5>
+
+			<h5 class="italic">
+				<span>
+					{{event.categoryName}}
+				</span>
+				em
+				<span>{{event.location}}</span>
+				de
 				<i18n-d
 					:value="event.startDate"
 					key="short"
@@ -20,14 +27,11 @@
 					locale="pt"
 					tag="span"
 				></i18n-d>
-				em
-				<span>{{event.location}}</span>
+
 			</h5>
-			<h5>
-				{{event.categoryName}}
-			</h5>
+
 		</header>
-		<div class="flex flex-col gap-4">
+		<div class="flex flex-col gap-1.5 divide-y">
 			<message-item
 				v-for="(message, index) in eventMessages"
 				:key="message.id"

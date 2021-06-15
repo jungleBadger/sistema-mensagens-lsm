@@ -33,7 +33,13 @@ import { faPlus } from "@fortawesome/pro-solid-svg-icons/faPlus";
 import { faTrashXmark } from "@fortawesome/pro-solid-svg-icons/faTrashXmark";
 import { faLink } from "@fortawesome/pro-solid-svg-icons/faLink";
 import { faRotateRight } from "@fortawesome/pro-solid-svg-icons/faRotateRight";
-
+import { faFilterList } from "@fortawesome/pro-solid-svg-icons/faFilterList";
+import { faFilePdf } from "@fortawesome/pro-solid-svg-icons/faFilePdf";
+import { faCartXmark } from "@fortawesome/pro-solid-svg-icons/faCartXmark";
+import { faCartPlus } from "@fortawesome/pro-solid-svg-icons/faCartPlus";
+import { faCartShopping } from "@fortawesome/pro-solid-svg-icons/faCartShopping";
+import { faUserGear } from "@fortawesome/pro-solid-svg-icons/faUserGear";
+import { faUserMusic } from "@fortawesome/pro-solid-svg-icons/faUserMusic";
 
 import { faLock } from "@fortawesome/pro-solid-svg-icons/faLock";
 import { faSpinnerThird } from "@fortawesome/pro-solid-svg-icons/faSpinnerThird";
@@ -74,6 +80,13 @@ library.add(
 	faTrashXmark,
 	faLink,
 	faRotateRight,
+	faFilterList,
+	faFilePdf,
+	faCartShopping,
+	faCartPlus,
+	faCartXmark,
+	faUserMusic,
+	faUserGear,
 
 	faLock,
 	faSpinnerThird,

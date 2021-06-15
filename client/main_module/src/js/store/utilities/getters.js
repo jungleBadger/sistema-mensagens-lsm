@@ -8,5 +8,9 @@ export default {
 
 	isSideMenuOpen(context) {
 		return context.isSideMenuOpen;
+	},
+
+	isAdvancedFiltersModalOpen(context) {
+		return context.isAdvancedFiltersModalOpen;
 	}
 };

@@ -1,17 +1,38 @@
 <template>
 	<div
 		style="background-color: rgb(215, 232, 239);"
-		class="h-full w-full flex flex-col overflow-hidden gap-1">
+		class="w-full flex flex-1 flex-col gap-2">
 
-		<div>
-			<lsm-input
-				v-model="filterText"
-				autofocus
-				class="border-0 rounded-lg shadow"
-				placeholder="Digite para procurar eventos e mensagens"
-				label="Procurar eventos e mensagens"></lsm-input>
+		<div
+			id="main-search-bar"
+			class="flex z-20 left-0 w-full shadow-lg items-center sticky top-0">
+			<div class="flex-1">
+				<lsm-input
+					v-model="filterText"
+					autofocus
+					autocapitalize="off"
+					autocorrect="off"
+					spellcheck="false"
+					autocomplete="off"
+					class="border-none rounded-l-sm h-14"
+					placeholder="Digite para procurar eventos e mensagens"
+					label="Procurar eventos e mensagens">
+				</lsm-input>
+
+			</div>
+
+			<lsm-button
+				style="border-radius: 0 !important;"
+				class="border-none rounded-none h-14 items-center"
+				label="Filtros avançados"
+				icon-id="filter-list"
+				@click="openAdvancedFiltersModal"
+				icon-style="fas"></lsm-button>
+
+
 		</div>
-		<div class="overflow-auto flex-1 w-full flex flex-col gap-2 divide-y">
+
+		<div class="flex-1 w-full flex flex-col mb-2 gap-2 md:pl-16 md:pr-16 pl-1 pr-1">
 
 			<event-item
 				v-for="event in events"
@@ -32,9 +53,14 @@
 		</div>
 
 
-		<span>oi</span>
 
-
+		<transition
+			@enter="fadeIn"
+			@leave="fadeOut"
+			mode="out-in"
+			:css="false">
+			<the-advanced-filters-modal v-if="isAdvancedFiltersModalOpen"></the-advanced-filters-modal>
+		</transition>
 	</div>
 </template>
 <script type="text/javascript">
@@ -46,10 +72,16 @@ import {useI18n} from "vue-i18n";
 import EventItem from "./event-item";
 import LsmInput from "../../../../../../_etc/shared_components/ui/lsm-input";
 import LsmButton from "../../../../../../_etc/shared_components/ui/lsm-button";
+import TheAdvancedFiltersModal from "../the-advanced-filters-modal";
+import fade from "../../../../../../_etc/shared_mixins/fade";
+
 
 export default defineComponent({
 	"name": "TheEventList",
-	components: { LsmButton, LsmInput, EventItem },
+	"mixins": [
+		fade
+	],
+	components: { TheAdvancedFiltersModal, LsmButton, LsmInput, EventItem },
 	setup() {
 		return {
 			...useI18n()
@@ -63,6 +95,14 @@ export default defineComponent({
 		}
 	},
 	"computed": {
+		"isAdvancedFiltersModalOpen": {
+			get() {
+				return this.$store.getters["utilities/isAdvancedFiltersModalOpen"];
+			},
+			set(val) {
+				return this.$store.commit("utilities/isAdvancedFiltersModalOpen", val);
+			}
+		},
 		"eventsCount": function () {
 			return this.$store.getters["events/totalEventsCount"];
 		},
@@ -124,6 +164,11 @@ export default defineComponent({
 		}
 	},
 	"methods": {
+
+		openAdvancedFiltersModal() {
+			this.isAdvancedFiltersModalOpen = true;
+		},
+
 		async loadEvents(isPagination) {
 			return await Promise.all([
 				this.$store.dispatch("events/retrieveTotalEventsCount"),

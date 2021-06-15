@@ -1,34 +1,46 @@
 <template>
 	<div
-		style="flex-basis: 40px;"
-		class="flex gap-2 w-full items-center">
+		class="flex gap-2 pl-1 w-full items-center pt-1.5 flex-wrap"
+		style="flex-basis: 40px;">
 
-		<header class="flex flex-col flex-1 font-sans-alternative gap-1 text-sm">
+		<header
+			class="flex flex-col flex-1 font-sans-alternative gap-1 text-sm"
+			style="min-width: 240px;">
 			<h5 class="flex flex-1 gap-1">
 				<i18n-n
 					:value="messageIndex"
-					locale="pt"
 					format="integer"
+					locale="pt"
 					tag="span"
 				></i18n-n>
 				-
-				<span class="overflow-hidden break-all">{{message.title}}</span>
+				<span class="overflow-hidden break-all">{{ message.title }}</span>
 			</h5>
 			<h6>
-				Por {{message.brotherName}} em <i18n-d
-				:value="message.messageDate"
-				key="short"
-				locale="pt"
-				tag="span"
-			></i18n-d>
+				Por {{ message.brotherName }} em
+				<i18n-d
+					key="short"
+					:value="message.messageDate"
+					locale="pt"
+					tag="span"
+				></i18n-d>
 			</h6>
+			<div>
+
+				<a
+					v-if="message.pdfFilePath"
+					:href="`/api/message/test/x?filePath=${message.pdfFilePath}`">
+					<font-awesome-icon :icon="['fas', 'file-pdf']" />
+					Clique para baixar esboço em PDF
+				</a>
+			</div>
 		</header>
 
 
 		<div v-if="isLoggedIn">
 			<lsm-button
-				kind="danger"
 				v-if="isAlreadyInCart"
+				kind="danger"
 				label="Remover do carrinho"
 				@click="removeItemFromCart"
 			></lsm-button>
@@ -72,10 +84,10 @@ export default defineComponent({
 		}
 	},
 	"methods": {
-		async addItemToCart() {
+		async addItemToCart () {
 			await this.$store.dispatch("shoppingCart/addItemToCart", this.message.id);
 		},
-		async removeItemFromCart() {
+		async removeItemFromCart () {
 			await this.$store.dispatch("shoppingCart/removeItemFromCart", this.isAlreadyInCart.orderItemId);
 		}
 	},
@@ -84,6 +96,6 @@ export default defineComponent({
 	}
 });
 </script>
-<style scoped lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
 
 </style>

@@ -3,7 +3,6 @@
 	<Component
 		:is="href ? 'router-link' : 'button'"
 		:to="href"
-		v-bind="$attrs"
 		:aria-disabled="isLoading"
 		style="min-width: 90px;"
 		:class="{
@@ -14,9 +13,11 @@
 			'bg-white hover:bg-gray-100 active:bg-gray-200': iconOnly
 		}"
 		:disabled="isLoading"
-		class="group relative py-2 px-2 border flex justify-between items-center
+		class="group relative py-2 px-2 border gap-2 flex justify-between items-center
 		border-transparent text-sm font-medium rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2
-	focus:ring-indigo-500 disabled:opacity-50 transition-colors">
+	focus:ring-indigo-500 disabled:opacity-50 transition-colors"
+		v-bind="$attrs"
+	>
 
 
 		<span v-if="!iconOnly">{{ label }}</span>
