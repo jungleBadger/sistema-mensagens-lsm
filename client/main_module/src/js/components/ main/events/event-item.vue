@@ -9,6 +9,9 @@
 			<h4
 
 				class="text-lg flex flex-wrap ">
+				<span class="text-lg text-gray-600 font-bold w-full">
+					{{event.title}}
+				</span>
 				<span class="italic w-full">
 					<i18n-d
 						:value="event.startDate"
@@ -31,9 +34,7 @@
 				<span>{{event.location}}</span>
 				</span>
 
-				<span class="text-lg text-gray-600 font-bold w-full">
-					{{event.title}}
-				</span>
+
 			</h4>
 
 
