@@ -35,11 +35,18 @@
 
 		<div class=" w-full flex flex-col mb-2 gap-2 md:pl-36 md:pr-36 pl-1 pr-1">
 
-			<event-item
-				v-for="event in events"
-				:key="event.id"
-				:event="event"
-			></event-item>
+
+
+			<template v-if="!events || !events.length" >
+				<h4 class="text-lg w-full text-center">Nenhum evento ou mensagem encontrados.</h4>
+			</template>
+			<template v-else>
+				<event-item
+					v-for="event in events"
+					:key="event.id"
+					:event="event"
+				></event-item>
+			</template>
 		</div>
 
 
