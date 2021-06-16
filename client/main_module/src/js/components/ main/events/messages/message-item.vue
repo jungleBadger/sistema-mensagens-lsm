@@ -6,14 +6,16 @@
 		<header
 			class="flex flex-col flex-1 font-sans-alternative gap-1 text-sm"
 			style="min-width: 240px;">
-			<h5 class="flex flex-1 gap-1">
-				<i18n-n
-					:value="messageIndex"
-					format="integer"
-					locale="pt"
-					tag="span"
-				></i18n-n>
-				-
+			<h5 class="flex flex-1 gap-1 md:flex-row flex-col">
+				<span>
+					<i18n-n
+						:value="messageIndex"
+						format="integer"
+						locale="pt"
+						tag="span"
+					></i18n-n> -
+				</span>
+
 				<div class="flex flex-wrap gap-1">
 					<span class="w-full overflow-hidden break-all">{{ message.title }}</span>
 					<span class="w-full">
