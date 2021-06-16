@@ -136,15 +136,6 @@ module.exports = {
 	 */
 	async removeDisabledItems (orderId, userId) {
 
-		console.log([
-			"DELETE FROM PEDIDO_ITEM PI WHERE MENSAGEM_ID IN (",
-			"SELECT M.ID AS MENSAGEM_ID FROM PEDIDO JOIN PEDIDO P on PEDIDO.ID = PI.PEDIDO_ID  JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
-			"WHERE PEDIDO.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE PEDIDO_STATUS.NOME_EXIBICAO = ?)",
-			"AND PI.PEDIDO_ID = ? AND P.USUARIO_ID = ? AND M.HABILITADO = FALSE",
-			");"
-		].join(" "));
-		console.log(orderId);
-		console.log(userId);
 		return await connectionPool.executePreparedSqlInstruction(
 			[
 				"DELETE FROM PEDIDO_ITEM PI WHERE MENSAGEM_ID IN (",
@@ -170,15 +161,6 @@ module.exports = {
 				"Missing required properties for fetching user shopping cart."
 			);
 		}
-		console.log(	[
-			"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, PI.ID AS PEDIDO_ITEM_ID, PI.MENSAGEM_ID, M.TITULO AS MENSAGEM_TITULO, PI.VALOR_APLICADO, PI.CRIADO_EM",
-			"FROM PEDIDO P",
-			"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
-			"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
-			"FULL JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
-			"WHERE P.USUARIO_ID = ? AND M.HABILITADO = true",
-			"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?);"
-		].join(" "));
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			[

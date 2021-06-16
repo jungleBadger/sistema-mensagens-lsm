@@ -20,22 +20,17 @@
 
 							<router-link
 								class="header-link"
-								:to="{'name': 'app.owned'}">
-								<font-awesome-icon :icon="['fas', 'user-music']"/> Meus pedidos e mensagens
+								:to="{'name': 'app.owned'}"><font-awesome-icon :icon="['fas', 'user-music']"/> Meus pedidos e mensagens
 							</router-link>
 
 							<router-link
 								class="header-link"
-								:to="{'name': 'app.owned'}">
-								<font-awesome-icon :icon="['fas', 'user-gear']"/> Perfil
-
+								:to="{'name': 'app.owned'}"><font-awesome-icon :icon="['fas', 'user-gear']"/> Perfil
 							</router-link>
 
 							<router-link
 								class="header-link"
-								:to="{'name': 'app.checkout'}">
-
-								<font-awesome-icon :icon="['fas', 'cart-shopping']"/> Carrinho ({{cartItemsLength}})
+								:to="{'name': 'app.checkout'}"><font-awesome-icon :icon="['fas', 'cart-shopping']"/> Carrinho ({{cartItemsLength}})
 							</router-link>
 						</template>
 						<template v-else>
@@ -112,7 +107,8 @@ export default defineComponent({
 		let result = await this.$store.dispatch("utilities/getUserInfo");
 		if (result && result.id) {
 			let [cartStatus] = await Promise.all([
-				this.$store.dispatch("shoppingCart/retrieveCartItems")
+				this.$store.dispatch("shoppingCart/retrieveCartItems"),
+				this.$store.dispatch("orders/retrieveOwnedItems")
 			]);
 			if (!cartStatus) {
 				await this.$store.dispatch("shoppingCart/createCart");
@@ -124,9 +120,14 @@ export default defineComponent({
 				});
 			}
 		}
-		await this.$nextTick(() => {
-			this.isLoading = false;
-		});
+
+		this.isLoading = false;
+
+		await Promise.all([
+			this.$store.dispatch("advancedFilters/loadBrothers"),
+			this.$store.dispatch("advancedFilters/loadCategories"),
+			this.$store.dispatch("advancedFilters/loadLocations")
+		]);
 
 	}
 });

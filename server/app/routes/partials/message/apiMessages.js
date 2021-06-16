@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const message = require("../../../helpers/message/crud");
 const {
-	isAdmin
+	isAdmin, isLoggedIn
 } = require("../../middlewares/auth");
 
 const multer = require("multer");
@@ -352,9 +352,27 @@ router.get(
 	}
 );
 
-router.get("/test/x", async (req, res) => {
-	return res.download(req.query.filePath);
-});
+router.get(
+	"/test/x",
+	isLoggedIn,
+	async (req, res) => {
+		return res.download(req.query.filePath, req.query.fileName || undefined);
+	}
+);
+
+router.get(
+	"/self/download/:messageId",
+	isLoggedIn,
+	async (req, res, next) => {
+		let fileInfo = await message.checkMessageOwnership( req.params.messageId, req.user.id);
+		res.locals.filePath = fileInfo.filePath;
+		res.locals.fileName = fileInfo.fileName;
+		return next();
+	},
+	(req, res) => {
+		return res.download(res.locals.filePath, res.locals.fileName);
+	}
+);
 
 router.patch("/organize/:eventId", async (req, res) => {
 	return res.status(200).send(await message.organizeMessages(req.body.messages));

@@ -10,6 +10,7 @@
 				<lsm-input
 					v-model="filterText"
 					autofocus
+					type="search"
 					autocapitalize="off"
 					autocorrect="off"
 					spellcheck="false"
@@ -32,7 +33,7 @@
 
 		</div>
 
-		<div class="flex-1 w-full flex flex-col mb-2 gap-2 md:pl-16 md:pr-16 pl-1 pr-1">
+		<div class=" w-full flex flex-col mb-2 gap-2 md:pl-36 md:pr-36 pl-1 pr-1">
 
 			<event-item
 				v-for="event in events"
@@ -42,14 +43,18 @@
 		</div>
 
 
-		<div v-if="hasNextPage">
-			<h3>PAGINATION</h3>
-			<div>
+		<div
+			class="w-full flex items-center justify-center md:pl-36 md:pr-36 pl-1 pr-1"
+			v-if="hasNextPage">
+			<lsm-button
+				style="justify-content: center;"
+				class="w-full content-center"
+				kind="secondary"
+				:is-loading="eventsLoading"
+				label="Clique para carregar mais eventos"
+				@click="updatePagination">
 
-				{{pagination}}
-				{{eventsCount}}
-			</div>
-			<lsm-button @click="updatePagination"></lsm-button>
+			</lsm-button>
 		</div>
 
 
@@ -91,7 +96,8 @@ export default defineComponent({
 		return {
 			"filterText": "",
 			"debounce": "",
-			"lastUpdated": Date.now()
+			"lastUpdated": Date.now(),
+			"eventsLoading": false
 		}
 	},
 	"computed": {
@@ -195,14 +201,17 @@ export default defineComponent({
 			this.isLoading = true;
 			await (this.asyncFilterText ? this.searchEvents(isPagination) : this.loadEvents(isPagination));
 			this.isLoading = false;
+			return true;
 		},
 
-		updatePagination() {
+		async updatePagination() {
+			this.eventsLoading = true;
 			this.pagination = {
 				...this.pagination,
 				"skip": this.pagination.skip + 1
 			};
-			return this.performRelevantQuery(true);
+			await this.performRelevantQuery(true);
+			this.eventsLoading = false;
 		},
 
 		handleAsyncSearch(value) {

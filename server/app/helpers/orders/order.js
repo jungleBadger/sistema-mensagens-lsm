@@ -122,6 +122,28 @@ module.exports = {
 		return result || [];
 	},
 
+	async fetchOwnedItemsdItems (userId) {
+		if (!userId) {
+			throw raiseError(
+				400,
+				"Missing required properties for fetching user items."
+			);
+		}
+
+		return await connectionPool.executePreparedSqlInstruction(
+			[
+				"SELECT P.ID AS PEDIDO_ID, PI.ID AS PEDIDO_ITEM_ID, PI.MENSAGEM_ID, M.TITULO AS MENSAGEM_TITULO, PI.VALOR_APLICADO, PI.CRIADO_EM",
+				"FROM PEDIDO P",
+				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
+				"FULL JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
+				"WHERE P.USUARIO_ID = ?",
+				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?);"
+			].join(" "),
+			[userId, 'CONCLUIDO']
+		);
+
+	},
+
 	async processOrder(orderId, yapayObject = {}) {
 
 		await Promise.all([
@@ -201,8 +223,6 @@ module.exports = {
 		await shoppingCart.removeDisabledItems(orderId, userId);
 		return await shoppingCart.retrieveUserCart(userId);
 	},
-
-
 
 
 	/**

@@ -40,6 +40,7 @@ import { faCartPlus } from "@fortawesome/pro-solid-svg-icons/faCartPlus";
 import { faCartShopping } from "@fortawesome/pro-solid-svg-icons/faCartShopping";
 import { faUserGear } from "@fortawesome/pro-solid-svg-icons/faUserGear";
 import { faUserMusic } from "@fortawesome/pro-solid-svg-icons/faUserMusic";
+import { faDownload } from "@fortawesome/pro-solid-svg-icons/faDownload";
 
 import { faLock } from "@fortawesome/pro-solid-svg-icons/faLock";
 import { faSpinnerThird } from "@fortawesome/pro-solid-svg-icons/faSpinnerThird";
@@ -87,6 +88,7 @@ library.add(
 	faCartXmark,
 	faUserMusic,
 	faUserGear,
+	faDownload,
 
 	faLock,
 	faSpinnerThird,

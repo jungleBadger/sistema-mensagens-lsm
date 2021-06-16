@@ -36,6 +36,12 @@ export default {
 		return await http.patch(
 			`${API_ENDPOINT}/${orderId}/validate`
 		);
+	},
+
+	async ownedItems() {
+		return await http.get(
+			`${API_ENDPOINT}/self`
+		);
 	}
 
 };

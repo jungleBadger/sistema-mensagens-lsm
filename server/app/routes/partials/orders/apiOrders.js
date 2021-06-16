@@ -43,14 +43,16 @@ router.patch("/:orderId/validate",
 );
 
 router.post("/:orderId/update", async (req, res) => {
-	console.log("OIIII");
-	console.log(req.body);
 	try {
 		return res.status(200).send(await order.processOrder(req.params.orderId, req.body));
 	} catch (e) {
 		console.log(e);
 		return res.status(200).send("ok");
 	}
+});
+
+router.get("/self", async (req, res) => {
+	return res.status(200).send(await order.fetchOwnedItemsdItems(req.user.id));
 });
 
 router.post("/:orderId/test", async (req, res) => {

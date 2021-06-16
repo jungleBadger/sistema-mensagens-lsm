@@ -5,7 +5,7 @@ export default {
 	"totalEventsCount": null,
 	"pagination": {
 		"skip": 0,
-		"limit": 5,
+		"limit": 1,
 		"orderBy": "DATA_INICIO",
 		"orderDirection": "DESC"
 	},

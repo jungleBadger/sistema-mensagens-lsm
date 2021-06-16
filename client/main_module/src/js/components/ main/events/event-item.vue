@@ -1,43 +1,71 @@
 <template>
 	<div
-		class="w-full p-2 bg-white shadow-sm flex flex-col gap-4">
-		<header class="text-gray-800" >
-			<h4 class="font-bold text-lg">
-				{{event.title}}
-			</h4>
+		class="w-full p-2 bg-white shadow-sm flex flex-col gap-2">
 
 
-			<h5 class="italic">
-				<span>
-					{{event.categoryName}}
-				</span>
-				em
-				<span>{{event.location}}</span>
-				de
-				<i18n-d
-					:value="event.startDate"
-					key="short"
-					locale="pt"
-					tag="span"
-				></i18n-d>
-				à
+		<header class="w-full text-gray-600 border-l-2 pl-2 break-words">
+
+
+			<h4
+
+				class="text-lg flex flex-wrap ">
+				<span class="italic w-full">
+					<i18n-d
+						:value="event.startDate"
+						key="short"
+						locale="pt"
+						tag="span"
+					></i18n-d>
+				~
 				<i18n-d
 					:value="event.endDate"
 					key="short"
 					locale="pt"
 					tag="span"
 				></i18n-d>
+				-
+				<span>
+					{{event.categoryName}}
+				</span>
+				em
+				<span>{{event.location}}</span>
+				</span>
 
+				<span class="text-lg text-gray-600 font-bold w-full">
+					{{event.title}}
+				</span>
+			</h4>
+
+
+
+			<h5
+				class="pl-px"
+				style="line-height: 22px;">
+				{{event.description}}
 			</h5>
-
 		</header>
+
+
 		<div class="flex flex-col gap-1.5 divide-y">
-			<message-item
-				v-for="(message, index) in eventMessages"
-				:key="message.id"
-				:message="message"
-				:message-index="index + 1">
-			</message-item>
+
+			<template v-if="isLoading">
+				<h4>
+					<span class="mr-2">Carregando mensagens...</span>
+					<font-awesome-icon
+						:icon="['fas', 'spinner-third']"
+						spin/>
+				</h4>
+			</template>
+			<template v-else>
+				<message-item
+					v-for="(message, index) in eventMessages"
+					:key="message.id"
+					:message="message"
+					:message-index="index + 1">
+				</message-item>
+			</template>
+
+
 		</div>
 	</div>
 </template>
@@ -59,6 +87,11 @@ export default defineComponent({
 			"required": true
 		}
 	},
+	"data": function () {
+		return {
+			"isLoading": true
+		}
+	},
 	setup () {
 		const {
 			datetimeFormats
@@ -74,7 +107,9 @@ export default defineComponent({
 		}
 	},
 	async mounted () {
+		this.isLoading = true;
 		await this.$store.dispatch("events/retrieveMessagesByEventId", this.event.id);
+		this.isLoading = false;
 	}
 });
 </script>

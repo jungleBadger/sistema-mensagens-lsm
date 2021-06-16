@@ -318,6 +318,44 @@ module.exports = {
 		);
 	},
 
+
+	async checkMessageOwnership(messageId, userId) {
+
+		if (!Number(messageId) || !Number(userId)) {
+			throw raiseError(
+				400,
+				"Missing required properties for checking message ownership."
+			);
+		}
+
+		let results = await connectionPool.executePreparedSqlInstruction(
+			[
+				"SELECT M.CAMINHO_ARQUIVO_AUDIO, M.ORDEM, M.TITULO",
+				"FROM PEDIDO P",
+				"JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
+				"JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
+				"WHERE M.ID = ? AND P.USUARIO_ID = ?",
+				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) LIMIT 1;"
+			].join(" "),
+			[messageId, userId, 'CONCLUIDO']
+		);
+
+		console.log(results);
+
+		if (!results || !results.length) {
+			throw raiseError(
+				403,
+				`User ${userId} cannot access message ${messageId}`
+			);
+		} else {
+			return {
+				"filePath": results[0].CAMINHO_ARQUIVO_AUDIO,
+				"fileName": `${results[0].ORDEM}_${results[0].TITULO}_audio.mp3`
+			};
+		}
+
+	},
+
 	// @SECTION - Methods for events integration
 
 	/**
@@ -351,14 +389,6 @@ module.exports = {
 	 */
 	async retrieveAllByEventId (eventId, targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
 
-		console.log([
-			`SELECT ${targetColumns.map(column => `${column}`).join(", ")}`,
-			`FROM ${TABLE_NAME} JOIN IRMAO I ON ${TABLE_NAME}.IRMAO_ID = I.ID`,
-			`WHERE ${TABLE_NAME}.EVENTO_ID = ${Number(eventId)}`,
-			`ORDER BY ${TABLE_NAME}.${orderBy} ${orderDirection}`,
-			`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
-			";"
-		].join(" "));
 		let results = await connectionPool.executeRawSqlInstruction(
 			[
 				`SELECT ${targetColumns.map(column => `${column}`).join(", ")}`,
@@ -369,8 +399,6 @@ module.exports = {
 				";"
 			].join(" ")
 		);
-
-
 
 		return {
 			"offset": skip + results.length,
