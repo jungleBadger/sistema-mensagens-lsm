@@ -8,10 +8,6 @@ export default {
 		let result = await ordersFactory.fetchProcessedOrders();
 		context.commit("orders", result);
 		return result;
-	},
-
-	async fetchOwnedItems (context) {
-		return [];
 	}
 
 };

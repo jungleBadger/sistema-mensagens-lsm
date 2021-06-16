@@ -132,8 +132,7 @@ export default defineComponent({
 		},
 
 		"loggedUserEmail": function () {
-			return "danibize@gmail.com";
-			// return this.$store.getters["utilities/userInfo"].email;
+			return this.$store.getters["utilities/userInfo"].email;
 		}
 	},
 	"methods": {
