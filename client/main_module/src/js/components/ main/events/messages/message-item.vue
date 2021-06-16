@@ -34,7 +34,7 @@
 
 						<template v-if="isAlreadyOwned">
 							<lsm-button
-								:href="`/api/message/self/download/${message.id}`"
+								:href="`${hostURL}/api/message/self/download/${message.id}`"
 								class="h-8"
 								icon-id="download"
 								icon-style="fas"
@@ -68,10 +68,9 @@
 								@click="addItemToCart"></lsm-button>
 						</template>
 
-
 						<lsm-button
 							v-if="message.pdfFilePath"
-							:href="`/api/message/test/x?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`"
+							:href="`${hostURL}/api/message/test/x?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`"
 							class="h-8"
 							icon-id="file-pdf"
 							icon-style="fas"
@@ -109,7 +108,8 @@ export default defineComponent({
 	},
 	"data": function () {
 		return {
-			"shoppingItemLoading": false
+			"shoppingItemLoading": false,
+			"hostURL": `https://${window.location.host}`
 		};
 	},
 	"computed": {
