@@ -7,7 +7,7 @@
 			class="flex flex-col flex-1 font-sans-alternative gap-1 text-sm"
 			style="min-width: 240px;">
 			<h5 class="flex flex-1 gap-1 md:flex-row flex-col">
-				<span>
+				<span style="min-width: 25px;">
 					<i18n-n
 						:value="messageIndex"
 						format="integer"
