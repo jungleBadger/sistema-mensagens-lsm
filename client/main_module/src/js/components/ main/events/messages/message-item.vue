@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="flex gap-2 pl-1 items-center pt-1.5 flex-wrap w-full "
+		class="flex gap-2 pl-1 items-center pt-2 flex-wrap w-full "
 		style="flex-basis: 40px;">
 
 		<header

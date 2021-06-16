@@ -41,7 +41,7 @@
 							<div
 								v-for="(element, index) in localMessages"
 								:key="element.title"
-								class="list-group-item flex bg-white border radius-sm items-start gap-1.5 p-1.5 mb-1.5 shadow-sm cursor-move">
+								class="list-group-item flex bg-white border radius-sm items-start gap-2 p-2 mb-2 shadow-sm cursor-move">
 
 								<lsm-select
 									:model-value="index + 1"

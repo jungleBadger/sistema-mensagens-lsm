@@ -46,7 +46,7 @@
 		</header>
 
 
-		<div class="flex flex-col gap-1.5 divide-y">
+		<div class="flex flex-col gap-2 divide-y">
 
 			<template v-if="isLoading">
 				<h4>
