@@ -16,7 +16,7 @@
 				class="w-40 h-10 self-end"
 				icon-style="fas"
 				icon-id="plus"
-				:href="{
+				:to="{
 					'name': 'app.categories.details',
 					'params': {'categoryId': 'novo'}
 				}">

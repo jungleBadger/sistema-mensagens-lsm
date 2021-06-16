@@ -14,7 +14,7 @@
 
 			<lsm-button
 				label="Criar Irmão"
-				:href="	{
+				:to="	{
 					'name': 'app.brothers.details',
 					'params': {'brotherId': 'novo'}
 				}"

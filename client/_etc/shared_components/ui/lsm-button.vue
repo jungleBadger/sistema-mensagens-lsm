@@ -1,8 +1,9 @@
 <template>
 
 	<Component
-		:is="href ? 'router-link' : 'button'"
-		:to="href"
+		:is="href ? 'a' : to ? 'router-link' : 'button'"
+		:to="to"
+		:href="href"
 		:aria-disabled="isLoading"
 		style="min-width: 90px;"
 		:class="{
@@ -10,6 +11,8 @@
 			'bg-gray-800 hover:bg-blue-700 active:bg-blue-500': !iconOnly && kind === 'secondary',
 			'bg-blue-600 hover:bg-blue-700 active:bg-blue-500': !iconOnly && kind === 'primary',
 			'bg-red-600 hover:bg-red-700 active:bg-red-500': !iconOnly && kind === 'danger',
+			'border-blue-600 text-blue-500 hover:bg-blue-200 active:bg-blue-100': !iconOnly && kind === 'primary-outline',
+			'border-red-600 text-red-500 hover:bg-red-200 active:bg-red-100': !iconOnly && kind === 'danger-outline',
 			'bg-white hover:bg-gray-100 active:bg-gray-200': iconOnly
 		}"
 		:disabled="isLoading"
@@ -92,16 +95,18 @@ export default {
 			"default": function () {
 				return "primary";
 			},
-			"validator": value => ["primary", "secondary", "tertiary", "danger"].indexOf(value) !== -1
+			"validator": value => ["primary", "primary-outline", "secondary", "tertiary", "danger", "danger-outline"].indexOf(value) !== -1
 
 		},
 
 		"href": {
 			"type": [String, Object],
-			"required": false,
-			"default": function () {
-				return "";
-			}
+			"required": false
+		},
+
+		"to": {
+			"type": [String, Object],
+			"required": false
 		}
 
 	}

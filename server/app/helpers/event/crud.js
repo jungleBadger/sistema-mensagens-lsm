@@ -259,8 +259,8 @@ module.exports = {
 
 		try {
 			await connectionPool.executePreparedSqlInstruction(
-				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.TITULO = ?, ${TABLE_NAME}.DATA_INICIO = ?, ${TABLE_NAME}.DATA_FIM = ?, ${TABLE_NAME}.CATEGORIA_ID = ?, ${TABLE_NAME}.LOCALIDADE_ID = ?, ${TABLE_NAME}.ATUALIZADO_EM = ? WHERE ${TABLE_NAME}.ID = ? `,
-				[updatedEvent.model.TITULO, updatedEvent.model.DATA_INICIO, updatedEvent.model.DATA_FIM, updatedEvent.model.CATEGORIA_ID, updatedEvent.model.LOCALIDADE_ID, updatedEvent.model.ATUALIZADO_EM, eventId]
+				`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.TITULO = ?, ${TABLE_NAME}.DATA_INICIO = ?, ${TABLE_NAME}.DATA_FIM = ?, ${TABLE_NAME}.CATEGORIA_ID = ?, ${TABLE_NAME}.LOCALIDADE_ID = ?, ${TABLE_NAME}.DESCRICAO = ?, ${TABLE_NAME}.ATUALIZADO_EM = ? WHERE ${TABLE_NAME}.ID = ? `,
+				[updatedEvent.model.TITULO, updatedEvent.model.DATA_INICIO, updatedEvent.model.DATA_FIM, updatedEvent.model.CATEGORIA_ID, updatedEvent.model.LOCALIDADE_ID, updatedEvent.model.DESCRICAO, updatedEvent.model.ATUALIZADO_EM, eventId]
 			);
 		} catch (e) {
 			console.log(e);

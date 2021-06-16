@@ -8,7 +8,9 @@
 		<!--			<span>Você pode explorar Eventos e Mensagens abaixo. Monte seu carrinho com as mensagens desejadas.</span>-->
 		<!--		</header>-->
 
-		<div class="w-full bg-black h-36 bg-gray-500"></div>
+		<div
+			style="min-height: 144px;"
+			class="w-full bg-black h-36 bg-gray-500"></div>
 
 		<the-event-list></the-event-list>
 
@@ -33,7 +35,6 @@ export default defineComponent({
 	"components": { TheEventList },
 	setup () {
 		return {
-			"requestId": null,
 			...useI18n()
 		};
 	}

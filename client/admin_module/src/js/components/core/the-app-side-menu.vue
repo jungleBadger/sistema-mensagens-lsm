@@ -18,7 +18,7 @@
 					class="w-12 h-12 text-base flex items-center justify-center"
 					style="min-width: 3rem;">
 					<font-awesome-icon
-						:icon="['fas', 'home']" />
+						:icon="['fas', 'house']" />
 				</span>
 
 

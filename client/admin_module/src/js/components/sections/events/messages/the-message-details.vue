@@ -173,6 +173,7 @@
 						<template v-if="pdfFilePath">
 
 							<a
+								download
 								:href="`/api/message/test/x?filePath=${pdfFilePath}`"
 								class="flex-1" target="_self">Download</a>
 

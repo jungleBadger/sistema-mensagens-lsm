@@ -103,7 +103,7 @@
 						</div>
 
 
-						<div class="w-full md:w-80 flex flex-col gap-1">
+						<div class="w-full md:w-80 flex flex-col gap-1 mb-6">
 							<label class="text-gray-700 ">Descrição</label>
 
 							<lsm-text-area

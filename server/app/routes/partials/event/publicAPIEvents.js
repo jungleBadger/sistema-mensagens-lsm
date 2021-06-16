@@ -49,6 +49,38 @@ router.get(
 					"EVENTO.TITULO",
 					"EVENTO.DATA_INICIO",
 					"EVENTO.DATA_FIM",
+					"EVENTO.DESCRICAO",
+					"EVENTO.LOCALIDADE_ID",
+					"EVENTO.CATEGORIA_ID",
+					"EVENTO.CRIADO_EM",
+					"EVENTO.ATUALIZADO_EM"
+				],
+				Number(req.query.limit) || 20,
+				Number(req.query.skip) || 0,
+				req.query.orderBy || "ID",
+				req.query.orderDirection || "DESC"
+			)
+		)
+	}
+);
+
+
+router.get(
+	"/advanced-search",
+	async (req, res) => {
+		res.status(
+			200
+		).send(
+			await event.search(
+				req.query.filterText,
+				req.query.filterColumn || "TITULO",
+				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [],
+				req.query.targetColumns ? req.query.targetColumns.split(",") : [
+					"EVENTO.ID",
+					"EVENTO.TITULO",
+					"EVENTO.DATA_INICIO",
+					"EVENTO.DATA_FIM",
+					"EVENTO.DESCRICAO",
 					"EVENTO.LOCALIDADE_ID",
 					"EVENTO.CATEGORIA_ID",
 					"EVENTO.CRIADO_EM",
@@ -75,6 +107,7 @@ router.get(
 					"DATA_INICIO",
 					"DATA_FIM",
 					"LOCALIDADE_ID",
+					"DESCRICAO",
 					"CATEGORIA_ID",
 					"CRIADO_EM",
 					"ATUALIZADO_EM"

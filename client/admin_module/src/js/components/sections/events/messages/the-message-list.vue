@@ -8,7 +8,7 @@
 				<div class="flex gap-2 flex-wrap">
 
 					<lsm-button
-						:href="{
+						:to="{
 						'name': 'app.events.organize',
 						'params': {'categoryId': eventId}
 					}"
@@ -19,7 +19,7 @@
 						label="Organizar mensagens"></lsm-button>
 
 					<lsm-button
-						:href="{
+						:to="{
 						'name': 'app.events.message.details',
 						'params': {'categoryId': eventId, 'messageId': 'novo'}
 					}"
