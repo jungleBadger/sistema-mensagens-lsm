@@ -17,7 +17,7 @@ router.get(
 /**
  * @swagger
  * /api/event/search:
- *   delete:
+ *   get:
  *     tags: [event]
  *     summary: Search brothers.
  *     produces:
@@ -53,8 +53,7 @@ router.get(
 					"EVENTO.LOCALIDADE_ID",
 					"EVENTO.CATEGORIA_ID",
 					"EVENTO.CRIADO_EM",
-					"EVENTO.ATUALIZADO_EM",
-
+					"EVENTO.ATUALIZADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,

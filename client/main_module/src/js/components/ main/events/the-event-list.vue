@@ -1,6 +1,6 @@
 <template>
 	<div
-		style="background-color: rgb(215, 232, 239);"
+		style="background-color: #f9fafb;"
 		class="w-full flex flex-1 flex-col gap-2">
 
 		<div
@@ -103,7 +103,7 @@ export default defineComponent({
 		return {
 			"filterText": "",
 			"debounce": "",
-			"lastUpdated": Date.now(),
+			"scrollDebounce": "",
 			"eventsLoading": false
 		}
 	},
@@ -164,7 +164,7 @@ export default defineComponent({
 				});
 			} else {
 				setTimeout(() => {
-					if (newValue.length >= 3 && Date.now() - this.debounce >= 300) {
+					if (newValue.length >= 2 && Date.now() - this.debounce >= 300) {
 						this.handleAsyncSearch({
 							"filteringField": this.selectedFilteringField,
 							"orderBy": this.selectedSortingField,
@@ -174,9 +174,25 @@ export default defineComponent({
 					}
 				}, 300);
 			}
+		},
+		hasNextPage(newValue) {
+			console.log(newValue);
+			if (newValue) {
+				this.$parent.$refs.scroller.addEventListener("scroll", this.handleScroll);
+			} else {
+				this.$parent.$refs.scroller.removeEventListener("scroll", this.handleScroll);
+			}
 		}
 	},
 	"methods": {
+		handleScroll(ev) {
+			if (!this.scrollDebounce || Date.now() - this.scrollDebounce >= 300) {
+				if (ev.srcElement.scrollTop + ev.srcElement.offsetHeight >= (ev.srcElement.scrollHeight - 80)) {
+					this.scrollDebounce = Date.now();
+					this.updatePagination();
+				}
+			}
+		},
 
 		openAdvancedFiltersModal() {
 			this.isAdvancedFiltersModalOpen = true;
@@ -232,6 +248,10 @@ export default defineComponent({
 
 			return this.performRelevantQuery();
 		}
+	},
+
+	unmounted () {
+		this.$parent.$refs.scroller.removeEventListener("scroll", this.handleScroll);
 	}
 });
 </script>

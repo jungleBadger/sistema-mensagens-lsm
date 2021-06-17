@@ -1,78 +1,127 @@
 <template>
-	<div>
-
-	</div>
-	<i18n-n
-		:value="messageIndex"
-		format="integer"
-		locale="pt"
-		tag="span"
-	></i18n-n>
-
-	<span class="w-full overflow-hidden break-all">{{ message.title }}</span>
-
-	<i18n-d
-		key="short"
-		:value="message.messageDate"
-		locale="pt"
-		tag="span"
-	></i18n-d>
 
 
-	<span class="w-full">{{ message.messageValue }} </span>
 
 
-	<span class="w-full">{{ message.brotherName }} </span>
 
-	<div>
 
-		<lsm-button
-			v-if="isAlreadyOwned"
-			:href="`${hostURL}/api/message/self/download/${message.id}`"
-			class="h-8"
-			icon-id="download"
-			icon-style="fas"
-			kind="tertiary"
-			label="Clique para baixar a mensagem em audio"
-			style="min-width: 260px;"
-		></lsm-button>
+	<tr>
+		<td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
+			<div class="text-sm font-medium text-gray-900">
+				{{ message.order }}
+			</div>
+		</td>
+		<td
+			style="max-width: 240px;"
+			class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
+			<div class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
+				{{ message.title }}
+			</div>
+		</td>
 
-		<lsm-button
-			v-else-if="isAlreadyInCart"
-			:is-loading="shoppingItemLoading"
-			class="h-8"
-			icon-id="cart-xmark"
-			icon-style="fas"
-			kind="danger-outline"
-			label="Clique para remover do carrinho"
-			style="min-width: 260px;"
-			@click="removeItemFromCart"
-		></lsm-button>
 
-		<lsm-button
-			v-else
-			:is-loading="shoppingItemLoading"
-			class="h-8"
-			icon-id="cart-plus"
-			icon-style="fas"
-			kind="primary-outline"
-			label="Clique para adicionar ao carrinho"
-			style="min-width: 260px;"
-			@click="addItemToCart">
+		<td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
 
-		</lsm-button>
+			<div class="text-sm text-gray-500"><i18n-d
+				key="short"
+				:value="message.messageDate"
+				locale="pt"
+			></i18n-d></div>
+		</td>
+		<td class="px-6 py-4 hidden md:table-cell">
+			<div class="text-sm text-gray-500">{{message.brotherName}}</div>
 
-		<lsm-button
-			v-if="message.pdfFilePath"
-			:href="`${hostURL}/api/message/test/x?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`"
-			class="h-8"
-			icon-id="file-pdf"
-			icon-style="fas"
-			kind="tertiary"
-			label="Clique para baixar esboço em PDF"
-			style="min-width: 260px;"/>
+		</td>
+		<td class="px-6 py-4 text-sm text-gray-500">
+			R$ {{ message.messageValue }}
+		</td>
 
-	</div>
+		<td class="px-6 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell">
+			<template v-if="message.pdfFilePath">
+				<a
+					class="text-indigo-600 hover:text-indigo-900"
+					:href="`${hostURL}/api/message/test/x?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`">Download
+				</a>
+			</template>
+			<template v-else>
+				-
+			</template>
+
+		</td>
+
+		<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+			<a
+				v-if="isAlreadyOwned"
+
+				class="text-indigo-600 hover:text-indigo-900"
+				:href="`${hostURL}/api/message/self/download/${message.id}`">Download
+			</a>
+
+			<lsm-button
+				v-else-if="isAlreadyInCart"
+				:is-loading="shoppingItemLoading"
+				class="h-8"
+				icon-id="cart-xmark"
+				icon-style="fas"
+				kind="danger-outline"
+				style="min-width: 170px;"
+				label="Remover do carrinho"
+
+				@click="removeItemFromCart"
+			></lsm-button>
+
+			<lsm-button
+				v-else
+				:is-loading="shoppingItemLoading"
+				class="h-8"
+				icon-id="cart-plus"
+				icon-style="fas"
+				kind="primary-outline"
+				style="min-width: 170px;"
+				label="Adicionar ao carrinho"
+
+				@click="addItemToCart">
+
+			</lsm-button>
+		</td>
+	</tr>
+
+
+
+
+<!--	<tr>-->
+
+
+<!--		<i18n-n-->
+<!--			:value="messageIndex"-->
+<!--			format="integer"-->
+<!--			locale="pt"-->
+<!--			tag="td"-->
+<!--		></i18n-n>-->
+
+<!--		<td>{{ message.title }}</td>-->
+
+
+
+
+<!--		<td>{{ message.brotherName }} </td>-->
+
+<!--		<td>{{ message.messageValue }} </td>-->
+
+
+
+<!--		<td>-->
+
+
+
+
+
+<!--		</td>-->
+
+
+<!--	</tr>-->
+
+
 </template>
 <script type="text/javascript">
 

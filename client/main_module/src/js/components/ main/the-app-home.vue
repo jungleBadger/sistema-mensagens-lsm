@@ -12,7 +12,8 @@
 			style="min-height: 144px;"
 			class="w-full bg-black h-36 bg-gray-500"></div>
 
-		<the-event-list></the-event-list>
+		<the-event-list
+			ref="eventList"></the-event-list>
 
 	</div>
 </template>
