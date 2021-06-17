@@ -18,10 +18,6 @@ export default {
 		return state.eventItems;
 	},
 
-	messagesByEvent(state) {
-		return state.messagesByEvent;
-	},
-
 	selectedEvent(state) {
 		return state.selectedEvent;
 	},

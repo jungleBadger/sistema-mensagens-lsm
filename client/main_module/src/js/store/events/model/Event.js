@@ -1,5 +1,7 @@
 "use strict";
 
+import Message from "./Message";
+
 export default class Event {
 	constructor (props) {
 		this.id = props.ID || props.id;
@@ -7,7 +9,7 @@ export default class Event {
 		this.locationId = props.locationId || props.LOCALIDADE_ID;
 		this.title = props.title || props.TITULO;
 		this.totalMessages = props.totalMessages || props.TOTAL_MENSAGENS || 0;
-		this.messages = props.messages || [];
+		this.messages = props.messages || (props.MENSAGENS || []).map(message => new Message(message));
 		this.categoryName = props.categoryNaem || props.CATEGORIA_NOME;
 		if (props.startDate) {
 			this.startDate = new Date(props.startDate);
@@ -28,6 +30,7 @@ export default class Event {
 		this.location = props.location || props.LOCALIDADE;
 		this.description = props.description || props.DESCRICAO;
 		this.createdAt = props.createdAt || new Date(props.CRIADO_EM );
+
 	}
 
 }

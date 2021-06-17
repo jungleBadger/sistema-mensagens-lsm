@@ -7,13 +7,6 @@ const API_ENDPOINT = `${window.location.protocol || "https:"}//${window.location
 export default {
 
 
-	async retrieveMessagesByEventId (eventId, skip, limit, orderBy, orderDirection) {
-		return await http.get(
-			`${API_ENDPOINT}/list/${eventId}?skip=${skip}&limit=${limit}&orderBy=${orderBy}&orderDirection=${orderDirection}`
-		);
-	},
-
-
 	async retrieveMessageById (id) {
 		return await http.get(
 			`${API_ENDPOINT}/${id}`

@@ -1,7 +1,6 @@
 "use strict";
 
 import Event from "./model/Event";
-import Message from "./model/Message";
 
 export default {
 
@@ -23,21 +22,13 @@ export default {
 	},
 
 	eventItems(state, events = []) {
+
+
 		state.eventItems = state.eventItems.concat(events.map(event => new Event(event)));
 	},
 
 	replaceEventItems(state, events = []) {
 		state.eventItems = events.map(event => new Event(event));
-	},
-
-	appendMessagesToEvent(state, params) {
-		let event = state.eventItems.find(event => event.id === params.eventId);
-		if (event) {
-			let messages = params.messages.map(message => new Message(message));
-			event.messages = messages;
-			state.messagesByEvent[event.id] = messages;
-		}
-
 	},
 
 	selectedEvent(state, event) {

@@ -43,7 +43,7 @@ router.get(
 			await event.search(
 				req.query.filterText,
 				req.query.filterColumn || "TITULO",
-				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [],
+				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [""],
 				req.query.targetColumns ? req.query.targetColumns.split(",") : [
 					"EVENTO.ID",
 					"EVENTO.TITULO",
@@ -53,7 +53,8 @@ router.get(
 					"EVENTO.LOCALIDADE_ID",
 					"EVENTO.CATEGORIA_ID",
 					"EVENTO.CRIADO_EM",
-					"EVENTO.ATUALIZADO_EM"
+					"EVENTO.ATUALIZADO_EM",
+
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
@@ -102,15 +103,15 @@ router.get(
 		res.status(200).send(
 			await event.retrieveAll(
 				[
-					"ID",
-					"TITULO",
-					"DATA_INICIO",
-					"DATA_FIM",
-					"LOCALIDADE_ID",
-					"DESCRICAO",
-					"CATEGORIA_ID",
-					"CRIADO_EM",
-					"ATUALIZADO_EM"
+					"EVENTO.ID",
+					"EVENTO.TITULO",
+					"EVENTO.DATA_INICIO",
+					"EVENTO.DATA_FIM",
+					"EVENTO.LOCALIDADE_ID",
+					"EVENTO.DESCRICAO",
+					"EVENTO.CATEGORIA_ID",
+					"EVENTO.CRIADO_EM",
+					"EVENTO.ATUALIZADO_EM"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,

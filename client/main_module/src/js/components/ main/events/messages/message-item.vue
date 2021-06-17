@@ -1,90 +1,76 @@
 <template>
-	<div
-		class="flex gap-2 pl-1 items-center pt-2 flex-wrap w-full "
-		style="flex-basis: 40px;">
+	<div>
 
-		<header
-			class="flex flex-col flex-1 font-sans-alternative gap-1 text-sm"
-			style="min-width: 240px;">
-			<h5 class="flex flex-1 gap-1 md:flex-row flex-col">
-				<span style="min-width: 25px;">
-					<i18n-n
-						:value="messageIndex"
-						format="integer"
-						locale="pt"
-						tag="span"
-					></i18n-n> -
-				</span>
+	</div>
+	<i18n-n
+		:value="messageIndex"
+		format="integer"
+		locale="pt"
+		tag="span"
+	></i18n-n>
 
-				<div class="flex flex-wrap gap-1">
-					<span class="w-full overflow-hidden break-all">{{ message.title }}</span>
-					<span class="w-full">
-						Por {{ message.brotherName }} em
-						<i18n-d
-							key="short"
-							:value="message.messageDate"
-							locale="pt"
-							tag="span"
-						></i18n-d>
-					</span>
+	<span class="w-full overflow-hidden break-all">{{ message.title }}</span>
+
+	<i18n-d
+		key="short"
+		:value="message.messageDate"
+		locale="pt"
+		tag="span"
+	></i18n-d>
 
 
-					<div
-						v-if="isLoggedIn"
-						class="flex flex-wrap gap-2">
+	<span class="w-full">{{ message.messageValue }} </span>
 
 
-						<template v-if="isAlreadyOwned">
-							<lsm-button
-								:href="`${hostURL}/api/message/self/download/${message.id}`"
-								class="h-8"
-								icon-id="download"
-								icon-style="fas"
-								kind="tertiary"
-								label="Clique para baixar a mensagem em audio"
-								style="min-width: 260px;"
-							></lsm-button>
-						</template>
-						<template v-else>
-							<lsm-button
-								v-if="isAlreadyInCart"
-								:is-loading="shoppingItemLoading"
-								class="h-8"
-								icon-id="cart-xmark"
-								icon-style="fas"
-								kind="danger-outline"
-								label="Clique para remover do carrinho"
-								style="min-width: 260px;"
-								@click="removeItemFromCart"
-							></lsm-button>
+	<span class="w-full">{{ message.brotherName }} </span>
 
-							<lsm-button
-								v-else
-								:is-loading="shoppingItemLoading"
-								class="h-8"
-								icon-id="cart-plus"
-								icon-style="fas"
-								kind="primary-outline"
-								label="Clique para adicionar ao carrinho"
-								style="min-width: 260px;"
-								@click="addItemToCart"></lsm-button>
-						</template>
+	<div>
 
-						<lsm-button
-							v-if="message.pdfFilePath"
-							:href="`${hostURL}/api/message/test/x?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`"
-							class="h-8"
-							icon-id="file-pdf"
-							icon-style="fas"
-							kind="tertiary"
-							label="Clique para baixar esboço em PDF"
-							style="min-width: 260px;"/>
-					</div>
-				</div>
-			</h5>
+		<lsm-button
+			v-if="isAlreadyOwned"
+			:href="`${hostURL}/api/message/self/download/${message.id}`"
+			class="h-8"
+			icon-id="download"
+			icon-style="fas"
+			kind="tertiary"
+			label="Clique para baixar a mensagem em audio"
+			style="min-width: 260px;"
+		></lsm-button>
 
-		</header>
+		<lsm-button
+			v-else-if="isAlreadyInCart"
+			:is-loading="shoppingItemLoading"
+			class="h-8"
+			icon-id="cart-xmark"
+			icon-style="fas"
+			kind="danger-outline"
+			label="Clique para remover do carrinho"
+			style="min-width: 260px;"
+			@click="removeItemFromCart"
+		></lsm-button>
 
+		<lsm-button
+			v-else
+			:is-loading="shoppingItemLoading"
+			class="h-8"
+			icon-id="cart-plus"
+			icon-style="fas"
+			kind="primary-outline"
+			label="Clique para adicionar ao carrinho"
+			style="min-width: 260px;"
+			@click="addItemToCart">
+
+		</lsm-button>
+
+		<lsm-button
+			v-if="message.pdfFilePath"
+			:href="`${hostURL}/api/message/test/x?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`"
+			class="h-8"
+			icon-id="file-pdf"
+			icon-style="fas"
+			kind="tertiary"
+			label="Clique para baixar esboço em PDF"
+			style="min-width: 260px;"/>
 
 	</div>
 </template>
