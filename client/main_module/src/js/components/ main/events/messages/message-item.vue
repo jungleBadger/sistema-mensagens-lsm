@@ -49,7 +49,7 @@
 
 		</td>
 
-		<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" v-if="isLoggedIn">
+		<td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="isLoggedIn">
 			<a
 				v-if="isAlreadyOwned"
 
