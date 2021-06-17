@@ -57,7 +57,7 @@ module.exports = {
 				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
 				"WHERE P.USUARIO_ID = ?",
 				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?)",
-				"GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM;"
+				"GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM, P.ATUALIZADO_EM;"
 			].join(" "),
 			[userId, 'PENDENTE']
 		);
@@ -86,7 +86,7 @@ module.exports = {
 				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
 				"WHERE P.USUARIO_ID = ?",
 				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?)",
-				"GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM;"
+				"GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM, P.ATUALIZADO_EM;"
 			].join(" "),
 			[userId, 'REJEITADO']
 		);
@@ -115,7 +115,7 @@ module.exports = {
 				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
 				"WHERE P.USUARIO_ID = ?",
 				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?)",
-				"GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM;"
+				"GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM, P.ATUALIZADO_EM;"
 			].join(" "),
 			[userId, 'CONCLUIDO']
 		);
@@ -236,7 +236,7 @@ module.exports = {
 
 		await connectionPool.executePreparedSqlInstruction(
 			[
-				"UPDATE PEDIDO P SET P.ATUALIZADO_EM, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
+				"UPDATE PEDIDO P SET P.ATUALIZADO_EM = ?, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
 			].join(" "),
 			[db2timestamp(), 'CONCLUIDO', Number(orderId)]
 		);
@@ -253,7 +253,7 @@ module.exports = {
 
 		await connectionPool.executePreparedSqlInstruction(
 			[
-				"UPDATE PEDIDO P SET P.ATUALIZADO_EM, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
+				"UPDATE PEDIDO P SET P.ATUALIZADO_EM = ?, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
 			].join(" "),
 			[db2timestamp(), 'REJEITADO', Number(orderId)]
 		);
