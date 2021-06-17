@@ -30,7 +30,7 @@ export default {
 		let url = new URL(`${API_ENDPOINT}/search`);
 
 		if (!filterColumn || filterColumn === "all") {
-			url.searchParams.append("extraFilterColumns", "EVENTO.CRIADO_EM,EVENTO.DESCRICAO,M.DATA_MINISTRADO,EVENTO.DATA_INICIO,EVENTO.DATA_FIM,M.TITULO");
+			url.searchParams.append("extraFilterColumns", "EVENTO.CRIADO_EM,EVENTO.DESCRICAO,M.DATA_MINISTRADO,EVENTO.DATA_INICIO,EVENTO.DATA_FIM,M.TITULO,I.IRMAO_NOME");
 		} else {
 			url.searchParams.append("filterColumn", filterColumn);
 		}
