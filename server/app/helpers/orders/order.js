@@ -14,6 +14,7 @@ const fs = require("fs").promises;
 const logger = require("../logger");
 const Transaction = require("../../models/yapay/Transaction");
 const shoppingCart = require("./shoppingCart");
+const db2timestamp = require("../db2Timestamp");
 
 module.exports = {
 
@@ -29,9 +30,9 @@ module.exports = {
 
 		await connectionPool.executePreparedSqlInstruction(
 			[
-				"UPDATE PEDIDO P SET P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ? AND P.USUARIO_ID = ?"
+				"UPDATE PEDIDO P SET P.ATUALIZADO_EM = ?, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ? AND P.USUARIO_ID = ?"
 			].join(" "),
-			['PENDENTE', Number(orderId), Number(userId)]
+			[db2timestamp(), 'PENDENTE', Number(orderId), Number(userId)]
 		);
 	},
 
@@ -50,7 +51,7 @@ module.exports = {
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			[
-				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, P.CRIADO_EM, COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS",
+				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, P.CRIADO_EM, P.ATUALIZADO_EM, COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS",
 				"FROM PEDIDO P",
 				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
 				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
@@ -79,7 +80,7 @@ module.exports = {
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			[
-				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, P.CRIADO_EM, COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS",
+				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, P.CRIADO_EM, P.ATUALIZADO_EM, COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS",
 				"FROM PEDIDO P",
 				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
 				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
@@ -108,7 +109,7 @@ module.exports = {
 
 		let result = await connectionPool.executePreparedSqlInstruction(
 			[
-				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, P.CRIADO_EM, COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS",
+				"SELECT P.ID AS PEDIDO_ID, PS.NOME_EXIBICAO AS PEDIDO_STATUS, P.CRIADO_EM, P.ATUALIZADO_EM, COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS",
 				"FROM PEDIDO P",
 				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
 				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
@@ -235,9 +236,9 @@ module.exports = {
 
 		await connectionPool.executePreparedSqlInstruction(
 			[
-				"UPDATE PEDIDO P SET P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
+				"UPDATE PEDIDO P SET P.ATUALIZADO_EM, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
 			].join(" "),
-			['CONCLUIDO', Number(orderId)]
+			[db2timestamp(), 'CONCLUIDO', Number(orderId)]
 		);
 	},
 
@@ -252,9 +253,9 @@ module.exports = {
 
 		await connectionPool.executePreparedSqlInstruction(
 			[
-				"UPDATE PEDIDO P SET P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
+				"UPDATE PEDIDO P SET P.ATUALIZADO_EM, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
 			].join(" "),
-			['REJEITADO', Number(orderId)]
+			[db2timestamp(), 'REJEITADO', Number(orderId)]
 		);
 	}
 
