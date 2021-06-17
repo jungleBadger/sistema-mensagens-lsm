@@ -113,7 +113,7 @@ module.exports = {
 							[
 								"SELECT M.ID, ORDEM, TITULO, VALOR, DATA_MINISTRADO, IRMAO_ID, HABILITADO, M.CRIADO_EM, I.NOME_EXIBICAO AS IRMAO_NOME, CAMINHO_ARQUIVO_ESBOCO ",
 								"FROM MENSAGEM M JOIN IRMAO I ON M.IRMAO_ID = I.ID",
-								`WHERE M.ID IN ( ${event.MENSAGENS} ); `
+								`WHERE M.ID IN ( ${event.MENSAGENS} ) ORDER BY M.ORDEM;`
 							].join(" ")
 						)
 					};
@@ -168,7 +168,7 @@ module.exports = {
 							[
 								"SELECT M.ID, ORDEM, TITULO, VALOR, DATA_MINISTRADO, IRMAO_ID, HABILITADO, M.CRIADO_EM, I.NOME_EXIBICAO AS IRMAO_NOME, CAMINHO_ARQUIVO_ESBOCO ",
 								"FROM MENSAGEM M JOIN IRMAO I ON M.IRMAO_ID = I.ID",
- 								`WHERE M.ID IN ( ${event.MENSAGENS} ); `
+								`WHERE M.ID IN ( ${event.MENSAGENS} ) ORDER BY M.ORDEM;`
 							].join(" ")
 						)
 					};
