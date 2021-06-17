@@ -36,11 +36,11 @@
 			R$ {{ message.messageValue }}
 		</td>
 
-		<td class="px-6 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell">
+		<td class="px-6 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell" v-if="isLoggedIn">
 			<template v-if="message.pdfFilePath">
 				<a
 					class="text-indigo-600 hover:text-indigo-900"
-					:href="`${hostURL}/api/message/test/x?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`">Download
+					:href="`${hostURL}/api/message/file/download?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`">Download
 				</a>
 			</template>
 			<template v-else>
@@ -49,7 +49,7 @@
 
 		</td>
 
-		<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+		<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" v-if="isLoggedIn">
 			<a
 				v-if="isAlreadyOwned"
 
@@ -85,41 +85,6 @@
 			</lsm-button>
 		</td>
 	</tr>
-
-
-
-
-<!--	<tr>-->
-
-
-<!--		<i18n-n-->
-<!--			:value="messageIndex"-->
-<!--			format="integer"-->
-<!--			locale="pt"-->
-<!--			tag="td"-->
-<!--		></i18n-n>-->
-
-<!--		<td>{{ message.title }}</td>-->
-
-
-
-
-<!--		<td>{{ message.brotherName }} </td>-->
-
-<!--		<td>{{ message.messageValue }} </td>-->
-
-
-
-<!--		<td>-->
-
-
-
-
-
-<!--		</td>-->
-
-
-<!--	</tr>-->
 
 
 </template>

@@ -353,7 +353,7 @@ router.get(
 );
 
 router.get(
-	"/test/x",
+	"/file/download",
 	isLoggedIn,
 	async (req, res) => {
 		return res.download(req.query.filePath, req.query.fileName || undefined);

@@ -127,7 +127,7 @@
 								class="h-10 w-80 border border-gray-300"
 								controls>
 								<source
-									:src="`/api/message/test/x?filePath=${audioFilePath}`"
+									:src="`/api/message/file/download?filePath=${audioFilePath}`"
 									type="audio/mpeg">
 							</audio>
 
@@ -174,7 +174,7 @@
 
 							<a
 								download
-								:href="`/api/message/test/x?filePath=${pdfFilePath}`"
+								:href="`/api/message/file/download?filePath=${pdfFilePath}`"
 								class="flex-1" target="_self">Download</a>
 
 							<lsm-button
