@@ -35,7 +35,7 @@ router.all(
 	(req, res) => {
 		req.logout();
 		req.session = null;
-		return res.status(200).send("Logged out.");
+		return res.redirect("/app");
 	}
 );
 

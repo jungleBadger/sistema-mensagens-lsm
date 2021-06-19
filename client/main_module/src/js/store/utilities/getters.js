@@ -12,5 +12,13 @@ export default {
 
 	isAdvancedFiltersModalOpen(context) {
 		return context.isAdvancedFiltersModalOpen;
+	},
+
+	acknowledgeLoginMessage(context) {
+		return context.acknowledgeLoginMessage;
+	},
+
+	acknowledgeRuleMessage(context) {
+		return context.acknowledgeRuleMessage;
 	}
 };

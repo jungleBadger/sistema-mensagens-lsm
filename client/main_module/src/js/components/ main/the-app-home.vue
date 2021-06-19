@@ -1,17 +1,57 @@
 <template>
 	<div
-		class="w-full flex flex-col flex-1 overflow-auto h-full "
-		ref="scroller">
-
-		<!--		<header class="w-full mb-2">-->
-		<!--			<h4 class="text-2xl">Sistema de Mensagens LSM</h4>-->
-		<!--			<span>Você pode explorar Eventos e Mensagens abaixo. Monte seu carrinho com as mensagens desejadas.</span>-->
-		<!--		</header>-->
-
+		ref="scroller"
+		class="w-full flex flex-col flex-1 overflow-auto h-full">
 		<div
-			style="min-height: 144px;"
-			class="w-full bg-black h-36 bg-gray-500"></div>
+			v-if="!isLoading && (enableRuleMessage || enableLoginMessage)"
+			class="w-full bg-gray-400 bg-white h-36 flex items-center"
+			style="min-height: 144px;">
 
+			<div
+				v-if="enableRuleMessage"
+				class="w-full md:w-64 h-5/6 ml-0 md:ml-12 bg-white rounded-sm flex flex-col shadow">
+				<main class="pt-1 px-2 flex-1 flex flex-col">
+					<span class="font-semibold">Atenção</span>
+					<span class="text-sm">Toda mensagem adquirida é pessoal e intransferível.</span>
+				</main>
+
+				<footer class="flex px-2 pb-1 self-end">
+					<lsm-button
+						icon-id="check"
+						icon-style="fas"
+						label="Entendi"
+						@click="declareAcknowledgeRuleMessage"></lsm-button>
+				</footer>
+
+			</div>
+
+			<div
+				v-if="enableLoginMessage"
+				class="w-full md:w-64 h-5/6 ml-0 md:ml-12 bg-white rounded-sm flex flex-col shadow">
+				<main class="pt-1 px-2 flex-1 flex flex-col">
+
+
+					<span class="font-semibold">Atenção</span>
+					<span class="text-sm">Para ver mais detalhes das mensagens e adquiri-las <a
+						class="text-blue-700"
+						href="/auth/signup">
+						registre-se
+					</a> ou faça o <a
+						class="text-blue-700"
+						href="/auth/login">
+						login.
+					</a></span>
+				</main>
+
+				<footer class="flex px-2 pb-1 self-end">
+					<lsm-button
+						icon-id="check"
+						icon-style="fas"
+						label="Entendi"
+						@click="declareAcknowledgeLoginMessage"></lsm-button>
+				</footer>
+			</div>
+		</div>
 		<the-event-list
 			ref="eventList"></the-event-list>
 
@@ -24,20 +64,52 @@
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import TheEventList from "./events/the-event-list";
+import LsmButton from "../../../../../_etc/shared_components/ui/lsm-button";
 
 // import gsap from "gsap";
 // import ScrollTrigger from "gsap/src/ScrollTrigger";
 
 // gsap.registerPlugin(ScrollTrigger);
 
-
 export default defineComponent({
 	"name": "AppHome",
-	"components": { TheEventList },
+	"components": {
+		LsmButton,
+		TheEventList
+	},
 	setup () {
 		return {
 			...useI18n()
 		};
+	},
+	"data": function () {
+		return {
+			"isLoading": true
+		}
+	},
+	"computed": {
+		"isLoggedIn": function () {
+			return this.$store.getters["utilities/userInfo"].id;
+		},
+		"enableRuleMessage": function () {
+			return this.isLoggedIn && !this.$store.getters["utilities/acknowledgeRuleMessage"];
+		},
+		"enableLoginMessage": function () {
+			return !this.isLoggedIn && !this.$store.getters["utilities/acknowledgeLoginMessage"];
+		}
+	},
+	"methods": {
+		"declareAcknowledgeRuleMessage": function () {
+			return this.$store.dispatch("utilities/acknowledgeRuleMessage");
+		},
+		"declareAcknowledgeLoginMessage": function () {
+			return this.$store.dispatch("utilities/acknowledgeLoginMessage");
+		}
+	},
+	mounted () {
+		this.$nextTick(() => {
+			this.isLoading = false;
+		});
 	}
 });
 </script>

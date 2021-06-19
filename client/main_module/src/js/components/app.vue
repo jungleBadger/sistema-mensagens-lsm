@@ -33,37 +33,62 @@
 						style="top: 48px; z-index: -1;">
 
 						<router-link
-							@click="closeOverflowMenu"
-							class="p-2 hover:bg-gray-200 transition-colors"
-							:to="{'name': 'app.home'}">
+							:to="{'name': 'app.home'}"
+							class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
+							@click="closeOverflowMenu">
 							<font-awesome-icon
-								:icon="['fas', 'house']" />
+								:icon="['fas', 'house']"/>
 							Inicio
 						</router-link>
 
-						<router-link
-							@click="closeOverflowMenu"
-							class="p-2 hover:bg-gray-200 transition-colors"
-							:to="{'name': 'app.owned'}">
-							<font-awesome-icon :icon="['fas', 'user-music']"/>
-							Minhas mensagens
-						</router-link>
+						<template v-if="userInfo && userInfo.id">
+							<router-link
+								:to="{'name': 'app.owned'}"
+								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
+								@click="closeOverflowMenu">
+								<font-awesome-icon :icon="['fas', 'user-music']"/>
+								Minhas mensagens
+							</router-link>
 
-						<router-link
-							@click="closeOverflowMenu"
-							class="p-2 hover:bg-gray-200 transition-colors"
-							:to="{'name': 'app.owned'}">
-							<font-awesome-icon :icon="['fas', 'user-gear']"/>
-							Perfil
-						</router-link>
+							<router-link
+								:to="{'name': 'app.owned'}"
+								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
+								@click="closeOverflowMenu">
+								<font-awesome-icon :icon="['fas', 'user-gear']"/>
+								Perfil
+							</router-link>
 
-						<router-link
-							@click="closeOverflowMenu"
-							class="p-2 hover:bg-gray-200 transition-colors"
-							:to="{'name': 'app.checkout'}">
-							<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
-							Carrinho ({{ cartItemsLength }})
-						</router-link>
+							<router-link
+								:to="{'name': 'app.checkout'}"
+								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
+								@click="closeOverflowMenu">
+								<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
+								Carrinho ({{ cartItemsLength }})
+							</router-link>
+
+
+							<a
+								href="/auth/logout"
+								class="p-2 hover:bg-gray-200 text-red-700 transition-colors flex items-center gap-4"
+								@click="closeOverflowMenu">
+								<font-awesome-icon :icon="['fas', 'arrow-up-left-from-circle']"/>
+								Sair
+							</a>
+
+						</template>
+
+						<template v-else>
+							<router-link
+								:to="{'name': 'app.owned'}"
+								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
+								@click="closeOverflowMenu">
+								<font-awesome-icon :icon="['fas', 'user']"/>
+								Entrar ou criar conta
+							</router-link>
+
+						</template>
+
+
 					</aside>
 				</transition>
 
@@ -83,7 +108,7 @@
 
 
 					<div
-						class="pr-2 flex flex-1 gap-6 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap hidden md:flex">
+						class="pr-2 flex flex-1 gap-12 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap hidden md:flex">
 						<template v-if="userInfo && userInfo.id">
 
 							<router-link
@@ -106,10 +131,21 @@
 								<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
 								Carrinho ({{ cartItemsLength }})
 							</router-link>
+
+							<a
+								href="/auth/logout"
+								class="header-link text-gray-600">
+								<font-awesome-icon :icon="['fas', 'arrow-up-left-from-circle']"/>
+								Sair
+							</a>
 						</template>
 
 						<template v-else>
-							<a href="/auth/login">Entrar</a>
+							<a class="header-link text-gray-600"
+							   href="/auth/login">
+								<font-awesome-icon :icon="['fas', 'user']"/>
+								Entrar ou criar conta
+							</a>
 						</template>
 					</div>
 
@@ -220,6 +256,9 @@ export default defineComponent({
 .header-link {
 	overflow: hidden;
 	text-overflow: ellipsis;
+	display: flex;
+	grid-gap: 8px;
+	align-items: center;
 
 	&:hover {
 		font-weight: 600;

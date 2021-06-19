@@ -5,7 +5,7 @@
 
 		<div
 			id="main-search-bar"
-			class="flex z-20 left-0 w-full shadow-lg items-center sticky top-0 flex-wrap">
+			class="flex z-30 left-0 w-full shadow-lg items-center sticky top-0 flex-wrap">
 			<div class="flex-1">
 				<lsm-input
 					ref="searchInput"
@@ -46,7 +46,7 @@
 
 		</div>
 
-		<div class=" w-full flex flex-col mb-2 gap-4 md:pl-36 md:pr-36 pl-1 pr-1">
+		<div class="flex flex-col mb-2 gap-4 pl-1 pr-1 items-center">
 
 
 
@@ -72,11 +72,10 @@
 				spin/> Carregando...
 		</div>
 		<div
-			class="w-full flex items-center justify-center md:pl-36 md:pr-36 pl-1 pr-1"
+			class=" flex items-center justify-center w-full pl-1 pr-1 h-12"
 			v-else-if="hasNextPage">
 			<lsm-button
 				style="justify-content: center;"
-				class="w-full content-center"
 				kind="secondary"
 				:is-loading="eventsLoading"
 				label="Clique para carregar mais eventos"

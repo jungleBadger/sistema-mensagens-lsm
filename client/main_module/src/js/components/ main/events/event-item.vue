@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="w-full p-2 bg-white shadow flex flex-col gap-2 rounded-sm overflow-hidden">
+		class="w-full md:w-9/12 p-2 bg-white shadow flex flex-col gap-2 rounded-sm overflow-hidden">
 
 
 		<header class="w-full break-words">
