@@ -165,7 +165,6 @@
 			fse.remove(modulePath + "/dist/css/style.css.map");
 		}
 
-		console.log(modulePath);
 		return gulp.src([
 			`${modulePath}/src/css/*.css`,
 			`${modulePath}/src/css/*.scss`
@@ -215,7 +214,8 @@
 									`./${modulePath}/src/index.ejs`,
 									`./${modulePath}/src/js/components/**/*.vue`,
 									"./_etc/shared_components/**/*.vue",
-									"./node_modules/litepie-datepicker/dist/*.js"
+									"./node_modules/litepie-datepicker/dist/*.js",
+									"./node_modules/@suadelabs/vue3-multiselect"
 								],
 								defaultExtractor (content) {
 									const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, "");
