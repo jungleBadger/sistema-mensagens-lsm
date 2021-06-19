@@ -215,7 +215,7 @@
 									`./${modulePath}/src/js/components/**/*.vue`,
 									"./_etc/shared_components/**/*.vue",
 									"./node_modules/litepie-datepicker/dist/*.js",
-									"./node_modules/@suadelabs/vue3-multiselect"
+									"./node_modules/@suadelabs/vue3-multiselect/dist/*.js"
 								],
 								defaultExtractor (content) {
 									const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, "");
