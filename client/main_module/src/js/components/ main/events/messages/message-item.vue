@@ -7,7 +7,6 @@
 			</div>
 		</td>
 		<td
-			style="max-width: 240px;"
 			class="px-4 py-4 whitespace-nowrap md:whitespace-normal">
 			<div class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
 				{{ message.title }}
@@ -16,39 +15,46 @@
 
 		<td class="px-4 py-4 whitespace-nowrap hidden md:table-cell">
 
-			<div class="text-sm text-gray-500"><i18n-d
-				key="short"
-				:value="message.messageDate"
-				locale="pt"
-			></i18n-d></div>
+			<div class="text-sm text-gray-500">
+				<i18n-d
+					key="short"
+					:value="message.messageDate"
+					locale="pt"
+				></i18n-d>
+			</div>
 		</td>
 		<td class="px-4 py-4 hidden md:table-cell">
-			<div class="text-sm text-gray-500">{{message.brotherName}}</div>
+			<div class="text-sm text-gray-500">{{ message.brotherName }}</div>
 
 		</td>
 		<td class="px-4 py-4 text-sm text-gray-500">
 			R$ {{ message.messageValue }}
 		</td>
 
-		<td class="px-4 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell" v-if="isLoggedIn">
-			<template v-if="message.pdfFilePath">
+		<td v-if="isLoggedIn" class="px-4 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell">
+			<span
+				style="min-width: 60px;"
+			>
+				<template v-if="message.pdfFilePath">
 				<a
-					class="text-indigo-600 hover:text-indigo-900"
-					:href="`${hostURL}/api/message/file/download?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`">Download
+					:href="`${hostURL}/api/message/file/download?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`"
+					class="text-indigo-600 hover:text-indigo-900">Download
 				</a>
 			</template>
 			<template v-else>
 				-
 			</template>
 
+			</span>
+
 		</td>
 
-		<td class="px-4 py-4 whitespace-nowrap text-sm font-medium" v-if="isLoggedIn">
+		<td v-if="isLoggedIn" class="px-4 py-4 whitespace-nowrap text-sm font-medium">
 			<a
 				v-if="isAlreadyOwned"
-
+				:href="`${hostURL}/api/message/self/download/${message.id}`"
 				class="text-indigo-600 hover:text-indigo-900"
-				:href="`${hostURL}/api/message/self/download/${message.id}`">Download
+				style="min-width: 170px;">Download
 			</a>
 
 			<lsm-button
@@ -58,8 +64,8 @@
 				icon-id="cart-xmark"
 				icon-style="fas"
 				kind="danger-outline"
-				style="min-width: 170px;"
 				label="Remover do carrinho"
+				style="min-width: 170px;"
 
 				@click="removeItemFromCart"
 			></lsm-button>
@@ -71,8 +77,8 @@
 				icon-id="cart-plus"
 				icon-style="fas"
 				kind="primary-outline"
-				style="min-width: 170px;"
 				label="Adicionar ao carrinho"
+				style="min-width: 170px;"
 
 				@click="addItemToCart">
 
