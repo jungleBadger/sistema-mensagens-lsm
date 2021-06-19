@@ -7,6 +7,7 @@
 			</div>
 		</td>
 		<td
+			style="max-width: 265px;"
 			class="px-4 py-4 whitespace-nowrap md:whitespace-normal">
 			<div class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
 				{{ message.title }}
@@ -28,7 +29,6 @@
 
 		</td>
 		<td
-			style="max-width: 265px;"
 			class="px-4 py-4 text-sm text-gray-500">
 			R$ {{ message.messageValue }}
 		</td>
