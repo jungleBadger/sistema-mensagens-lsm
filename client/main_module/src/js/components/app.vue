@@ -68,8 +68,8 @@
 
 
 							<a
-								href="/auth/logout"
 								class="p-2 hover:bg-gray-200 text-red-700 transition-colors flex items-center gap-4"
+								href="/auth/logout"
 								@click="closeOverflowMenu">
 								<font-awesome-icon :icon="['fas', 'arrow-up-left-from-circle']"/>
 								Sair
@@ -133,16 +133,17 @@
 							</router-link>
 
 							<a
-								href="/auth/logout"
-								class="header-link text-gray-600">
+								class="header-link text-gray-600"
+								href="/auth/logout">
 								<font-awesome-icon :icon="['fas', 'arrow-up-left-from-circle']"/>
 								Sair
 							</a>
 						</template>
 
 						<template v-else>
-							<a class="header-link text-gray-600"
-							   href="/auth/login">
+							<a
+								class="header-link text-gray-600"
+								href="/auth/login">
 								<font-awesome-icon :icon="['fas', 'user']"/>
 								Entrar ou criar conta
 							</a>
