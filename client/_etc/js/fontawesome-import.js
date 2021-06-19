@@ -34,6 +34,7 @@ import { faTrashXmark } from "@fortawesome/pro-solid-svg-icons/faTrashXmark";
 import { faLink } from "@fortawesome/pro-solid-svg-icons/faLink";
 import { faRotateRight } from "@fortawesome/pro-solid-svg-icons/faRotateRight";
 import { faFilterList } from "@fortawesome/pro-solid-svg-icons/faFilterList";
+import { faFilterCircleXmark } from "@fortawesome/pro-solid-svg-icons/faFilterCircleXmark";
 import { faFilePdf } from "@fortawesome/pro-solid-svg-icons/faFilePdf";
 import { faCartXmark } from "@fortawesome/pro-solid-svg-icons/faCartXmark";
 import { faCartPlus } from "@fortawesome/pro-solid-svg-icons/faCartPlus";
@@ -82,6 +83,7 @@ library.add(
 	faLink,
 	faRotateRight,
 	faFilterList,
+	faFilterCircleXmark,
 	faFilePdf,
 	faCartShopping,
 	faCartPlus,

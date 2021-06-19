@@ -5,10 +5,11 @@
 
 		<div
 			id="main-search-bar"
-			class="flex z-20 left-0 w-full shadow-lg items-center sticky top-0">
+			class="flex z-20 left-0 w-full shadow-lg items-center sticky top-0 flex-wrap">
 			<div class="flex-1">
 				<lsm-input
 					v-model="filterText"
+					:disabled="useAdvancedSearch"
 					autofocus
 					type="search"
 					autocapitalize="off"
@@ -23,6 +24,16 @@
 			</div>
 
 			<lsm-button
+				v-if="useAdvancedSearch"
+				style="border-radius: 0 !important;"
+				class="border-none rounded-none h-14 items-center"
+				label="Remover filtros avançados"
+				kind="secondary"
+				icon-id="filter-circle-xmark"
+				icon-style="fas"
+				@click="removeFilters"></lsm-button>
+
+			<lsm-button
 				style="border-radius: 0 !important;"
 				class="border-none rounded-none h-14 items-center"
 				label="Filtros avançados"
@@ -33,7 +44,7 @@
 
 		</div>
 
-		<div class=" w-full flex flex-col mb-2 gap-2 md:pl-36 md:pr-36 pl-1 pr-1">
+		<div class=" w-full flex flex-col mb-2 gap-4 md:pl-36 md:pr-36 pl-1 pr-1">
 
 
 
@@ -71,7 +82,8 @@
 			@leave="fadeOut"
 			mode="out-in"
 			:css="false">
-			<the-advanced-filters-modal v-if="isAdvancedFiltersModalOpen"></the-advanced-filters-modal>
+			<the-advanced-filters-modal
+				v-if="isAdvancedFiltersModalOpen"></the-advanced-filters-modal>
 		</transition>
 	</div>
 </template>
@@ -108,6 +120,14 @@ export default defineComponent({
 		}
 	},
 	"computed": {
+		"useAdvancedSearch": {
+			get () {
+				return this.$store.getters["advancedFilters/useAdvancedSearch"];
+			},
+			set (val) {
+				return this.$store.commit("advancedFilters/useAdvancedSearch", val);
+			}
+		},
 		"isAdvancedFiltersModalOpen": {
 			get() {
 				return this.$store.getters["utilities/isAdvancedFiltersModalOpen"];
@@ -115,6 +135,9 @@ export default defineComponent({
 			set(val) {
 				return this.$store.commit("utilities/isAdvancedFiltersModalOpen", val);
 			}
+		},
+		"advancedFilters": function () {
+			return this.$store.getters["advancedFilters/advancedFilters"];
 		},
 		"eventsCount": function () {
 			return this.$store.getters["events/totalEventsCount"];
@@ -152,6 +175,13 @@ export default defineComponent({
 
 	},
 	"watch": {
+		"useAdvancedSearch": function () {
+			this.pagination = {
+				...this.pagination,
+				"skip": 0
+			};
+			return this.performRelevantQuery();
+		},
 		"filterText": function (newValue) {
 			this.currentPage = 1;
 			this.debounce = Date.now();
@@ -176,7 +206,6 @@ export default defineComponent({
 			}
 		},
 		hasNextPage(newValue) {
-			console.log(newValue);
 			if (newValue) {
 				this.$parent.$refs.scroller.addEventListener("scroll", this.handleScroll);
 			} else {
@@ -198,6 +227,10 @@ export default defineComponent({
 			this.isAdvancedFiltersModalOpen = true;
 		},
 
+		removeFilters() {
+			this.$store.commit("advancedFilters/removeFilters");
+		},
+
 		async loadEvents(isPagination) {
 			return await Promise.all([
 				this.$store.dispatch("events/retrieveTotalEventsCount"),
@@ -217,12 +250,32 @@ export default defineComponent({
 				}
 			);
 		},
+
+		async advancedSearchEvents(isPagination) {
+			return await this.$store.dispatch(
+				"events/advancedSearchEvents",
+				{
+					"filterColumn": this.asyncFilterColumn,
+					"filterText": this.asyncFilterText,
+					isPagination,
+					"advancedFilters": this.advancedFilters
+				}
+			);
+		},
 		async performRelevantQuery(isPagination) {
 			if (this.isLoading) {
 				return false;
 			}
 			this.isLoading = true;
-			await (this.asyncFilterText ? this.searchEvents(isPagination) : this.loadEvents(isPagination));
+
+			if (this.useAdvancedSearch) {
+				await this.advancedSearchEvents(isPagination);
+			} else {
+				await (this.asyncFilterText ? this.searchEvents(isPagination) : this.loadEvents(isPagination));
+			}
+
+
+
 			this.isLoading = false;
 			return true;
 		},

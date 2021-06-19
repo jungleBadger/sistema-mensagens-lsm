@@ -65,16 +65,14 @@ router.get(
 );
 
 
-router.get(
+router.post(
 	"/advanced-search",
 	async (req, res) => {
 		res.status(
 			200
 		).send(
-			await event.search(
-				req.query.filterText,
-				req.query.filterColumn || "TITULO",
-				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [],
+			await event.advancedSearch(
+				req.body,
 				req.query.targetColumns ? req.query.targetColumns.split(",") : [
 					"EVENTO.ID",
 					"EVENTO.TITULO",
@@ -89,7 +87,8 @@ router.get(
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
 				req.query.orderBy || "ID",
-				req.query.orderDirection || "DESC"
+				req.query.orderDirection || "DESC",
+				req.user ? req.user.id : ""
 			)
 		)
 	}

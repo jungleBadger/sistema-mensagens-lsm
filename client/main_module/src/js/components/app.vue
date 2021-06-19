@@ -1,38 +1,113 @@
 <template>
 
 	<section class="flex flex-col flex-1 w-full h-full">
-		<the-app-header class="md:pl-12 md:pr-12 pl-2 pr-2">
+		<the-app-header class="md:pl-12 md:pr-12 pl-0 md:pl-2 md:pr-2">
+
 			<template v-slot:app-buttons>
-				<div class="flex gap-4 w-full">
-					<div class="pl-2 hidden sm:block">
+				<button
+					aria-controls="lsm-sidemenu"
+					class="bg-white text-gray-800 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-400 transition-colors w-12 h-12 flex md:hidden items-center justify-center"
+					@click="toggleOverflowMenu">
+					<template v-if="isOverflowMenuOpen">
+					<span
+						aria-label="Fechar menu de navegação"
+						role="img">
+						<font-awesome-icon :icon="['fal', 'xmark']"/>
+					</span>
+					</template>
+					<template v-else>
+					<span
+						aria-label="Abrir menu de navegação"
+						role="img">
+						<font-awesome-icon :icon="['fal', 'bars']"/>
+					</span>
+					</template>
+				</button>
+				<transition :css="false"
+							mode="out-in"
+							@enter="fadeIn"
+							@leave="fadeOut">
+					<aside
+						v-if="isOverflowMenuOpen"
+						class="w-48 h-auto bg-white rounded-b shadow-lg border absolute left-0 flex flex-col gap-2"
+						style="top: 48px; z-index: -1;">
+
+						<router-link
+							@click="closeOverflowMenu"
+							class="p-2 hover:bg-gray-200 transition-colors"
+							:to="{'name': 'app.home'}">
+							<font-awesome-icon
+								:icon="['fas', 'house']" />
+							Inicio
+						</router-link>
+
+						<router-link
+							@click="closeOverflowMenu"
+							class="p-2 hover:bg-gray-200 transition-colors"
+							:to="{'name': 'app.owned'}">
+							<font-awesome-icon :icon="['fas', 'user-music']"/>
+							Minhas mensagens
+						</router-link>
+
+						<router-link
+							@click="closeOverflowMenu"
+							class="p-2 hover:bg-gray-200 transition-colors"
+							:to="{'name': 'app.owned'}">
+							<font-awesome-icon :icon="['fas', 'user-gear']"/>
+							Perfil
+						</router-link>
+
+						<router-link
+							@click="closeOverflowMenu"
+							class="p-2 hover:bg-gray-200 transition-colors"
+							:to="{'name': 'app.checkout'}">
+							<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
+							Carrinho ({{ cartItemsLength }})
+						</router-link>
+					</aside>
+				</transition>
+
+
+				<div class="flex gap-4 w-full ">
+					<div class="pl-2 hidden md:block">
 						<router-link
 							:to="{'name': 'app.home'}">
 							<img
-								class="mx-auto h-10 w-auto"
-								src="/_etc/assets/1x/logo.png"
 								alt="Logotipo Livro aberto"
+								class="mx-auto h-10 w-auto"
 								role="img"
+								src="/_etc/assets/1x/logo.png"
 							/>
 						</router-link>
 					</div>
-					<div class="pr-2 flex flex-1 gap-6 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap">
+
+
+					<div
+						class="pr-2 flex flex-1 gap-6 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap hidden md:flex">
 						<template v-if="userInfo && userInfo.id">
 
 							<router-link
-								class="header-link"
-								:to="{'name': 'app.owned'}"><font-awesome-icon :icon="['fas', 'user-music']"/> Meus pedidos e mensagens
+								:to="{'name': 'app.owned'}"
+								class="header-link text-gray-600">
+								<font-awesome-icon :icon="['fas', 'user-music']"/>
+								Minhas mensagens
 							</router-link>
 
 							<router-link
-								class="header-link"
-								:to="{'name': 'app.owned'}"><font-awesome-icon :icon="['fas', 'user-gear']"/> Perfil
+								:to="{'name': 'app.owned'}"
+								class="header-link text-gray-600">
+								<font-awesome-icon :icon="['fas', 'user-gear']"/>
+								Perfil
 							</router-link>
 
 							<router-link
-								class="header-link"
-								:to="{'name': 'app.checkout'}"><font-awesome-icon :icon="['fas', 'cart-shopping']"/> Carrinho ({{cartItemsLength}})
+								:to="{'name': 'app.checkout'}"
+								class="header-link text-gray-600">
+								<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
+								Carrinho ({{ cartItemsLength }})
 							</router-link>
 						</template>
+
 						<template v-else>
 							<a href="/auth/login">Entrar</a>
 						</template>
@@ -51,20 +126,17 @@
 					v-slot="{ Component }">
 
 					<transition
-						@enter="fadeIn"
-						@leave="fadeOut"
+						:css="false"
 						mode="out-in"
-						:css="false">
-						<keep-alive include="AppHome">
-							<component :is="Component" />
-						</keep-alive>
+						@enter="fadeIn"
+						@leave="fadeOut">
+						<component :is="Component"/>
 					</transition>
 				</router-view>
 			</template>
 
 
 		</main>
-
 
 
 		<lsm-toast-notification-container></lsm-toast-notification-container>
@@ -74,7 +146,7 @@
 <script type="text/javascript">
 "use strict";
 import { defineComponent } from "vue";
-import TheAppHeader from "./core/the-app-header.vue"
+import TheAppHeader from "./core/the-app-header.vue";
 import fade from "../../../../_etc/shared_mixins/fade";
 
 import LsmToastNotificationContainer
@@ -87,8 +159,9 @@ export default defineComponent({
 	],
 	"data": function () {
 		return {
-			"isLoading": false
-		}
+			"isLoading": false,
+			"isOverflowMenuOpen": false
+		};
 	},
 	"components": {
 		LsmToastNotificationContainer,
@@ -100,6 +173,16 @@ export default defineComponent({
 		},
 		"cartItemsLength": function () {
 			return this.$store.getters["shoppingCart/currentCart"].length;
+		}
+	},
+	"methods": {
+		toggleOverflowMenu () {
+			this.isOverflowMenuOpen = !this.isOverflowMenuOpen;
+		},
+		closeOverflowMenu () {
+			this.$nextTick(() => {
+				this.isOverflowMenuOpen = false;
+			});
 		}
 	},
 	async beforeCreate () {
@@ -132,11 +215,12 @@ export default defineComponent({
 	}
 });
 </script>
-<style scoped lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
 
 .header-link {
 	overflow: hidden;
 	text-overflow: ellipsis;
+
 	&:hover {
 		font-weight: 600;
 

@@ -5,6 +5,13 @@ export default {
 	"isSideMenuOpen": "",
 	"isAdvancedFiltersModalOpen": false,
 
+	"useAdvancedSearch": false,
+
+	"ownedOnly": false,
+
+	"eventTitle": "",
+	"messageTitle": "",
+
 	"startDate": "",
 	"endDate": "",
 

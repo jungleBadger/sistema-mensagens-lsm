@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="w-full p-2 bg-white shadow flex flex-col gap-2 rounded overflow-hidden">
+		class="w-full p-2 bg-white shadow flex flex-col gap-2 rounded-sm overflow-hidden">
 
 
 		<header class="w-full break-words">
@@ -45,39 +45,39 @@
 						<div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
 							<table class="min-w-full divide-y divide-gray-200">
 								<thead class="bg-gray-50">
-								<tr>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-										scope="col">
-										Ordem
-									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-										scope="col">
-										Título
-									</th>
+									<tr>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+											scope="col">
+											Ordem
+										</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+											scope="col">
+											Título
+										</th>
 
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-										scope="col">
-										Data
-									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-										scope="col">
-										Irmão
-									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-										scope="col">
-										Preço
-									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-										scope="col"
-										v-if="isLoggedIn">
-										Esboço
-									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-										scope="col"
-										v-if="isLoggedIn">
-										Audio
-									</th>
-								</tr>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+											scope="col">
+											Data
+										</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+											scope="col">
+											Irmão
+										</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+											scope="col">
+											Preço
+										</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+											scope="col"
+											v-if="isLoggedIn">
+											Esboço
+										</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+											scope="col"
+											v-if="isLoggedIn">
+											Audio
+										</th>
+									</tr>
 								</thead>
 								<tbody class="bg-white divide-y divide-gray-200">
 

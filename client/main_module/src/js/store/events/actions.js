@@ -30,6 +30,40 @@ export default {
 
 	},
 
+	async advancedSearchEvents(context, params) {
+		const {skip, limit, orderBy, orderDirection} = context.getters["pagination"];
+		console.log(params);
+		try {
+			let result = await eventsFactory.advancedSearchEvents(
+				skip,
+				limit,
+				orderBy,
+				orderDirection,
+				params.advancedFilters
+
+			);
+			context.commit("totalEventsCount", result.totalCount);
+
+			if (params.isPagination) {
+				context.commit("eventItems", result.results);
+			} else {
+				context.commit("replaceEventItems", result.results);
+			}
+
+		} catch (e) {
+			context.commit(
+				"notification/addNotification",
+				{
+					"kind": "error",
+					"title": "Houve um erro realizando a busca.",
+					"subtitle": "Confira os filtros, tente novamente e se o erro persistir contate o suporte."
+				},
+				{"root": true}
+			);
+		}
+
+	},
+
 	async retrieveTotalEventsCount(context) {
 		try {
 			let result = await eventsFactory.retrieveTotalEventsCount();

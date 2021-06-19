@@ -158,6 +158,7 @@ router.get(
 	extractAndLoadAPIKey,
 	validateJWT,
 	async (req, res) => {
+		//@TODO VALIDATE RESET REQUEST
 		res.status(200).send(res.locals.decodedJWT);
 	}
 );
