@@ -6,21 +6,21 @@
 
 
 	<tr>
-		<td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
+		<td class="px-4 py-4 whitespace-nowrap hidden md:table-cell">
 			<div class="text-sm font-medium text-gray-900">
 				{{ message.order }}
 			</div>
 		</td>
 		<td
 			style="max-width: 240px;"
-			class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
+			class="px-4 py-4 whitespace-nowrap md:whitespace-normal">
 			<div class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
 				{{ message.title }}
 			</div>
 		</td>
 
 
-		<td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
+		<td class="px-4 py-4 whitespace-nowrap hidden md:table-cell">
 
 			<div class="text-sm text-gray-500"><i18n-d
 				key="short"
@@ -28,15 +28,15 @@
 				locale="pt"
 			></i18n-d></div>
 		</td>
-		<td class="px-6 py-4 hidden md:table-cell">
+		<td class="px-4 py-4 hidden md:table-cell">
 			<div class="text-sm text-gray-500">{{message.brotherName}}</div>
 
 		</td>
-		<td class="px-6 py-4 text-sm text-gray-500">
+		<td class="px-4 py-4 text-sm text-gray-500">
 			R$ {{ message.messageValue }}
 		</td>
 
-		<td class="px-6 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell" v-if="isLoggedIn">
+		<td class="px-4 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell" v-if="isLoggedIn">
 			<template v-if="message.pdfFilePath">
 				<a
 					class="text-indigo-600 hover:text-indigo-900"
@@ -49,7 +49,7 @@
 
 		</td>
 
-		<td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="isLoggedIn">
+		<td class="px-4 py-4 whitespace-nowrap text-sm font-medium" v-if="isLoggedIn">
 			<a
 				v-if="isAlreadyOwned"
 
