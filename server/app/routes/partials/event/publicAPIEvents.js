@@ -53,7 +53,8 @@ router.get(
 					"EVENTO.LOCALIDADE_ID",
 					"EVENTO.CATEGORIA_ID",
 					"EVENTO.CRIADO_EM",
-					"EVENTO.ATUALIZADO_EM"
+					"EVENTO.ATUALIZADO_EM",
+					"I.NOME_EXIBICAO"
 				],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
