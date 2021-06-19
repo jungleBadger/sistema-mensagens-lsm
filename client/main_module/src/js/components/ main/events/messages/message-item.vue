@@ -1,10 +1,5 @@
 <template>
 
-
-
-
-
-
 	<tr>
 		<td class="px-4 py-4 whitespace-nowrap hidden md:table-cell">
 			<div class="text-sm font-medium text-gray-900">
@@ -18,7 +13,6 @@
 				{{ message.title }}
 			</div>
 		</td>
-
 
 		<td class="px-4 py-4 whitespace-nowrap hidden md:table-cell">
 

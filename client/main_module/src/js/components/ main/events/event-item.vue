@@ -76,6 +76,11 @@
 											scope="col"
 											v-if="isLoggedIn">
 											Audio
+											<template v-if="availableItems && availableItems.length">
+												<span
+													class="text-blue-700 cursor-pointer"
+													@click="addAvailableItems">- Adicionar todos</span>
+											</template>
 										</th>
 									</tr>
 								</thead>
@@ -94,8 +99,6 @@
 					</div>
 				</div>
 			</div>
-
-
 		</main>
 	</div>
 </template>
@@ -119,6 +122,24 @@ export default defineComponent({
 	"computed": {
 		"isLoggedIn": function () {
 			return this.$store.getters["utilities/userInfo"].id;
+		},
+
+		"currentCart": function () {
+			return this.$store.getters["shoppingCart/currentCart"];
+		},
+
+		"ownedItems": function () {
+			return this.$store.getters["orders/ownedItems"];
+		},
+
+		"availableItems": function () {
+			return (
+				this.event.messages || []
+			).filter(eventMessage => {
+				return !this.ownedItems.some(item => item.messageId === eventMessage.id);
+			}).filter(eventMessage => {
+				return !this.currentCart.some(item => item.messageId === eventMessage.id);
+			}).map(item => item.id);
 		}
 	},
 	setup () {
@@ -129,6 +150,15 @@ export default defineComponent({
 		return {
 			datetimeFormats
 		};
+	},
+	"methods": {
+		async addAvailableItems() {
+			await Promise.all([
+				this.availableItems.map(item =>
+					this.$store.dispatch("shoppingCart/addItemToCart", item)
+				)
+			]);
+		}
 	}
 });
 </script>

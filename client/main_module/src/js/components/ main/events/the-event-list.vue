@@ -54,23 +54,26 @@
 				<h4 class="text-lg w-full text-center">Nenhum evento ou mensagem encontrados.</h4>
 			</template>
 			<template v-else>
-				<transition-group
-					name="flip-list"
-					type="transition">
-					<event-item
-						v-for="event in events"
-						:key="event.id"
-						:event="event"
-					></event-item>
-				</transition-group>
+				<event-item
+					v-for="event in events"
+					:key="event.id"
+					:event="event"
+				></event-item>
 
 			</template>
 		</div>
 
 
 		<div
+			class="w-full h-12 flex gap-2 items-center justify-center"
+			v-if="isLoading">
+			<font-awesome-icon
+				:icon="['fas', 'spinner-third']"
+				spin/> Carregando...
+		</div>
+		<div
 			class="w-full flex items-center justify-center md:pl-36 md:pr-36 pl-1 pr-1"
-			v-if="hasNextPage">
+			v-else-if="hasNextPage">
 			<lsm-button
 				style="justify-content: center;"
 				class="w-full content-center"
@@ -81,13 +84,7 @@
 
 			</lsm-button>
 		</div>
-		<div
-			class="w-full h-12 flex gap-2 items-center justify-center"
-			v-if="isLoading">
-			<font-awesome-icon
-				:icon="['fas', 'spinner-third']"
-				spin/> Carregando...
-		</div>
+
 
 
 
