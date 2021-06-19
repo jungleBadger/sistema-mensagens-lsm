@@ -4,7 +4,7 @@
 		class="w-full flex flex-col flex-1 overflow-auto h-full">
 		<div
 			v-if="!isLoading && (enableRuleMessage || enableLoginMessage)"
-			class="w-full bg-gray-400 bg-white h-36 flex items-center"
+			class="w-full bg-gray-400 h-36 flex items-center"
 			style="min-height: 144px;">
 
 			<div

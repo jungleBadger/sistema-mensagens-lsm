@@ -27,7 +27,9 @@
 			<div class="text-sm text-gray-500">{{ message.brotherName }}</div>
 
 		</td>
-		<td class="px-4 py-4 text-sm text-gray-500">
+		<td
+			style="max-width: 265px;"
+			class="px-4 py-4 text-sm text-gray-500">
 			R$ {{ message.messageValue }}
 		</td>
 
