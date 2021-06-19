@@ -321,7 +321,11 @@ export default defineComponent({
 	},
 
 	unmounted () {
-		this.$parent.$refs.scroller.removeEventListener("scroll", this.handleScroll);
+		try {
+			this.$parent.$refs.scroller.removeEventListener("scroll", this.handleScroll);
+		} catch {
+			return false;
+		}
 	}
 });
 </script>
