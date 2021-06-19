@@ -8,8 +8,9 @@
 			class="flex z-20 left-0 w-full shadow-lg items-center sticky top-0 flex-wrap">
 			<div class="flex-1">
 				<lsm-input
+					ref="searchInput"
 					v-model="filterText"
-					:disabled="useAdvancedSearch"
+					:disabled="useAdvancedSearch || isLoading"
 					autofocus
 					type="search"
 					autocapitalize="off"
@@ -34,6 +35,7 @@
 				@click="removeFilters"></lsm-button>
 
 			<lsm-button
+				:is-loading="isLoading"
 				style="border-radius: 0 !important;"
 				class="border-none rounded-none h-14 items-center"
 				label="Filtros avançados"
@@ -52,11 +54,16 @@
 				<h4 class="text-lg w-full text-center">Nenhum evento ou mensagem encontrados.</h4>
 			</template>
 			<template v-else>
-				<event-item
-					v-for="event in events"
-					:key="event.id"
-					:event="event"
-				></event-item>
+				<transition-group
+					name="flip-list"
+					type="transition">
+					<event-item
+						v-for="event in events"
+						:key="event.id"
+						:event="event"
+					></event-item>
+				</transition-group>
+
 			</template>
 		</div>
 
@@ -73,6 +80,13 @@
 				@click="updatePagination">
 
 			</lsm-button>
+		</div>
+		<div
+			class="w-full h-12 flex gap-2 items-center justify-center"
+			v-if="isLoading">
+			<font-awesome-icon
+				:icon="['fas', 'spinner-third']"
+				spin/> Carregando...
 		</div>
 
 
@@ -183,8 +197,12 @@ export default defineComponent({
 			return this.performRelevantQuery();
 		},
 		"filterText": function (newValue) {
+			if (this.isLoading) {
+				return false;
+			}
 			this.currentPage = 1;
 			this.debounce = Date.now();
+
 			if (!newValue) {
 				this.handleAsyncSearch( {
 					"filteringField": this.selectedFilteringField,
@@ -277,6 +295,9 @@ export default defineComponent({
 
 
 			this.isLoading = false;
+			await this.$nextTick(() => {
+				this.$refs.searchInput.$refs.input.focus();
+			})
 			return true;
 		},
 
@@ -309,5 +330,11 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">
+.flip-list-move {
+	transition: transform 0.5s;
+}
 
+.no-move {
+	transition: transform 0s;
+}
 </style>
