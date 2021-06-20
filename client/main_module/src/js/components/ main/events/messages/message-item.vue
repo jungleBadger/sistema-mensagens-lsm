@@ -31,7 +31,7 @@
 
 		</td>
 		<td
-			class="px-4 py-4 text-sm text-gray-500">
+			class="px-4 py-4 text-sm text-gray-500 hidden md:table-cell">
 			R$ {{ message.messageValue }}
 		</td>
 
@@ -148,7 +148,6 @@ export default defineComponent({
 				return false;
 			}
 			this.shoppingItemLoading = true;
-			console.log(this.isAlreadyInCart);
 			await this.$store.dispatch("shoppingCart/removeItemFromCart", this.isAlreadyInCart.orderItemId);
 			this.shoppingItemLoading = false;
 
