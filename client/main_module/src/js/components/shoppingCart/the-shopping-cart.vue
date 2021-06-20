@@ -91,7 +91,7 @@
 				<form
 					id="form_pagamento"
 					ref="yapayForm"
-					action="https://tc-intermediador-sandbox.yapay.com.br/payment/transaction"
+					action="https://tc.intermediador.yapay.com.br/payment/transaction"
 					class="hidden"
 					method="POST"
 					name="form_pagamento"
@@ -101,7 +101,7 @@
 						id="token_account"
 						name="token_account"
 						type="hidden"
-						value="e4438667a6d6e80">
+						value="0f2c69390802b26">
 
 					<input
 						id="customer_email"
