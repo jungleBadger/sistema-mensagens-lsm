@@ -47,7 +47,7 @@
 					<h4 class="text-l">
 						Mensagens adquiridas em Pedidos com status <span>concluído</span> podem ser acessadas em <router-link
 						class="text-blue-700"
-						:to="{'name': 'app.home'}">suas mensagens</router-link>.
+						:to="{'name': 'app.owned'}">suas mensagens</router-link>.
 					</h4>
 				</div>
 
