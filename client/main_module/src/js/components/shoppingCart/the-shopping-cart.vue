@@ -148,7 +148,7 @@
 
 					<input
 						id="url_process"
-						:value="`https://sistema.igrejaemsumare.com.br/app/minhas-mensagens`"
+						:value="`https://sistema.igrejaemsumare.com.br/app/perfil-e-pedidos`"
 						name="url_process"
 						type="hidden">
 
