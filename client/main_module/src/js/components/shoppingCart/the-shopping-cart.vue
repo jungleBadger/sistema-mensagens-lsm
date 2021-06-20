@@ -211,7 +211,7 @@ export default defineComponent({
 		},
 
 		"totalMessagesPrice": function () {
-			return this.cartItems.map(item => item.appliedValue).reduce((acc, currentValue) =>  acc + currentValue);
+			return (this.cartItems.map(item => Number(item.appliedValue)).reduce((acc, currentValue) =>  acc + currentValue)).toFixed(2);
 		}
 	},
 	"methods": {
