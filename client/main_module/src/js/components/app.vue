@@ -131,7 +131,7 @@
 							<router-link
 								:to="{'name': 'app.checkout'}"
 								:class="{'text-gray-500 font-bold': $route.name === 'app.checkout'}"
-								class="header-link text-gray-600 hidden md:flex transition-colors">
+								class="header-link text-gray-600 md:flex transition-colors">
 								<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
 								Carrinho ({{ cartItemsLength }})
 							</router-link>
