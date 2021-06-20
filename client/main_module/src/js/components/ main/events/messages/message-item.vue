@@ -58,7 +58,7 @@
 				v-if="isAlreadyOwned"
 				:href="`${hostURL}/api/message/self/download/${message.id}`"
 				class="text-indigo-600 hover:text-indigo-900"
-				style="min-width: 170px;">Download
+				style="min-width: 150px;">Download
 			</a>
 
 			<lsm-button
@@ -68,8 +68,8 @@
 				icon-id="cart-xmark"
 				icon-style="fas"
 				kind="danger-outline"
-				label="Remover do carrinho"
-				style="min-width: 170px;"
+				label="Remover"
+				style="min-width: 150px;"
 
 				@click="removeItemFromCart"
 			></lsm-button>
@@ -81,15 +81,14 @@
 				icon-id="cart-plus"
 				icon-style="fas"
 				kind="primary-outline"
-				label="Adicionar ao carrinho"
-				style="min-width: 170px;"
+				label="Adicionar"
+				style="min-width: 150px;"
 
 				@click="addItemToCart">
 
 			</lsm-button>
 		</td>
 	</tr>
-
 
 </template>
 <script type="text/javascript">
@@ -137,14 +136,23 @@ export default defineComponent({
 	},
 	"methods": {
 		async addItemToCart () {
+			if (this.shoppingItemLoading) {
+				return false;
+			}
 			this.shoppingItemLoading = true;
 			await this.$store.dispatch("shoppingCart/addItemToCart", this.message.id);
 			this.shoppingItemLoading = false;
 		},
 		async removeItemFromCart () {
+			if (this.shoppingItemLoading) {
+				return false;
+			}
 			this.shoppingItemLoading = true;
+			console.log(this.isAlreadyInCart);
 			await this.$store.dispatch("shoppingCart/removeItemFromCart", this.isAlreadyInCart.orderItemId);
 			this.shoppingItemLoading = false;
+
+
 
 		}
 	}

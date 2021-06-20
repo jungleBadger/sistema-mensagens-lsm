@@ -94,14 +94,13 @@ module.exports = {
 
 		if (result && result[0]) {
 			return {
-				"ID": result[0].ID,
+				"PEDIDO_ITEM_ID": result[0].ID,
 				"PEDIDO_ID": result[0].PEDIDO_ID,
 				"VALOR_APLICADO": result[0].VALOR_APLICADO,
 				"MENSAGEM_ID": itemId,
 				"CRIADO_EM": result[0].CRIADO_EM
 			}
 		} else {
-			console.log(result);
 			throw raiseError(
 				500,
 				"Problem adding item to shopping cart."
