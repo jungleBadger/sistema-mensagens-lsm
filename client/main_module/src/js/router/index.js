@@ -3,7 +3,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import TheAppHome from "../components/ main/the-app-home.vue";
 import TheShoppingCart from "../components/shoppingCart/the-shopping-cart.vue";
-import TheOwnedMessages from "../components/ownedMessages/the-owned-messages";
+import TheProfileAndOrders from "../components/profileAndOrders/the-profile-and-orders.vue";
+import TheOwnedItems from "../components/ownedItems/the-owned-items.vue";
 
 export default createRouter({
 	"base": "/app",
@@ -27,9 +28,17 @@ export default createRouter({
 			}
 		},
 		{
+			"name": "app.profile",
+			"path": "/perfil-e-pedidos",
+			"component": TheProfileAndOrders,
+			"meta": {
+				"indexed": true
+			}
+		},
+		{
 			"name": "app.owned",
 			"path": "/minhas-mensagens",
-			"component": TheOwnedMessages,
+			"component": TheOwnedItems,
 			"meta": {
 				"indexed": true
 			}

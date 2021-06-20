@@ -111,7 +111,7 @@ import fade from "../../../../../_etc/shared_mixins/fade";
 import LsmButton from "../../../../../_etc/shared_components/ui/lsm-button";
 
 export default defineComponent({
-	"name": "TheOwnedMessages",
+	"name": "TheProfileAndOrders",
 	"mixins": [
 		fade
 	],
