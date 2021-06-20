@@ -72,14 +72,8 @@ export default defineComponent({
 		},
 		"ownedItems": function () {
 			return this.$store.getters["orders/ownedItems"];
-		},
+		}
 
-	},
-	"methods": {
-
-	},
-
-	async created () {
 	}
 });
 </script>
