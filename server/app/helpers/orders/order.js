@@ -339,7 +339,7 @@ module.exports = {
 	},
 
 	/**
-	 * @method setOrderToPending
+	 * @method validateOrder
 	 * @desc Set an open order to pending status.
 	 * @param {string} orderId
 	 * @param {string} userId

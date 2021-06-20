@@ -12,5 +12,5 @@ module.exports = function (referenceDate = new Date()) {
 			"Invalid reference date."
 		);
 	}
-	return dayjs.utc(referenceDate).format("YYYY-MM-DD HH:mm:ss");
+	return dayjs(referenceDate).format("YYYY-MM-DD HH:mm:ss");
 }
