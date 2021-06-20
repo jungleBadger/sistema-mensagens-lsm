@@ -111,11 +111,6 @@
 
 
 					<template v-if="orderId">
-						<input
-							id="order_number"
-							:value="orderId"
-							name="order_number"
-							type="hidden">
 
 						<template v-for="(item, index) in cartItems" class="flex gap-2">
 							<input
