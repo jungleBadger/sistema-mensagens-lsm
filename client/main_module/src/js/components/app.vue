@@ -137,7 +137,7 @@
 							</router-link>
 
 							<a
-								class="header-link text-red-600 hidden md:flex"
+								class="header-link text-red-700 hidden md:flex"
 								href="/auth/logout">
 								<font-awesome-icon :icon="['fas', 'arrow-up-left-from-circle']"/>
 								Sair
