@@ -27,6 +27,7 @@
 				v-if="selectedAudioPath"
 				class="absolute flex w-full bg-white bottom-0 left-0 p-2 shadow items-center gap-2">
 				<audio
+					:key="selectedAudioPath"
 					class="h-10 flex-1"
 					autoplay
 					controls>
@@ -107,6 +108,9 @@ export default defineComponent({
 		dismissAudioPath() {
 			this.$store.commit("privateEvents/selectedAudioPath", "");
 		}
+	},
+	beforeUnmount () {
+		this.dismissAudioPath();
 	}
 });
 </script>
