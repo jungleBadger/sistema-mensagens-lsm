@@ -18,8 +18,6 @@ export default {
 					},
 					{ "root": true }
 				);
-				let parsedResult = await res.json();
-				console.log(parsedResult);
 			} else {
 				let error = {
 					"title": "Houve um erro ao criar a Mensagem.",
