@@ -179,9 +179,6 @@ class DBConnectionPool {
 
 								try {
 
-									console.log("akiii");
-									let r = operations.map(operation => conn.querySync(operation));
-									console.log(r);
 									conn.commitTransaction((commitErr) => {
 
 										if (commitErr) {
@@ -189,7 +186,6 @@ class DBConnectionPool {
 												return reject(`Error commiting transaction: ${commitErr.message}`);
 											});
 										} else {
-											console.log("xxxxx");
 											return resolve(true);
 										}
 
