@@ -31,7 +31,7 @@
 					<label class="text-gray-700 font-semibold">Senha</label>
 					<span><a
 						class="text-blue-700 cursor-pointer"
-						href="auth/reset/" target="_blank">Clique aqui</a> para reiniciar processo de troca de senha.</span>
+						href="/auth/reset/" target="_blank">Clique aqui</a> para reiniciar processo de troca de senha.</span>
 				</div>
 
 
