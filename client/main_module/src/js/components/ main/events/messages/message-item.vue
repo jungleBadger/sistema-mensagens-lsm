@@ -7,9 +7,11 @@
 			</div>
 		</td>
 		<td
-			style="max-width: 265px;"
+			style="width: 180px;"
 			class="px-4 py-4 whitespace-nowrap md:whitespace-normal">
-			<div class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
+			<div
+				style="width: 180px;"
+				class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
 				{{ message.title }}
 			</div>
 		</td>

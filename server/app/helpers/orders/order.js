@@ -15,6 +15,7 @@ const logger = require("../logger");
 const Transaction = require("../../models/yapay/Transaction");
 const shoppingCart = require("./shoppingCart");
 const db2timestamp = require("../db2Timestamp");
+const TABLE_NAME = "PEDIDO";
 
 module.exports = {
 
@@ -123,7 +124,132 @@ module.exports = {
 		return result || [];
 	},
 
-	async fetchOwnedItemsdItems (userId) {
+	/**
+	 * @method countUserOrders
+	 * @return {Promise<Object|Error>}
+	 */
+	async countUserOrders (userId) {
+		return {
+			"table": TABLE_NAME,
+			"count": (await connectionPool.executePreparedSqlInstruction(
+				[
+					`SELECT COUNT(P.ID) FROM ${TABLE_NAME} P`,
+					`WHERE P.USUARIO_ID = ? AND P.STATUS_ID != (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?)`
+				].join(" "),
+				[userId, "ABERTO"],
+				"fetch"
+			))["1"]
+		};
+	},
+
+	/**
+	 * @method fetchUserOrders
+	 * @param {string} userId
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @return {Promise<Object|Error>}
+	 */
+	async fetchUserOrders(userId, limit = 20, skip = 0, orderBy = "CRIADO_EM", orderDirection= "DESC") {
+		if (!userId) {
+			throw raiseError(
+				400,
+				"Missing required properties for fetching user's pending orders."
+			);
+		}
+
+		let results = await connectionPool.executePreparedSqlInstruction(
+			[
+				"SELECT P.ID, INITCAP(PS.NOME_EXIBICAO) AS PEDIDO_STATUS, P.CRIADO_EM, P.ATUALIZADO_EM, COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS,",
+				"SUM(PI.VALOR_APLICADO) AS VALOR_TOTAL",
+				"FROM PEDIDO P",
+				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
+				"JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID",
+				"WHERE P.USUARIO_ID = ?",
+				"AND P.STATUS_ID != (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?)",
+				"GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM, P.ATUALIZADO_EM",
+				`ORDER BY ${orderBy} ${orderDirection} OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
+				";"
+			].join(" "),
+			[userId, 'ABERTO']
+		);
+
+		return {
+			"offset": skip + results.length,
+			"orderBy": orderBy,
+			"results": results
+		};
+	},
+
+	/**
+	 * Search user orders.
+	 * @method searchUserOrders
+	 * @param {string} userId - Filtering text.
+	 * @param {string} filterText - Filtering text.
+	 * @param {Array<string>} [extraFilterColumns=[]] - TBD.
+	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
+	 * @param {number} [limit=20] - Optional limit of rows.
+	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
+	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
+	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
+	 * @return {Promise<object|Error>} TBD.
+	 */
+	async searchUserOrders(userId, filterText, extraFilterColumns = [], targetColumns = [], limit = 20, skip = 0, orderBy = "P.CRIADO_EM", orderDirection= "DESC") {
+		if (!filterText) {
+			throw raiseError(
+				400,
+				"Missing required properties for searching User orders."
+			);
+		}
+
+		let [results, countResults] = await Promise.all([
+			connectionPool.executePreparedSqlInstruction(
+				[
+					`SELECT P.ID, INITCAP(PS.NOME_EXIBICAO) AS PEDIDO_STATUS, P.CRIADO_EM, P.ATUALIZADO_EM,`,
+					"SUM(PI.VALOR_APLICADO) AS VALOR_TOTAL,",
+					"COUNT(PI.MENSAGEM_ID) AS TOTAL_ITENS",
+					`FROM (
+					${TABLE_NAME} P
+					FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID
+					JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID
+					)`,
+					"WHERE P.USUARIO_ID = ? AND P.STATUS_ID != (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?)",
+					`AND (${extraFilterColumns.map((column) => `LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" OR ")})`,
+					`GROUP BY P.ID, PS.NOME_EXIBICAO, P.CRIADO_EM, P.ATUALIZADO_EM`,
+					`ORDER BY ${orderBy} ${orderDirection}`,
+					`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
+					";"
+				].join(" "),
+				[Number(userId), 'ABERTO']
+			),
+			connectionPool.executePreparedSqlInstruction(
+				[
+					`SELECT COUNT(P.ID)`,
+					`FROM (
+					${TABLE_NAME} P
+					FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID
+					JOIN PEDIDO_STATUS PS on PS.ID = P.STATUS_ID
+					)`,
+					"WHERE P.USUARIO_ID = ? AND P.STATUS_ID != (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?)",
+					`AND (${extraFilterColumns.map((column) => `LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" OR ")})`,
+					";"
+				].join(" "),
+				[Number(userId), 'ABERTO'],
+				"fetch"
+			)
+		]);
+
+		return {
+			"offset": skip + results.length,
+			"orderBy": orderBy,
+			"orderDirection": orderDirection,
+			"totalCount": countResults["1"],
+			"results": results
+		};
+	},
+
+	async fetchOwnedItems (userId) {
 		if (!userId) {
 			throw raiseError(
 				400,
@@ -138,7 +264,7 @@ module.exports = {
 				"FULL JOIN PEDIDO_ITEM PI on P.ID = PI.PEDIDO_ID",
 				"FULL JOIN MENSAGEM M on PI.MENSAGEM_ID = M.ID",
 				"WHERE P.USUARIO_ID = ?",
-				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?);"
+				"AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) LIMIT 1000;"
 			].join(" "),
 			[userId, 'CONCLUIDO']
 		);

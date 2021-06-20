@@ -2,7 +2,7 @@
 
 	<div
 		:id="id"
-		class="h-full flex flex-col overflow-hidden">
+		class="h-full flex flex-col overflow-hidden shadow-lg">
 
 		<!--			@SECTION TABLE FILTERS -->
 
@@ -555,7 +555,7 @@ export default defineComponent({
 					});
 				} else {
 					setTimeout(() => {
-						if (newValue.length >= 3 && Date.now() - this.debounce >= 300) {
+						if (newValue.length >= 2 && Date.now() - this.debounce >= 300) {
 							this.$emit("search", {
 								"filteringField": this.selectedFilteringField,
 								"orderBy": this.selectedSortingField,

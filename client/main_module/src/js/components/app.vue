@@ -55,7 +55,7 @@
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
 								<font-awesome-icon :icon="['fas', 'user-gear']"/>
-								Perfil
+								Meu perfil e pedidos
 							</router-link>
 
 							<router-link
@@ -108,21 +108,22 @@
 
 
 					<div
-						class="pr-2 flex flex-1 gap-12 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap hidden md:flex">
+						class="pr-2 flex flex-1 gap-12 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap">
+
 						<template v-if="userInfo && userInfo.id">
 
 							<router-link
 								:to="{'name': 'app.owned'}"
-								class="header-link text-gray-600">
+								class="header-link text-gray-600 hidden md:flex">
 								<font-awesome-icon :icon="['fas', 'user-music']"/>
 								Minhas mensagens
 							</router-link>
 
 							<router-link
 								:to="{'name': 'app.owned'}"
-								class="header-link text-gray-600">
+								class="header-link text-gray-600 hidden md:flex">
 								<font-awesome-icon :icon="['fas', 'user-gear']"/>
-								Perfil
+								Meu perfil e pedidos
 							</router-link>
 
 							<router-link
@@ -133,7 +134,7 @@
 							</router-link>
 
 							<a
-								class="header-link text-gray-600"
+								class="header-link text-red-700 hidden md:flex"
 								href="/auth/logout">
 								<font-awesome-icon :icon="['fas', 'arrow-up-left-from-circle']"/>
 								Sair
@@ -161,7 +162,6 @@
 			<template v-else>
 				<router-view
 					v-slot="{ Component }">
-
 					<transition
 						:css="false"
 						mode="out-in"
@@ -257,7 +257,6 @@ export default defineComponent({
 .header-link {
 	overflow: hidden;
 	text-overflow: ellipsis;
-	display: flex;
 	grid-gap: 8px;
 	align-items: center;
 

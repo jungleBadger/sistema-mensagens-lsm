@@ -29,12 +29,11 @@
 			class="w-full flex-1 overflow-hidden"
 			role="main"
 			aria-label="Tabela de Eventos">
-
 			<lsm-table
 				:is-async-search-enabled="true"
 				:total-items-count="totalEventsCount"
 				:items-per-page="pagination.limit"
-				:table-items="brothers"
+				:table-items="eventItems"
 				:columns-data="tableColumns"
 				:is-async-loading="isLoading"
 				:handle-click="true"
@@ -99,7 +98,7 @@ export default defineComponent({
 			}
 		},
 
-		brothers() {
+		eventItems() {
 			return this.$store.getters["events/eventItems"];
 		},
 		"isLoading": {

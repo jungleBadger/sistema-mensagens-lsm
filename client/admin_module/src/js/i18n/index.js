@@ -7,6 +7,11 @@ const DEFAULT_FALLBACK = process.env.DEFAULT_FALLBACK || "pt";
 const enLang = require("./en-US");
 const ptLang = require("./pt-BR");
 
+console.log({
+	"en": enLang.numberFormats,
+	"pt": ptLang.numberFormats
+});
+
 export default createI18n({
 	"locale": DEFAULT_LOCALE,
 	"locales": ["en", "pt"],

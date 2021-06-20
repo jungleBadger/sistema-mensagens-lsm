@@ -96,7 +96,7 @@ module.exports = {
 	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
 	 * @param {string} [orderBy="ID"] - Optional Order by parameter.
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
-	 * @return {Promise<object|Error>} Containing the deletion confirmation.
+	 * @return {Promise<object|Error>} TBD.
 	 */
 	async search (filterText, filterColumn = "NOME_EXIBICAO", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection= "DESC") {
 		if (!filterText) {

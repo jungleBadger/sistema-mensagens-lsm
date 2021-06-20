@@ -14,6 +14,64 @@ router.patch("/:orderId/pending",
 	}
 );
 
+router.get("/self",
+	isLoggedIn,
+	async (req, res) => {
+		return res.status(200).send(
+			await order.fetchUserOrders(
+				req.user.id,
+				Number(req.query.limit) || 20,
+				Number(req.query.skip) || 0,
+				req.query.orderBy || "CRIADO_EM",
+				req.query.orderDirection || "DESC"
+			)
+		);
+	}
+);
+
+
+router.get(
+	"/self/count",
+	isLoggedIn,
+	async (req, res) => {
+		res.status(200).send(
+			await order.countUserOrders(req.user.id),
+		);
+	}
+);
+
+router.get(
+	"/self/search",
+	isLoggedIn,
+	async (req, res) => {
+		res.status(
+			200
+		).send(
+			await order.searchUserOrders(
+				req.user.id,
+				req.query.filterText,
+				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [
+					"P.ID",
+					"PS.NOME_EXIBICAO",
+					"P.CRIADO_EM",
+					"P.ATUALIZADO_EM"
+				],
+
+				req.query.targetColumns ? req.query.targetColumns.split(",") : [
+					"P.ID AS PEDIDO_ID",
+					"PS.NOME_EXIBICAO AS PEDIDO_STATUS",
+					"P.CRIADO_EM",
+					"P.ATUALIZADO_EM"
+				],
+				Number(req.query.limit) || 20,
+				Number(req.query.skip) || 0,
+				req.query.orderBy || "ID",
+				req.query.orderDirection || "DESC"
+			)
+		)
+	}
+);
+
 router.get("/pending",
 	isLoggedIn,
 	async (req, res) => {
@@ -51,8 +109,8 @@ router.post("/:orderId/update", async (req, res) => {
 	}
 });
 
-router.get("/self", async (req, res) => {
-	return res.status(200).send(await order.fetchOwnedItemsdItems(req.user.id));
+router.get("/self/owned", async (req, res) => {
+	return res.status(200).send(await order.fetchOwnedItems(req.user.id));
 });
 
 router.post("/:orderId/test", async (req, res) => {

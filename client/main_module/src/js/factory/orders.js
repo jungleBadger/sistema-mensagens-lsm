@@ -40,7 +40,35 @@ export default {
 
 	async ownedItems() {
 		return await http.get(
-			`${API_ENDPOINT}/self`
+			`${API_ENDPOINT}/self/owned`
+		);
+	},
+
+	async searchOrders(filterText, filterColumn, skip, limit, orderBy, orderDirection) {
+		let url = new URL(`${API_ENDPOINT}/self/search`);
+
+
+		url.searchParams.append("filterText", filterText);
+		url.searchParams.append("skip", skip);
+		url.searchParams.append("limit", limit);
+		url.searchParams.append("orderBy", orderBy);
+		url.searchParams.append("orderDirection", orderDirection);
+
+
+		return await http.get(
+			url
+		);
+	},
+
+	async retrieveOrders(skip, limit, orderBy, orderDirection) {
+		return await http.get(
+			`${API_ENDPOINT}/self?skip=${skip}&limit=${limit}&orderBy=${orderBy}&orderDirection=${orderDirection}`
+		);
+	},
+
+	async retrieveTotalOrdersCount() {
+		return await http.get(
+			`${API_ENDPOINT}/self/count`
 		);
 	}
 

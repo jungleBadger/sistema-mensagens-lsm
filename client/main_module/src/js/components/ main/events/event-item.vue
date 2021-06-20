@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="w-full md:w-9/12 p-2 bg-white shadow flex flex-col gap-2 rounded-sm overflow-hidden">
+		class="w-full md:w-10/12 p-2 bg-white shadow flex flex-col gap-2 rounded-sm overflow-hidden">
 
 
 		<header class="w-full break-words">
@@ -50,7 +50,9 @@
 											scope="col">
 											Ordem
 										</th>
-										<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+										<th
+											style="width: 180px;"
+											class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 											scope="col">
 											Título
 										</th>

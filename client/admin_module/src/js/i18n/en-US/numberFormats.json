@@ -11,7 +11,6 @@
 		"style": "decimal"
 	},
 	"integer": {
-		"style": "unit",
 		"minimumIntegerDigits": 2
 	}
 }
