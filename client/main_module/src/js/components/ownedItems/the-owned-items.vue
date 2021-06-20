@@ -9,7 +9,7 @@
 				<div class="flex flex-col gap-0 flex-1">
 					<h3 class="text-2xl">Mensagens adquiridas</h3>
 					<h4 class="text-l">
-						xx
+						Nesta área você pode navegar pelas suas mensagens adquiridas. Cada mensagem é agrupada em seu evento para melhor organização.
 					</h4>
 				</div>
 
@@ -18,7 +18,8 @@
 			<main
 				class="w-full flex-1 overflow-hidden bg-white p-2 shadow rounded"
 				role="main"
-				aria-label="Detalhes do usuário">
+				aria-label="Mensagens adquiridas">
+				{{ownedItems}}
 			</main>
 		</section>
 
@@ -69,84 +70,16 @@ export default defineComponent({
 		"userInfo": function () {
 			return this.$store.getters["utilities/userInfo"];
 		},
-		totalOrdersCount() {
-			return this.$store.getters["orders/totalOrdersCount"];
-		},
-		"pagination": {
-			get() {
-				return this.$store.getters["orders/pagination"];
-			},
-			set(val) {
-				this.$store.commit("orders/pagination", val);
-			}
+		"ownedItems": function () {
+			return this.$store.getters["orders/ownedItems"];
 		},
 
-		orderItems() {
-			return this.$store.getters["orders/orderItems"];
-		},
-
-		"isLoading": {
-			get() {
-				return this.$store.getters["orders/isLoading"];
-			},
-			set(val) {
-				this.$store.commit("orders/isLoading", val);
-			}
-		},
-		tableColumns() {
-			return this.$store.getters["orders/tableColumns"];
-		}
 	},
 	"methods": {
 
-		async loadOrders() {
-			return await Promise.all([
-				this.$store.dispatch("orders/retrieveTotalOrdersCount"),
-				this.$store.dispatch("orders/retrieveOrders")
-			]);
-		},
-
-		async searchOrders() {
-			return await this.$store.dispatch(
-				"orders/searchOrders",
-				{
-					"filterColumn": this.asyncFilterColumn,
-					"filterText": this.asyncFilterText
-				}
-			);
-		},
-
-		async performRelevantQuery() {
-			if (this.isLoading) {
-				return false;
-			}
-			this.isLoading = true;
-			await (this.asyncFilterText ? this.searchOrders() : this.loadOrders());
-			this.isLoading = false;
-		},
-
-		updatePagination(value) {
-			this.pagination = value;
-			return this.performRelevantQuery();
-		},
-
-		handleAsyncSearch(value) {
-
-			this.asyncFilterColumn = value.filteringField;
-			this.asyncFilterText = value.filteringValue;
-			this.pagination = {
-				...this.pagination,
-				"skip": 0
-			};
-
-			return this.performRelevantQuery();
-		}
 	},
 
 	async created () {
-		this.isLoading = true;
-		await this.loadOrders();
-		this.isLoading = false;
 	}
 });
 </script>
