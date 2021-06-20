@@ -108,7 +108,6 @@ export default defineComponent({
 		},
 
 		updatePagination(value) {
-			console.log(value);
 			this.pagination = value;
 			return this.performRelevantQuery();
 		},

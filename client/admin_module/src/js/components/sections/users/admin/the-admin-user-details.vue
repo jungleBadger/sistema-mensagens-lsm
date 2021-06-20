@@ -168,8 +168,6 @@ export default defineComponent({
 			this.isLoading = false;
 		}
 
-		console.log(this.selectedAdminUser);
-
 		if (this.selectedAdminUser) {
 			this.email = this.selectedAdminUser.email;
 			this.displayName = this.selectedAdminUser.displayName;
