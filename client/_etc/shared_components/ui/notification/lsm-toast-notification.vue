@@ -42,7 +42,7 @@
 				@click="executeHandler">
 				<span>Retry operation</span>
 				<span class="bx--btn__icon">
-						<font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
+						<font-awesome-icon :icon="['fal', 'rotate']"></font-awesome-icon>
 					</span>
 
 			</lsm-button>

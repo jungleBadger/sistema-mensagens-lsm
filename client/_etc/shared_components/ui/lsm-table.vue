@@ -24,7 +24,7 @@
 				style="min-width: 240px;">
 				<lsm-input
 					v-model="filterText"
-					:placeholder="isAsyncSearchEnabled ? 'Digite 03 caracteres ou mais para buscar.' : 'Digite para filtrar a tabela.'"
+					:placeholder="isAsyncSearchEnabled ? 'Digite 02 caracteres ou mais para buscar.' : 'Digite para filtrar a tabela.'"
 					autofocus
 					type="search">
 				</lsm-input>

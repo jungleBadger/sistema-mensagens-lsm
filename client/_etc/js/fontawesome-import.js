@@ -10,7 +10,7 @@ import { faXmark } from "@fortawesome/pro-light-svg-icons/faXmark";
 import { faChevronRight } from "@fortawesome/pro-light-svg-icons/faChevronRight";
 import { faChevronLeft } from "@fortawesome/pro-light-svg-icons/faChevronLeft";
 import { faUndo } from "@fortawesome/pro-light-svg-icons/faUndo";
-import { faSync } from "@fortawesome/pro-light-svg-icons/faSync";
+import { faRotate } from "@fortawesome/pro-light-svg-icons/faRotate";
 import { faCheck as faCheckLight } from "@fortawesome/pro-light-svg-icons/faCheck";
 import { faArrowDown19 } from "@fortawesome/pro-light-svg-icons/faArrowDown19";
 
@@ -44,6 +44,8 @@ import { faUserMusic } from "@fortawesome/pro-solid-svg-icons/faUserMusic";
 import { faDownload } from "@fortawesome/pro-solid-svg-icons/faDownload";
 import { faArrowUpLeftFromCircle } from "@fortawesome/pro-solid-svg-icons/faArrowUpLeftFromCircle";
 import { faUpRightFromSquare } from "@fortawesome/pro-solid-svg-icons/faUpRightFromSquare";
+import { faRotate as faRotateSolid } from "@fortawesome/pro-solid-svg-icons/faRotate";
+
 
 import { faLock } from "@fortawesome/pro-solid-svg-icons/faLock";
 import { faSpinnerThird } from "@fortawesome/pro-solid-svg-icons/faSpinnerThird";
@@ -63,7 +65,7 @@ library.add(
 	faChevronRight,
 	faChevronLeft,
 	faUndo,
-	faSync,
+	faRotate,
 	faUser,
 	faUserCrown,
 	faCheckLight,
@@ -95,6 +97,7 @@ library.add(
 	faDownload,
 	faArrowUpLeftFromCircle,
 	faUpRightFromSquare,
+	faRotateSolid,
 
 	faLock,
 	faSpinnerThird,

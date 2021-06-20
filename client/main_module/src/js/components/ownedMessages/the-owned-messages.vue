@@ -50,6 +50,16 @@
 					</h4>
 				</div>
 
+				<lsm-button
+
+					label="Atualizar dados"
+					kind="secondary"
+					@click="performRelevantQuery"
+					class="w-40 h-10 self-end"
+					icon-style="fas"
+					icon-id="rotate">
+				</lsm-button>
+
 			</header>
 			<main
 				class="w-full flex-1 overflow-hidden"
