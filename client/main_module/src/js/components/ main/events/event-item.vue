@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="w-full md:w-10/12 p-2 bg-white shadow flex flex-col gap-2 rounded-sm overflow-hidden">
+		class="event-item p-2 bg-white shadow flex flex-col gap-2 rounded-sm overflow-hidden">
 
 
 		<header class="w-full break-words">
@@ -165,5 +165,20 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
+.event-item {
+	max-width: 100%;
+	width: 84%;
+}
+
+@media screen and (max-width: 1024px) {
+	.event-item {
+		width: 92%;
+	}
+}
+@media screen and (max-width: 768px) {
+	.event-item {
+		width: 100%;
+	}
+}
 
 </style>
