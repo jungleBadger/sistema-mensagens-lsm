@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import TheLoginForm from "../components/forms/the-login-form.vue";
 import TheSignupForm from "../components/forms/the-signup-form.vue";
 import ThePasswordResetForm from "../components/forms/the-password-reset-form.vue";
+import ThePasswordResetCompleteForm from "../components/forms/the-password-reset-complete-form.vue";
 
 export default createRouter({
 	"base": "/auth",
@@ -23,6 +24,11 @@ export default createRouter({
 			"name": "auth.reset",
 			"path": "/reset",
 			"component": ThePasswordResetForm
+		},
+		{
+			"name": "auth.reset.complete",
+			"path": "/reset/complete",
+			"component": ThePasswordResetCompleteForm
 		},
 		{
 			"path": "/:pathMatch(.*)*",

@@ -349,6 +349,29 @@ module.exports = {
 	},
 
 	/**
+	 * @method updatePassword
+	 */
+	async updatePassword(id, password) {
+
+		let newPassword = await generateHash(password);
+		await connectionPool.executePreparedSqlInstruction(
+			`UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.SENHA = ?, ${TABLE_NAME}.ATUALIZADO_EM = ? WHERE USUARIO.ID = ?;`,
+			[newPassword, db2Timestamp(), Number(id)]
+		);
+
+		return {
+			...(await logger.generateLog(
+				"UPDATE",
+				id,
+				TABLE_NAME,
+				"system",
+				null
+			))
+		};
+
+	},
+
+	/**
 	 * Delete a single User.
 	 * @method delete
 	 * @param {string} userId - ID to search for and delete.

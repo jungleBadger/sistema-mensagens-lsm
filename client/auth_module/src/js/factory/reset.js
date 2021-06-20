@@ -11,5 +11,16 @@ export default {
 				email
 			}
 		);
+	},
+
+	async completeReset(email, apiKey, password) {
+		return await http.patch(
+			"/api/common/user/reset/complete",
+			{
+				email,
+				apiKey,
+				password
+			}
+		);
 	}
 };

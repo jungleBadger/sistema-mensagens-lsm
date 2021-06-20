@@ -152,5 +152,45 @@ export default {
 		} finally {
 			context.commit("loadingState", false);
 		}
+	},
+
+
+	async completeReset(context, params) {
+		const { email, jwt, password } = params;
+
+		context.commit("loadingState", true);
+
+		try {
+			await reset.completeReset(
+				email,
+				jwt,
+				password
+			);
+
+			return true;
+
+		} catch (e) {
+			if (e.status === 404) {
+				context.commit("completeResetErrorMessage", {
+					"title": "Erro ao redefinir senha:",
+					"description": "Usuário não encontrado."
+				});
+			}
+			if (e.status === 403) {
+				context.commit("completeResetErrorMessage", {
+					"title": "Erro de permissão.",
+					"description": "Tente reiniciar o processo."
+				});
+			} else {
+				console.log(e);
+				context.commit("completeResetErrorMessage", {
+					"title": "Erro ao redefinir senha:",
+					"description": "Atualize a página e confira os dados."
+				});
+			}
+
+		} finally {
+			context.commit("loadingState", false);
+		}
 	}
 };

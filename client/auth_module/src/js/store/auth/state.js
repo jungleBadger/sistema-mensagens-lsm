@@ -10,5 +10,8 @@ export default {
 
 	"loginErrorMessage": "",
 	"signupErrorMessage": "",
-	"requestResetErrorMessage": ""
+	"requestResetErrorMessage": "",
+
+
+	"completeResetErrorMessage": ""
 };

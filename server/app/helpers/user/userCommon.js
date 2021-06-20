@@ -6,6 +6,7 @@ const crud = require("./userCRUD");
 
 const mailerTransport = require("../mailer");
 const resetPasswordEmailObject = require("../../templates/email/passwordReset");
+const resetPasswordCompleteEmailObject = require("../../templates/email/passwordResetComplete");
 const nodemailer = require("nodemailer")
 
 module.exports = {
@@ -65,7 +66,7 @@ module.exports = {
 					{ userEmail },
 					process.env.APP_SECRET,
 					{
-						"expiresIn": "08 hours",
+						"expiresIn": "02 hours",
 						"audience": "single_user"
 					}
 				)
@@ -78,5 +79,20 @@ module.exports = {
 
 	async updateUser(id, displayName, isAdmin, operator) {
 		return crud.updateProfile(id, displayName, isAdmin, operator);
+	},
+
+	async updatePassword(email, newPassword) {
+		let userId = await crud.retrieveByEmail(email);
+
+		await crud.updatePassword(userId.ID, newPassword);
+		let mailResult = await mailerTransport.sendMail({
+			"to": email,
+			"subject": resetPasswordCompleteEmailObject.subject,
+			"text": resetPasswordCompleteEmailObject.text,
+			"html": resetPasswordCompleteEmailObject.html()
+		});
+
+		console.log("Preview URL: %s", nodemailer.getTestMessageUrl(mailResult));
+		return true;
 	}
 }

@@ -18,18 +18,6 @@ module.exports = {
 			res.locals.decodedJWT = decodedJWT;
 		}
 		next();
-	},
-
-
-	validateRequestReferer(req, res, next) {
-
-		console.log(req.header(""));
-		return next();
-		// return function (targetReferer) {
-		// 	if (targetReferer === req.header("Referer"))
-		// 	return next();
-		// }
-
-	},
+	}
 
 };

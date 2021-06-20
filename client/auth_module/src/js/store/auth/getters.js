@@ -36,5 +36,9 @@ export default {
 
 	requestResetErrorMessage(context) {
 		return context.requestResetErrorMessage;
+	},
+
+	completeResetErrorMessage(context) {
+		return context.completeResetErrorMessage;
 	}
 };

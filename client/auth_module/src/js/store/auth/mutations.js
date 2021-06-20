@@ -37,5 +37,9 @@ export default {
 
 	requestResetErrorMessage(context, msg) {
 		context.requestResetErrorMessage = msg;
+	},
+
+	completeResetErrorMessage(context, msg) {
+		context.completeResetErrorMessage = msg;
 	}
 }

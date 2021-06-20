@@ -158,8 +158,54 @@ router.get(
 	extractAndLoadAPIKey,
 	validateJWT,
 	async (req, res) => {
-		//@TODO VALIDATE RESET REQUEST
-		res.status(200).send(res.locals.decodedJWT);
+		res.status(200).redirect(`/auth/reset/complete?jwt=${res.locals.apiKey}&email=${res.locals.decodedJWT.userEmail}`);
+	}
+);
+
+/**
+ * @swagger
+ * /api/common/user/request-reset:
+ *   get:
+ *     tags: [common_user]
+ *     summary: Request user's password request.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *      - name: email
+ *        in: body
+ *        required: true
+ *        description: User email to search for.
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: User email has been confirmed.
+ *       400:
+ *         description: Invalid parameters.
+ *       401:
+ *         description: Expired JWT.
+ *       404:
+ *         description: regular User not found.
+ *       422:
+ *         description: Invalid JWT.
+ *       500:
+ *         description: Error handler.
+ */
+router.patch(
+	"/reset/complete",
+	extractAndLoadAPIKey,
+	validateJWT,
+	(req, res, next) => {
+		if (res.locals.decodedJWT.userEmail !== req.body.email) {
+
+			return res.status(403).send("Invalid configuration");
+		} else {
+			return next();
+		}
+	},
+	async (req, res) => {
+		await commonUser.updatePassword(req.body.email, req.body.password);
+		res.status(200).send("ok");
 	}
 );
 
