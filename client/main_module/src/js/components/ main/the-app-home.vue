@@ -52,8 +52,8 @@
 				</footer>
 			</div>
 		</div>
-		<the-event-list
-			ref="eventList"></the-event-list>
+
+		<the-event-list class="p-2"></the-event-list>
 
 	</div>
 </template>

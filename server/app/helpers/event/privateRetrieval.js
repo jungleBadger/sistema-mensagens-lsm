@@ -1,5 +1,6 @@
 "use strict";
 
+
 const raiseError = require("../errorHandler").raiseError;
 const DBConnectionPool = require("../DBConnectionPool");
 const connectionPool = new DBConnectionPool(
@@ -18,9 +19,10 @@ module.exports = {
 	/**
 	 * Retrieves the count of total Brothers rows.
 	 * @method retrieveTotalRowsCount
+	 * @param {string} userId
 	 * @return {Promise<Object|Error>} Containing all Brother objects and request metadata.
 	 */
-	async retrieveTotalRowsCount () {
+	async retrieveTotalRowsCount (userId) {
 		return {
 			"table": TABLE_NAME,
 			"count": (await connectionPool.executePreparedSqlInstruction(
@@ -29,11 +31,14 @@ module.exports = {
 					`FROM (
 					${TABLE_NAME}
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
-					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID)`,
-					"WHERE M.HABILITADO = TRUE AND M.CAMINHO_ARQUIVO_AUDIO > ''",
+					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID)
+					JOIN PEDIDO_ITEM PI ON M.ID = PI.MENSAGEM_ID
+					JOIN PEDIDO P ON PI.PEDIDO_ID = P.ID
+					JOIN PEDIDO_STATUS PS ON P.STATUS_ID = PS.ID`,
+					"WHERE (P.USUARIO_ID = ? AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = 'CONCLUIDO'))",
 					");"
 				].join(" "),
-				[],
+				[Number(userId)],
 				"fetch"
 			))["1"]
 		};
@@ -42,6 +47,7 @@ module.exports = {
 	/**
 	 * Search events.
 	 * @method search
+	 * @param {string} userId
 	 * @param {string} filterText - Filtering text.
 	 * @param {string} [filterColumn="TITULO"] - Optional column selector to use in the SELECT statement.
 	 * @param {Array<string>} [extraFilterColumns=[]] - TBD.
@@ -52,16 +58,17 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<object|Error>} Containing the deletion confirmation.
 	 */
-	async search (filterText, filterColumn = "TITULO", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
-		if (!filterText) {
+	async search (userId, filterText, filterColumn = "TITULO", extraFilterColumns = [], targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
+		if (!userId || !filterText) {
 			throw raiseError(
 				400,
 				"Missing required properties for searching Event."
 			);
 		}
 
+
 		let [results, countResults] = await Promise.all([
-			connectionPool.executeRawSqlInstruction(
+			connectionPool.executePreparedSqlInstruction(
 				[
 					`SELECT ${targetColumns.map(column => `${column}`).join(", ")},`,
 					"COUNT(M.ID) AS TOTAL_MENSAGENS, LISTAGG(M.ID, ',') AS MENSAGENS, C.NOME AS CATEGORIA_NOME,",
@@ -71,8 +78,11 @@ module.exports = {
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
 					JOIN CATEGORIA C on ${TABLE_NAME}.CATEGORIA_ID = C.ID
 					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
-					JOIN IRMAO I on M.IRMAO_ID = I.ID)`,
-					"WHERE M.HABILITADO = TRUE AND M.CAMINHO_ARQUIVO_AUDIO > '' AND",
+					JOIN IRMAO I on M.IRMAO_ID = I.ID
+					JOIN PEDIDO_ITEM PI ON M.ID = PI.MENSAGEM_ID
+					JOIN PEDIDO P ON PI.PEDIDO_ID = P.ID
+					JOIN PEDIDO_STATUS PS ON P.STATUS_ID = PS.ID)`,
+					"WHERE (P.USUARIO_ID = ? AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = 'CONCLUIDO')) AND",
 					`(LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
 					`LOWER((L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)) LIKE LOWER('%${filterText}%')`,
 					extraFilterColumns.map((column) => `OR LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" "),
@@ -82,7 +92,7 @@ module.exports = {
 					`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
 					";"
 				].join(" "),
-				[]
+				[Number(userId)]
 			),
 			connectionPool.executePreparedSqlInstruction(
 				[
@@ -92,14 +102,17 @@ module.exports = {
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
 					JOIN CATEGORIA C on ${TABLE_NAME}.CATEGORIA_ID = C.ID
 					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
-					JOIN IRMAO I on M.IRMAO_ID = I.ID)`,
-					"WHERE M.HABILITADO = TRUE AND M.CAMINHO_ARQUIVO_AUDIO > '' AND",
+					JOIN IRMAO I on M.IRMAO_ID = I.ID
+					JOIN PEDIDO_ITEM PI ON M.ID = PI.MENSAGEM_ID
+					JOIN PEDIDO P ON PI.PEDIDO_ID = P.ID
+					JOIN PEDIDO_STATUS PS ON P.STATUS_ID = PS.ID) WHERE`,
+					"(P.USUARIO_ID = ? AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = 'CONCLUIDO')) AND",
 					`(LOWER(${TABLE_NAME}.${filterColumn}) LIKE LOWER('%${filterText}%') OR`,
 					`LOWER((L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)) LIKE LOWER('%${filterText}%')`,
 					extraFilterColumns.map((column) => `OR LOWER(${column}) LIKE LOWER('%${filterText}%')`).join(" "),
 					"));"
 				].join(" "),
-				[],
+				[Number(userId)],
 				"fetch"
 			)
 		]);
@@ -139,7 +152,7 @@ module.exports = {
 	 * @return {Promise<object|Error>} Containing the deletion confirmation.
 	 */
 	async advancedSearch (advancedFilters, targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC", userId = "") {
-		if (!advancedFilters) {
+		if (!advancedFilters || !userId) {
 			throw raiseError(
 				400,
 				"Missing required properties for advanced search."
@@ -147,7 +160,7 @@ module.exports = {
 		}
 
 		let advancedQueryString = [
-			advancedFilters.ownedOnly && userId ? `(P.USUARIO_ID = ? AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = 'CONCLUIDO'))` : "",
+			`(P.USUARIO_ID = ? AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = 'CONCLUIDO'))`,
 			advancedFilters.eventTitle ? `(LOWER(EVENTO.TITULO) LIKE LOWER(?))` : "",
 			advancedFilters.messageTitle ? `(LOWER(M.TITULO) LIKE LOWER(?))` : "",
 			advancedFilters.startDate && advancedFilters.endDate ? "(M.DATA_MINISTRADO BETWEEN ? AND ? )" : "",
@@ -159,7 +172,7 @@ module.exports = {
 		).join(" AND ");
 
 		let advancedParams = [
-			advancedFilters.ownedOnly && userId ? userId : "",
+			userId,
 			advancedFilters.eventTitle ? `%${advancedFilters.eventTitle}%` : "",
 			advancedFilters.messageTitle ? `%${advancedFilters.messageTitle}%` : "",
 			...(advancedFilters.startDate && advancedFilters.endDate ? [
@@ -254,6 +267,7 @@ module.exports = {
 	/**
 	 * Retrieves all events.
 	 * @method retrieveAll
+	 * @param {String} userId.
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
 	 * @param {number} [limit=20] - Optional limit of rows.
 	 * @param {number} [skip=0] - Optional row skipping - useful for pagination.
@@ -261,9 +275,9 @@ module.exports = {
 	 * @param {string} [orderDirection="ASC"] - Optional Order direction.
 	 * @return {Promise<Object|Error>} Containing all admin Users objects and request metadata.
 	 */
-	async retrieveAll (targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
+	async retrieveAll (userId, targetColumns = ["*"], limit = 20, skip = 0, orderBy = "ID", orderDirection = "DESC") {
 
-		let results = await connectionPool.executeRawSqlInstruction(
+		let results = await connectionPool.executePreparedSqlInstruction(
 			[
 				`SELECT ${targetColumns.map(column => `${column}`).join(", ")},`,
 				"COUNT(M.ID) AS TOTAL_MENSAGENS, LISTAGG(M.ID, ',') AS MENSAGENS, C.NOME AS CATEGORIA_NOME,",
@@ -273,14 +287,18 @@ module.exports = {
 					JOIN LOCALIDADE L on ${TABLE_NAME}.LOCALIDADE_ID = L.ID
 					JOIN CATEGORIA C on ${TABLE_NAME}.CATEGORIA_ID = C.ID
 					LEFT JOIN MENSAGEM M on ${TABLE_NAME}.ID = M.EVENTO_ID
+					JOIN PEDIDO_ITEM PI ON M.ID = PI.MENSAGEM_ID
+					JOIN PEDIDO P ON PI.PEDIDO_ID = P.ID
+					JOIN PEDIDO_STATUS PS ON P.STATUS_ID = PS.ID
 				)`,
-				"WHERE M.HABILITADO = TRUE AND M.CAMINHO_ARQUIVO_AUDIO > ''",
+				"WHERE (P.USUARIO_ID = ? AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = 'CONCLUIDO'))",
 				`GROUP BY C.NOME, ${targetColumns.map(column => `${column}`).join(", ")},`,
 				"(L.PAIS concat ' - ' concat L.CIDADE concat ' - ' concat L.ESTADO)",
 				`ORDER BY ${orderBy} ${orderDirection}`,
 				`OFFSET ${skip} ROWS FETCH FIRST ${limit} ROWS ONLY`,
 				";"
-			].join(" ")
+			].join(" "),
+			[Number(userId)]
 		);
 
 		return {
@@ -308,11 +326,12 @@ module.exports = {
 	/**
 	 * Retrieves a single Brother by ID.
 	 * @method retrieveById
+	 * @param {string} userId - user ID to search for.
 	 * @param {string} eventId - ID to search for.
 	 * @param {Array<string>} [targetColumns=["*"]] - Optional Array of COLUMNS to be selected.
 	 * @return {Promise<Object|Error>} Containing the Brother object.
 	 */
-	async retrieveById (eventId, targetColumns = ["*"]) {
+	async retrieveById (userId, eventId, targetColumns = ["*"]) {
 
 		if (!eventId) {
 			throw raiseError(
@@ -322,8 +341,8 @@ module.exports = {
 		}
 
 		let result = await connectionPool.executePreparedSqlInstruction(
-			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? LIMIT 1;`,
-			[eventId]
+			`SELECT ${targetColumns.join(", ")} FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.ID = ? AND (P.USUARIO_ID = ? AND P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = 'CONCLUIDO')) LIMIT 1;`,
+			[Number(userId), Number(eventId)]
 		);
 
 		if (!result || !result.length) {
