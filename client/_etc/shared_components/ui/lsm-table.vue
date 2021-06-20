@@ -6,7 +6,7 @@
 
 		<!--			@SECTION TABLE FILTERS -->
 
-		<header class="bg-gray-300 flex gap-1 items-center shadow z-20 p-1.5 flex-wrap">
+		<header class="bg-gray-300 flex gap-1 items-center shadow z-20 p-1 flex-wrap">
 
 			<div class="w-full md:w-48">
 				<lsm-select
@@ -171,7 +171,7 @@
 
 
 		<!--			@SECTION TABLE FOOTER -->
-		<footer class="bg-gray-300 flex justify-between gap-1 items-center shadow z-10 p-1.5 flex-wrap text-sm">
+		<footer class="bg-gray-300 flex justify-between gap-1 items-center shadow z-10 p-1 flex-wrap text-sm">
 
 
 			<div class="flex flex-1 gap-4">
