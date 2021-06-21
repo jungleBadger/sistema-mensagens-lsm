@@ -331,7 +331,7 @@ export default defineComponent({
 
 			if (this.datesStructure && this.datesStructure.length) {
 				this.startDate = dayjs(this.datesStructure[0]).startOf("day");
-				this.endDate = dayjs(this.datesStructure[1] || this.datesStructure[0]).startOf("day");
+				this.endDate = dayjs(this.datesStructure[1] || this.datesStructure[0]).endOf("day");
 			}
 
 
