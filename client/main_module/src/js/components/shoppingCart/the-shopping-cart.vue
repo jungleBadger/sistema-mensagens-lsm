@@ -102,6 +102,11 @@
 						name="token_account"
 						type="hidden"
 						value="0f2c69390802b26">
+					<input
+						id="sub_store"
+						name="sub_store"
+						type="hidden"
+						value="LSM/Livro Aberto">
 
 					<input
 						id="customer_email"
