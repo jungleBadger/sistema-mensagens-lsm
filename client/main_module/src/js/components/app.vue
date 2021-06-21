@@ -108,9 +108,17 @@
 
 
 					<div
-						class="pr-2 flex flex-1 gap-12 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap">
+						class="pr-2 flex flex-1 gap-8 items-center justify-end overflow-hidden overflow-ellipsis whitespace-nowrap">
 
 						<template v-if="userInfo && userInfo.id">
+
+							<router-link
+								:to="{'name': 'app.home'}"
+								:class="{'text-gray-500 font-bold': $route.name === 'app.home'}"
+								class="header-link text-gray-600 hidden md:flex transition-colors">
+								<font-awesome-icon :icon="['fas', 'house']"/>
+								Início
+							</router-link>
 
 							<router-link
 								:to="{'name': 'app.owned'}"
