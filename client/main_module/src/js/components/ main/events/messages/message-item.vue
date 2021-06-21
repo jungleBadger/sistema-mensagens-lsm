@@ -1,14 +1,14 @@
 <template>
 
 	<tr>
-		<td class="px-4 py-4 whitespace-nowrap hidden md:table-cell">
+		<td class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap hidden md:table-cell">
 			<div class="text-sm font-medium text-gray-900">
 				{{ message.order }}
 			</div>
 		</td>
 		<td
 			style="width: 180px;"
-			class="px-4 py-4 whitespace-nowrap md:whitespace-normal">
+			class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap md:whitespace-normal">
 			<div
 				style="width: 180px;"
 				class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
@@ -16,7 +16,7 @@
 			</div>
 		</td>
 
-		<td class="px-4 py-4 whitespace-nowrap hidden md:table-cell">
+		<td class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap hidden md:table-cell">
 
 			<div class="text-sm text-gray-500">
 				<i18n-d
@@ -26,16 +26,16 @@
 				></i18n-d>
 			</div>
 		</td>
-		<td class="px-4 py-4 hidden md:table-cell">
+		<td class="px-2 py-2 md:px-4 md:py-4 hidden md:table-cell">
 			<div class="text-sm text-gray-500">{{ message.brotherName }}</div>
 
 		</td>
 		<td
-			class="px-4 py-4 text-sm text-gray-500 hidden md:table-cell">
+			class="px-2 py-2 md:px-4 md:py-4 text-sm text-gray-500 hidden md:table-cell">
 			R$ {{ message.messageValue }}
 		</td>
 
-		<td v-if="isLoggedIn" class="px-4 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell">
+		<td v-if="isLoggedIn" class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell">
 			<span
 				style="min-width: 60px;"
 			>
@@ -53,7 +53,7 @@
 
 		</td>
 
-		<td v-if="isLoggedIn" class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+		<td v-if="isLoggedIn" class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
 			<a
 				v-if="isAlreadyOwned"
 				:href="`${hostURL}/api/message/self/download/${message.id}`"
