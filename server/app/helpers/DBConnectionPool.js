@@ -5,7 +5,7 @@ const raiseError = require("./errorHandler").raiseError;
 
 class DBConnectionPool {
 
-	constructor(
+	constructor (
 		db,
 		host,
 		port,
@@ -17,11 +17,12 @@ class DBConnectionPool {
 		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};UID=${uid};PWD=${password}`;
 		this.pool = new ibm_db.Pool(
 			{
-				"systemNaming" : true
+				"systemNaming": true
 			}
 		);
 		this.pool.init(poolSize, this.connectionString);
 	}
+
 	/**
 	 * @method buildSearchQuery
 	 * @param {Array<string>} [selectColumns=["*"]] - Optional - TBD.
@@ -38,20 +39,20 @@ class DBConnectionPool {
 	static buildSearchQuery (
 		selectColumns = ["*"],
 		tableName,
-		filterColumn= "ID",
+		filterColumn = "ID",
 		filterText,
 		extraFilterColumns = [],
-		orderBy= "ID",
+		orderBy = "ID",
 		orderDirection = "ASC",
-		skip= 0,
-		limit= 20
+		skip = 0,
+		limit = 20
 	) {
 
 		if (!tableName && !filterText) {
 			return raiseError(
 				400,
 				"Missing parameters to build search query"
-			)
+			);
 		}
 
 		return {
@@ -69,10 +70,10 @@ class DBConnectionPool {
 				extraFilterColumns.map((column) => `OR LOWER(${tableName}.${column}) LIKE LOWER('%${filterText}%')`).join(" "),
 				";"
 			].join(" ")
-		}
+		};
 	}
 
-	executeRawSqlInstruction(rawSqlInstruction) {
+	executeRawSqlInstruction (rawSqlInstruction) {
 		return new Promise((resolve, reject) => {
 			this.pool.open(
 				this.connectionString,
@@ -98,7 +99,7 @@ class DBConnectionPool {
 		});
 	}
 
-	executePreparedSqlInstruction(sqlStringTemplate, paramsArray, resultHandling = "fetchAll") {
+	executePreparedSqlInstruction (sqlStringTemplate, paramsArray, resultHandling = "fetchAll") {
 		return new Promise((resolve, reject) => {
 			this.pool.open(
 				this.connectionString,
@@ -118,9 +119,7 @@ class DBConnectionPool {
 								return reject(`Error executing the SQL statement: ${executeErr.message}`);
 							}
 
-
 							if (resultHandling) {
-
 
 								operationResult[resultHandling]((resultErr, parsedResult) => {
 									if (resultErr) {
@@ -129,11 +128,11 @@ class DBConnectionPool {
 
 									statement.close((statementCloseErr) => {
 										if (statementCloseErr) {
-											return reject(`Error closing the SQL statement: ${statementCloseErr.message}`)
+											return reject(`Error closing the SQL statement: ${statementCloseErr.message}`);
 										}
 
 										conn.close((closeError) => {
-											return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(parsedResult)
+											return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(parsedResult);
 										});
 
 									});
@@ -141,11 +140,11 @@ class DBConnectionPool {
 							} else {
 								statement.close((statementCloseErr) => {
 									if (statementCloseErr) {
-										return reject(`Error closing the SQL statement: ${statementCloseErr.message}`)
+										return reject(`Error closing the SQL statement: ${statementCloseErr.message}`);
 									}
 
 									conn.close((closeError) => {
-										return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(operationResult)
+										return closeError ? reject(`Error closing the connection: ${closeError.message}`) : resolve(operationResult);
 									});
 
 								});
@@ -158,14 +157,11 @@ class DBConnectionPool {
 		});
 	}
 
-	executeOperationsWithinTransaction(operations = []) {
-
-		console.log(operations);
+	executeOperationsWithinTransaction (operations = []) {
 
 		return new Promise((resolve, reject) => {
 			this.pool.open(
 				this.connectionString,
-
 				(openErr, conn) => {
 
 					conn.beginTransaction((err) => {
@@ -178,16 +174,22 @@ class DBConnectionPool {
 							} else {
 
 								try {
-
-									conn.commitTransaction((commitErr) => {
-
-										if (commitErr) {
-											conn.rollbackTransaction(() => {
-												return reject(`Error commiting transaction: ${commitErr.message}`);
-											});
-										} else {
-											return resolve(true);
+									conn.query(operations.join("; "), (err, result) => {
+										if (err) {
+											return reject(`Error performing the queries: ${err}`);
 										}
+
+										conn.commitTransaction((commitErr) => {
+
+											if (commitErr) {
+												conn.rollbackTransaction(() => {
+													return reject(`Error commiting transaction: ${commitErr.message}`);
+												});
+											} else {
+												return resolve(result);
+											}
+
+										});
 
 									});
 
@@ -202,8 +204,6 @@ class DBConnectionPool {
 
 						}
 					});
-
-
 
 				}
 			);

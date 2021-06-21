@@ -309,10 +309,10 @@ module.exports = {
 
 		let moment = db2Timestamp();
 
-		await connectionPool.executeOperationsWithinTransaction(
+		return await connectionPool.executeOperationsWithinTransaction(
 			messages.map(
 				message => {
-					return `UPDATE ${TABLE_NAME} SET ORDEM = ${message.order} , ATUALIZADO_EM = '${moment.toString()}' WHERE ${TABLE_NAME}.ID = ${message.id}`
+					return `UPDATE ${TABLE_NAME} SET ${TABLE_NAME}.ORDEM = ${message.order} , ATUALIZADO_EM = '${moment.toString()}' WHERE ${TABLE_NAME}.ID = ${message.id}`
 				}
 			)
 		);
