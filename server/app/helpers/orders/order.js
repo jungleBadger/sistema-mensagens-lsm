@@ -273,7 +273,8 @@ module.exports = {
 
 	async processOrder(orderId, yapayObject = {}) {
 
-		if (yapayObject.transaction.status_name.toLowerCase() === "aguardando pagamento") {
+		let orderStatus = yapayObject.transaction.status_name.toLowerCase();
+		if (orderStatus === "aguardando pagamento" || orderStatus === "em monitoramento") {
 			await this.setOrderToAnalysis(orderId);
 		} else {
 			await Promise.all([
@@ -289,7 +290,9 @@ module.exports = {
 				}, null, 4))
 			]);
 
-			if (yapayObject.transaction.status_name === "Aprovada") {
+
+
+			if (orderStatus === "aprovada") {
 				await this.setOrderToApproved(orderId);
 			} else {
 				await this.setOrderToCancelled(orderId);
