@@ -273,24 +273,29 @@ module.exports = {
 
 	async processOrder(orderId, yapayObject = {}) {
 
-		await Promise.all([
-			this.storeOrderTransaction({
-				"orderId": orderId,
-				"transactionId": yapayObject.transaction.transaction_id,
-				"transactionToken": yapayObject.token_transaction,
-				"transactionDate": yapayObject.transaction.date_transaction
-			}),
-			fs.writeFile(`./${Date.now()}_request.log`, JSON.stringify({
-				yapayObject,
-				orderId
-			}, null, 4))
-		]);
-
-		if (yapayObject.transaction.status_name === "Aprovada") {
-			await this.setOrderToApproved(orderId);
+		if (yapayObject.transaction.status_name.toLowerCase() === "aguardando pagamento") {
+			await this.setOrderToAnalysis(orderId);
 		} else {
-			await this.setOrderToCancelled(orderId);
+			await Promise.all([
+				this.storeOrderTransaction({
+					"orderId": orderId,
+					"transactionId": yapayObject.transaction.transaction_id,
+					"transactionToken": yapayObject.token_transaction,
+					"transactionDate": yapayObject.transaction.date_transaction
+				}),
+				fs.writeFile(`./${Date.now()}_request.log`, JSON.stringify({
+					yapayObject,
+					orderId
+				}, null, 4))
+			]);
+
+			if (yapayObject.transaction.status_name === "Aprovada") {
+				await this.setOrderToApproved(orderId);
+			} else {
+				await this.setOrderToCancelled(orderId);
+			}
 		}
+
 	},
 
 
@@ -327,14 +332,8 @@ module.exports = {
 
 
 		} catch (e) {
-			if (e && e.indexOf && e.indexOf("duplicate values") > -1) {
-				throw raiseError(
-					409,
-					`Brother ${displayName} already exists.`
-				);
-			} else {
-				throw e;
-			}
+			console.log(e);
+			throw e;
 		}
 	},
 
@@ -365,6 +364,22 @@ module.exports = {
 				"UPDATE PEDIDO P SET P.ATUALIZADO_EM = ?, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
 			].join(" "),
 			[db2timestamp(), 'CONCLUIDO', Number(orderId)]
+		);
+	},
+
+	/**
+	 * @method setOrderToApproved
+	 * @desc Set an open order to pending status.
+	 * @param {string} orderId
+	 * @return {Promise<Object|Error>}
+	 */
+	async setOrderToAnalysis (orderId) {
+
+		await connectionPool.executePreparedSqlInstruction(
+			[
+				"UPDATE PEDIDO P SET P.ATUALIZADO_EM = ?, P.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS PS WHERE PS.NOME_EXIBICAO = ?) WHERE P.ID = ?"
+			].join(" "),
+			[db2timestamp(), 'ANALISE', Number(orderId)]
 		);
 	},
 
