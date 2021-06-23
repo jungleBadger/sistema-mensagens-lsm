@@ -117,7 +117,9 @@ export default defineComponent({
 
 		"startDateString": function () {
 			if (this.event && this.event.startDate) {
-				let date = new Date(this.event.startDate);
+				let t = this.event.startDate.split(/[- :]/);
+				let d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+				let date = new Date(d);
 				let month = date.getMonth() + 1;
 				let day = date.getDate();
 
@@ -127,7 +129,9 @@ export default defineComponent({
 
 		"endDateString": function () {
 			if (this.event && this.event.endDate) {
-				let date = new Date(this.event.endDate);
+				let t = this.event.endDate.split(/[- :]/);
+				let d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+				let date = new Date(d);
 				let month = date.getMonth() + 1;
 				let day = date.getDate();
 
