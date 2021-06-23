@@ -1,7 +1,7 @@
 <template>
 
 	<tr style="vertical-align: baseline;">
-		<td class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap hidden md:table-cell">
+		<td class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap">
 			<div class="text-sm font-medium text-gray-900">
 				{{ message.order }}
 			</div>
@@ -25,16 +25,16 @@
 				></i18n-d>
 			</div>
 		</td>
-		<td class="px-2 py-2 md:px-4 md:py-4 hidden md:table-cell">
+		<td class="px-2 md:px-4 md:py-4 hidden md:table-cell">
 			<div class="text-sm text-gray-500">{{ message.brotherName }}</div>
 
 		</td>
 		<td
-			class="px-2 py-2 md:px-4 md:py-4 text-sm text-gray-500 hidden md:table-cell">
+			class="px-2 md:px-4 md:py-4 text-sm text-gray-500 hidden md:table-cell">
 			R$ {{ message.messageValue }}
 		</td>
 
-		<td v-if="isLoggedIn" class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
+		<td v-if="isLoggedIn" class="px-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
 
 			<span
 				style="min-width: 60px;"
@@ -45,20 +45,17 @@
 					class="text-indigo-600 hover:text-indigo-900">Download
 				</a>
 			</template>
-			<template v-else>
-				-
-			</template>
-
+			<template v-else>-</template>
 			</span>
 
 		</td>
 
-		<td v-if="isLoggedIn" class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
+		<td v-if="isLoggedIn" class="px-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
 			<a
 				v-if="isAlreadyOwned"
 				:href="`${hostURL}/api/message/self/download/${message.id}`"
 				class="text-indigo-600 hover:text-indigo-900"
-				style="min-width: 150px;">Download
+				style="min-width: 110px;">Download
 			</a>
 
 			<lsm-button
@@ -69,7 +66,7 @@
 				icon-style="fas"
 				kind="danger-outline"
 				label="Remover"
-				style="min-width: 140px;"
+				style="min-width: 110px;"
 
 				@click="removeItemFromCart"
 			></lsm-button>
@@ -82,7 +79,7 @@
 				icon-style="fas"
 				kind="primary-outline"
 				label="Adicionar"
-				style="min-width: 140px;"
+				style="min-width: 110px;"
 
 				@click="addItemToCart">
 

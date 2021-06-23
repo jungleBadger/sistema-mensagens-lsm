@@ -1,7 +1,7 @@
 <template>
 
 	<tr style="vertical-align: baseline;">
-		<td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap hidden md:table-cell">
+		<td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap">
 			<div class="text-sm font-medium text-gray-900">
 				{{ message.order }}
 			</div>
@@ -44,9 +44,7 @@
 					class="text-indigo-600 hover:text-indigo-900">Download
 				</a>
 			</template>
-			<template v-else>
-				-
-			</template>
+			<template v-else>-</template>
 
 			</span>
 
