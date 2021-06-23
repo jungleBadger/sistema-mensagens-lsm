@@ -1,16 +1,15 @@
 <template>
 
-	<tr>
+	<tr style="vertical-align: baseline;">
 		<td class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap hidden md:table-cell">
 			<div class="text-sm font-medium text-gray-900">
 				{{ message.order }}
 			</div>
 		</td>
 		<td
-			style="width: 180px;"
-			class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap md:whitespace-normal">
+			class="px-2 py-2 md:px-4 md:py-4 md:whitespace-normal">
 			<div
-				style="width: 180px;"
+				style="max-width: 180px;"
 				class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
 				{{ message.title }}
 			</div>
@@ -35,7 +34,8 @@
 			R$ {{ message.messageValue }}
 		</td>
 
-		<td v-if="isLoggedIn" class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell">
+		<td v-if="isLoggedIn" class="px-2 py-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
+
 			<span
 				style="min-width: 60px;"
 			>
@@ -69,7 +69,7 @@
 				icon-style="fas"
 				kind="danger-outline"
 				label="Remover"
-				style="min-width: 150px;"
+				style="min-width: 140px;"
 
 				@click="removeItemFromCart"
 			></lsm-button>
@@ -82,7 +82,7 @@
 				icon-style="fas"
 				kind="primary-outline"
 				label="Adicionar"
-				style="min-width: 150px;"
+				style="min-width: 140px;"
 
 				@click="addItemToCart">
 

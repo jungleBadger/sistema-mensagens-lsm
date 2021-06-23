@@ -1,16 +1,15 @@
 <template>
 
-	<tr>
+	<tr style="vertical-align: baseline;">
 		<td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap hidden md:table-cell">
 			<div class="text-sm font-medium text-gray-900">
 				{{ message.order }}
 			</div>
 		</td>
 		<td
-			style="width: 180px;"
-			class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap md:whitespace-normal">
+			class="px-2 py-2 md:px-4 md:py-3 md:whitespace-normal">
 			<div
-				style="width: 180px;"
+				style="max-width: 180px;"
 				class="text-sm font-medium text-gray-900 overflow-ellipsis overflow-hidden">
 				{{ message.title }}
 			</div>
@@ -35,7 +34,7 @@
 			R$ {{ message.messageValue }}
 		</td>
 
-		<td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm font-medium hidden md:table-cell">
+		<td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm font-medium">
 			<span
 				style="min-width: 60px;"
 			>
@@ -58,14 +57,14 @@
 			<a
 				:href="`${hostURL}/api/message/self/download/${message.id}`"
 				class="text-indigo-600 hover:text-indigo-900"
-				style="min-width: 150px;">Download
+				style="min-width: 140px;">Download
 			</a>
 			/
 			<a
 				href="#"
 				@click="setAudioPath"
 				class="text-indigo-600 hover:text-indigo-900"
-				style="min-width: 150px;">Ouvir
+				style="min-width: 140px;">Ouvir
 			</a>
 
 		</td>
