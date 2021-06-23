@@ -11,26 +11,16 @@
 
 			<h2 class="text-gray-500 font-semibold pl-px">
 
-				<span class="space-x-4"><span class="capitalize">{{event.categoryName }}</span> em {{ event.location }}</span> de <span>
-					<i18n-d
-						key="short"
-						:value="event.startDate"
-						locale="pt"
-						tag="span"
-					></i18n-d> à
-					<i18n-d
-						key="short"
-						:value="event.endDate"
-						locale="pt"
-						tag="span"
-					></i18n-d>
+				<span class="space-x-4"><span class="capitalize">{{ event.categoryName }}</span> em {{ event.location }}</span>
+				de <span>
+						<span>{{ startDateString }}</span> à
+				<span>{{ endDateString }}</span>
 				</span>
 			</h2>
 
 			<h3 class="text-gray-500 pl-px">
 				{{ event.description }}
 			</h3>
-
 
 
 		</header>
@@ -45,47 +35,47 @@
 						<div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
 							<table class="min-w-full divide-y divide-gray-200">
 								<thead class="bg-gray-50">
-									<tr>
-										<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-											scope="col">
-											Ordem
-										</th>
-										<th
-											class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-											scope="col">
-											Título
-										</th>
+								<tr>
+									<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+										scope="col">
+										Ordem
+									</th>
+									<th
+										class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+										scope="col">
+										Título
+									</th>
 
-										<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-											scope="col">
-											Data
-										</th>
-										<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-											scope="col">
-											Irmão
-										</th>
-										<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-											scope="col">
-											Preço
-										</th>
-										<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-											scope="col">
-											Esboço
-										</th>
-										<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-											scope="col">
-											Audio
-										</th>
-									</tr>
+									<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+										scope="col">
+										Data
+									</th>
+									<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+										scope="col">
+										Irmão
+									</th>
+									<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+										scope="col">
+										Preço
+									</th>
+									<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+										scope="col">
+										Esboço
+									</th>
+									<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+										scope="col">
+										Audio
+									</th>
+								</tr>
 								</thead>
 								<tbody class="bg-white divide-y divide-gray-200">
 
-									<message-item
-										v-for="(message, index) in event.messages"
-										:key="message.id"
-										:message="message"
-										:message-index="index + 1">
-									</message-item>
+								<message-item
+									v-for="(message, index) in event.messages"
+									:key="message.id"
+									:message="message"
+									:message-index="index + 1">
+								</message-item>
 
 								</tbody>
 							</table>
@@ -113,6 +103,28 @@ export default defineComponent({
 			"required": true
 		}
 	},
+	"computed": {
+		"startDateString": function () {
+			if (this.event && this.event.startDate) {
+				let date = new Date(this.event.startDate);
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				return `${day >= 10 ? day : "0" + day}/${month >= 10 ? month : "0" + month}/${date.getFullYear()}`;
+			}
+		},
+
+		"endDateString": function () {
+			if (this.event && this.event.endDate) {
+				let date = new Date(this.event.endDate);
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				return `${day >= 10 ? day : "0" + day}/${month >= 10 ? month : "0" + month}/${date.getFullYear()}`;
+			}
+		}
+
+	},
 	setup () {
 		const {
 			datetimeFormats
@@ -135,6 +147,7 @@ export default defineComponent({
 		width: 92%;
 	}
 }
+
 @media screen and (max-width: 768px) {
 	.event-item {
 		width: 100%;

@@ -12,18 +12,8 @@
 			<h2 class="text-gray-500 font-semibold pl-px">
 
 				<span class="space-x-4"><span class="capitalize">{{event.categoryName }}</span> em {{ event.location }}</span> de <span>
-					<i18n-d
-						key="short"
-						:value="event.startDate"
-						locale="pt"
-						tag="span"
-					></i18n-d> à
-					<i18n-d
-						key="short"
-						:value="event.endDate"
-						locale="pt"
-						tag="span"
-					></i18n-d>
+				<span>{{startDateString}}</span> à
+				<span>{{endDateString}}</span>
 				</span>
 			</h2>
 
@@ -124,6 +114,27 @@ export default defineComponent({
 		"isLoggedIn": function () {
 			return this.$store.getters["utilities/userInfo"].id;
 		},
+
+		"startDateString": function () {
+			if (this.event && this.event.startDate) {
+				let date = new Date(this.event.startDate);
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				return `${day >= 10 ? day : "0" + day}/${month >= 10 ? month : "0" + month}/${date.getFullYear()}`;
+			}
+		},
+
+		"endDateString": function () {
+			if (this.event && this.event.endDate) {
+				let date = new Date(this.event.endDate);
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				return `${day >= 10 ? day : "0" + day}/${month >= 10 ? month : "0" + month}/${date.getFullYear()}`;
+			}
+		},
+
 
 		"currentCart": function () {
 			return this.$store.getters["shoppingCart/currentCart"];
