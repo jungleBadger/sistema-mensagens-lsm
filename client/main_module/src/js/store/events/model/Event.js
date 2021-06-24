@@ -12,7 +12,7 @@ export default class Event {
 		this.messages = props.messages || (props.MENSAGENS || []).map(message => new Message(message));
 		this.categoryName = props.categoryNaem || props.CATEGORIA_NOME;
 		if (props.startDate) {
-			this.startDate = new Date(props.startDate);
+			this.startDate = new Date(props.startDate.replace(/-/g, "/"));
 		} else if (props.DATA_FIM) {
 			this.startDate = new Date(props.DATA_INICIO );
 		} else {
@@ -22,7 +22,7 @@ export default class Event {
 		if (props.endDate) {
 			this.endDate = new Date(props.endDate);
 		} else if (props.DATA_FIM) {
-			this.endDate = new Date(props.DATA_FIM );
+			this.endDate = new Date(props.DATA_FIM.replace(/-/g, "/") );
 		} else {
 			this.endDate = "";
 		}
