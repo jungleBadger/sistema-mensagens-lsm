@@ -10,11 +10,11 @@ export default class Event {
 		this.title = props.title || props.TITULO;
 		this.totalMessages = props.totalMessages || props.TOTAL_MENSAGENS || 0;
 		this.messages = props.messages || (props.MENSAGENS || []).map(message => new Message(message));
-		this.categoryName = props.categoryNaem || props.CATEGORIA_NOME;
+		this.categoryName = props.categoryName || props.CATEGORIA_NOME;
 		if (props.startDate) {
-			this.startDate = new Date(props.startDate.replace(/-/g, "/"));
-		} else if (props.DATA_FIM) {
-			this.startDate = new Date(props.DATA_INICIO );
+			this.startDate = new Date(props.startDate);
+		} else if (props.DATA_INICIO) {
+			this.startDate = new Date(props.DATA_INICIO.replace(/-/g, "/").replace(' ', 'T') );
 		} else {
 			this.startDate = "";
 		}
@@ -22,7 +22,7 @@ export default class Event {
 		if (props.endDate) {
 			this.endDate = new Date(props.endDate);
 		} else if (props.DATA_FIM) {
-			this.endDate = new Date(props.DATA_FIM.replace(/-/g, "/") );
+			this.endDate = new Date(props.DATA_FIM.replace(/-/g, "/").replace(' ', 'T') );
 		} else {
 			this.endDate = "";
 		}
