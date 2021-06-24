@@ -99,6 +99,8 @@
 "use strict";
 import { defineComponent } from "vue";
 import MessageItem from "./messages/message-item";
+import dayjs from "dayjs";
+
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -117,25 +119,13 @@ export default defineComponent({
 
 		"startDateString": function () {
 			if (this.event && this.event.startDate) {
-				let t = this.event.startDate.split(/[- :]/);
-				let d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
-				let date = new Date(d);
-				let month = date.getMonth() + 1;
-				let day = date.getDate();
-
-				return `${day >= 10 ? day : "0" + day}/${month >= 10 ? month : "0" + month}/${date.getFullYear()}`;
+				return dayjs(this.event.startDate).format('DD/MM/YYYY');
 			}
 		},
 
 		"endDateString": function () {
 			if (this.event && this.event.endDate) {
-				let t = this.event.endDate.split(/[- :]/);
-				let d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
-				let date = new Date(d);
-				let month = date.getMonth() + 1;
-				let day = date.getDate();
-
-				return `${day >= 10 ? day : "0" + day}/${month >= 10 ? month : "0" + month}/${date.getFullYear()}`;
+				return dayjs(this.event.endDate).format('DD/MM/YYYY');
 			}
 		},
 
