@@ -230,7 +230,7 @@ export default defineComponent({
 	"methods": {
 		handleScroll(ev) {
 			if (!this.scrollDebounce || Date.now() - this.scrollDebounce >= 300) {
-				if (ev.srcElement.scrollTop + ev.srcElement.offsetHeight >= (ev.srcElement.scrollHeight - 80)) {
+				if (ev.srcElement.scrollTop + ev.srcElement.offsetHeight >= (ev.srcElement.scrollHeight - 150)) {
 					this.scrollDebounce = Date.now();
 					this.updatePagination();
 				}
