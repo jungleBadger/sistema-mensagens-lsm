@@ -301,7 +301,7 @@ export default defineComponent({
 			this.eventsLoading = true;
 			this.pagination = {
 				...this.pagination,
-				"skip": this.pagination.skip + 1
+				"skip": this.pagination.skip + 10
 			};
 			await this.performRelevantQuery(true);
 			this.eventsLoading = false;
