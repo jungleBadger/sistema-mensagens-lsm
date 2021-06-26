@@ -5,19 +5,18 @@
 
 		<div
 			id="main-search-bar"
-			class="flex z-30 left-0 w-full shadow-lg items-center sticky top-0 flex-wrap">
+			class="flex z-30 left-0 w-full shadow-lg items-center sticky top-0 flex-wrap bg-white">
 			<div class="flex-1">
 				<lsm-input
 					ref="searchInput"
 					v-model="filterText"
 					:disabled="useAdvancedSearch || isLoading"
-					autofocus
 					type="search"
 					autocapitalize="off"
 					autocorrect="off"
 					spellcheck="false"
 					autocomplete="off"
-					class="border-none rounded-l-sm h-14"
+					class="border-none rounded-none h-14 overflow-ellipsis"
 					placeholder="Digite para procurar eventos e mensagens"
 					label="Procurar eventos e mensagens">
 				</lsm-input>
