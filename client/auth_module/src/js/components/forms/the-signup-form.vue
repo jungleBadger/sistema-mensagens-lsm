@@ -17,16 +17,26 @@
 					/>
 				</a>
 
-				<h2 class="mt-6 text-center text-3xl font-bold text-gray-900">
-					Crie uma nova conta
-				</h2>
+<!--				<h2 class="mt-6 text-center text-3xl font-bold text-gray-900">-->
+<!--					Crie uma nova conta-->
+<!--				</h2>-->
 
-				<p class="mt-2 text-center text-sm text-gray-600">
-					Ou
-					<router-link
-						class="font-medium text-blue-700 hover:text-blue-400"
-						:to="{'name': 'auth.login'}">Acesse uma já existente</router-link>
-				</p>
+<!--				<p class="mt-2 text-center text-sm text-gray-600">-->
+<!--					Ou-->
+<!--					<router-link-->
+<!--						class="font-medium text-blue-700 hover:text-blue-400"-->
+<!--						:to="{'name': 'auth.login'}">Acesse uma já existente</router-link>-->
+<!--				</p>-->
+
+				<nav class="flex w-full shadow-sm h-12 border mt-2">
+					<div class="cursor-pointer flex-1 bg-gray-200 h-full flex items-center justify-center text-gray-500 font-semibold">
+						<router-link
+							:to="{'name': 'auth.login'}">Entrar
+						</router-link>
+					</div>
+					<div class="flex-1 h-full flex items-center justify-center text-gray-800 font-semibold">Criar nova conta</div>
+				</nav>
+
 
 			</div>
 

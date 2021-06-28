@@ -8,38 +8,46 @@
 					href="/"
 					target="_blank">
 					<img
-						class="mx-auto h-36 w-48 w-auto"
-						src="/_etc/assets/1x/logo.png"
 						alt="Logotipo Livro aberto"
+						class="mx-auto h-36 w-48 w-auto"
 						role="img"
+						src="/_etc/assets/1x/logo.png"
 					/>
 				</a>
 
+				<nav class="flex w-full shadow-sm h-12 border mt-2">
+					<div class="flex-1 h-full flex items-center justify-center text-gray-800 font-semibold">Entrar</div>
+					<div class="cursor-pointer flex-1 bg-gray-200 h-full flex items-center justify-center text-gray-500 font-semibold">
+						<router-link
+							:to="{'name': 'auth.signup'}">Criar nova conta
+						</router-link>
+					</div>
+				</nav>
 
-				<h2 class="mt-6 text-center text-3xl font-bold text-gray-900">
-					Acesse sua conta
-				</h2>
+				<!--				<h2 class="mt-6 text-center text-3xl font-bold text-gray-900">-->
+				<!--					Acesse sua conta-->
+				<!--				</h2>-->
 
-				<p class="mt-2 text-center text-sm text-gray-600">
-					Ou
-					<router-link
-						class="font-medium text-blue-700 hover:text-blue-400"
-						:to="{'name': 'auth.signup'}">Crie uma nova</router-link>
-				</p>
+				<!--				<p class="mt-2 text-center text-sm text-gray-600">-->
+				<!--					Ou-->
+				<!--					<router-link-->
+				<!--						class="font-medium text-blue-700 hover:text-blue-400"-->
+				<!--						:to="{'name': 'auth.signup'}">Crie uma nova</router-link>-->
+				<!--				</p>-->
 
 			</div>
 
 			<lsm-inline-notification
 				v-if="userCreatedMessage"
-				title="Login realizado com sucesso:"
 				:description="userCreatedMessage"
-				kind="success">
+				kind="success"
+				title="Login realizado com sucesso:">
 			</lsm-inline-notification>
 
 			<lsm-inline-notification
 				v-if="loginErrorMessage"
-				:title="loginErrorMessage.title"
 				:description="loginErrorMessage.description"
+				:title="loginErrorMessage.title"
 				kind="error">
 			</lsm-inline-notification>
 
@@ -47,42 +55,42 @@
 			<recaptcha-protected-resource>
 
 				<form
-					class="mt-8 space-y-6"
 					action="#"
+					class="mt-8 space-y-6"
 					method="POST"
 					@submit.prevent="submitForm">
 
 
 					<div class="rounded-md shadow-sm -space-y-px">
 						<lsm-input
-							v-model="email"
-							class="rounded-t-md disabled:opacity-50"
-							:disabled="Boolean(userCreatedMessage)"
 							id="email"
-							name="email"
-							label="Endereço de email"
-							type="email"
+							:key="loginErrorMessage"
+							v-model="email"
+							:disabled="Boolean(userCreatedMessage)"
 							autocomplete="username"
-							placeholder="Digite seu endereço de email"
-							minlength="4"
-							maxlength="256"
-							required
 							autofocus
-							:key="loginErrorMessage" />
+							class="rounded-t-md disabled:opacity-50"
+							label="Endereço de email"
+							maxlength="256"
+							minlength="4"
+							name="email"
+							placeholder="Digite seu endereço de email"
+							required
+							type="email"/>
 
 						<lsm-input
-							v-model="password"
-							class="rounded-b-md disabled:opacity-50"
-							:disabled="Boolean(userCreatedMessage)"
 							id="current-password"
-							name="password"
-							type="password"
-							label="Password"
+							v-model="password"
+							:disabled="Boolean(userCreatedMessage)"
 							autocomplete="current-password"
-							placeholder="Digite sua senha"
-							minlength="8"
+							class="rounded-b-md disabled:opacity-50"
+							label="Password"
 							maxlength="128"
+							minlength="8"
+							name="password"
+							placeholder="Digite sua senha"
 							required
+							type="password"
 						/>
 
 					</div>
@@ -91,13 +99,13 @@
 						<div class="flex items-center cursor-pointer">
 							<input
 								id="remember_me"
-								name="remember_me"
-								type="checkbox"
 								v-model="shouldRememberUserEmail"
-								class="cursor-pointer h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+								class="cursor-pointer h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+								name="remember_me"
+								type="checkbox"/>
 							<label
-								for="remember_me"
-								class="cursor-pointer ml-2 block text-sm text-gray-900">
+								class="cursor-pointer ml-2 block text-sm text-gray-900"
+								for="remember_me">
 								Lembre meu e-mail
 							</label>
 						</div>
@@ -112,18 +120,16 @@
 					</div>
 
 
-
 					<div>
 						<lsm-button
-							type="submit"
-							label="Acessar conta"
-							class="w-full"
 							:disabled="Boolean(loadingState || userCreatedMessage || !isLoginFormValid)"
+							:is-loading="loadingState"
+							class="w-full"
 							icon-id="lock"
-							:is-loading="loadingState">
+							label="Acessar conta"
+							type="submit">
 						</lsm-button>
 					</div>
-
 
 
 				</form>
@@ -136,22 +142,22 @@
 			</div>
 			<div>
 				<a
-					:disabled="loadingState"
-					type="button"
-					href="/auth/google?action=signin"
 					id="google-login-button"
-					title="Clique para acessar sua conta através do Google"
+					:disabled="loadingState"
 					class="
 					py-2 px-4 border flex justify-between items-center
 					relative border-solid border shadow-sm border-gray-400
                         font-semibold text-gray-600 text-sm py-2 text-center rounded text-center w-full
-                        focus:outline-none hover:border-indigo-600">
+                        focus:outline-none hover:border-indigo-600"
+					href="/auth/google?action=signin"
+					title="Clique para acessar sua conta através do Google"
+					type="button">
 					<span>
 						Entre com Google
 					</span>
 					<font-awesome-icon
-						style="line-height: 28px;"
-						:icon="['fab', 'google']" />
+						:icon="['fab', 'google']"
+						style="line-height: 28px;"/>
 				</a>
 			</div>
 		</div>
@@ -160,13 +166,12 @@
 </template>
 
 
-
 <script>
 
 import LsmInput from "../../../../../_etc/shared_components/ui/lsm-input.vue";
 import LsmButton from "../../../../../_etc/shared_components/ui/lsm-button";
 import RecaptchaProtectedResource from "../recaptcha-protected-resource";
-import LsmInlineNotification from "../../../../../_etc/shared_components/ui/lsm-inline-notification"
+import LsmInlineNotification from "../../../../../_etc/shared_components/ui/lsm-inline-notification";
 
 // General - Invalid form.
 // Basic - Account don't exist
@@ -184,39 +189,39 @@ export default {
 	"data": function () {
 		return {
 			"userCreatedMessage": ""
-		}
+		};
 	},
 	"computed": {
 
 		"email": {
-			get() {
+			get () {
 				return this.$store.getters["auth/email"];
 			},
-			set(value) {
+			set (value) {
 				this.$store.commit("auth/email", value);
 			}
 		},
 
 		"password": {
-			get() {
+			get () {
 				return this.$store.getters["auth/password"];
 			},
-			set(value) {
+			set (value) {
 				this.$store.commit("auth/password", value);
 			}
 		},
 
 		"shouldRememberUserEmail": {
-			get() {
+			get () {
 				return this.$store.getters["auth/shouldRememberUserEmail"];
 			},
-			set(value) {
+			set (value) {
 				this.$store.commit("auth/shouldRememberUserEmail", value);
 			}
 		},
 
 		"loadingState": {
-			get() {
+			get () {
 				return this.$store.getters["auth/loadingState"];
 			}
 		},
@@ -226,10 +231,10 @@ export default {
 		},
 
 		"loginErrorMessage": {
-			get() {
+			get () {
 				return this.$store.getters["auth/loginErrorMessage"];
 			},
-			set(value) {
+			set (value) {
 				this.$store.commit("auth/loginErrorMessage", value);
 			}
 		}
@@ -237,7 +242,7 @@ export default {
 	},
 	"methods": {
 
-		async submitForm() {
+		async submitForm () {
 
 			if (this.isLoginFormValid) {
 				this.loginErrorMessage = "";
@@ -249,7 +254,7 @@ export default {
 
 		},
 
-		triggerAutomatedLogin(redirectPath = "/") {
+		triggerAutomatedLogin (redirectPath = "/") {
 			let index = 3;
 			this.userCreatedMessage = `Redirecionando para a página principal em ${index}.`;
 			let intervalHandler = setInterval(async () => {
@@ -274,29 +279,27 @@ export default {
 			this.loginErrorMessage = {
 				"title": "Houve um problema no seu login com Google:",
 				"description": "Seu e-mail não foi encontrado em nossos registros."
-			}
+			};
 
 		} else if (errorStatus === 409) {
 
 			this.loginErrorMessage = {
 				"title": "Já existe uma conta cadastrada com este e-mail!",
 				"description": "Faça o login abaixo."
-			}
+			};
 
-		}  else if (errorStatus) {
-
+		} else if (errorStatus) {
 
 			console.log(errorStatus);
 			this.loginErrorMessage = {
 				"title": "Houve um problema inesperado no seu login com Google!",
 				"description": "Tente novamente em alguns minutos."
-			}
-
+			};
 
 		}
 
 	}
-}
+};
 </script>
 
 <style scoped>
