@@ -1,13 +1,11 @@
 ---
 - name: "Update npm."
-  become: true
   npm:
       name: npm
       global: yes
       state: latest
 
 - name: "Install pm2."
-  become: true
   npm:
     name: pm2
     global: yes
@@ -15,21 +13,18 @@
     state: present
 
 - name: "Install node dependencies."
-  become: true
   shell: |
       cd /app/lsm/web/server
       npm install
 
 - name: "Stop PM2."
   ignore_errors: yes
-  become: true
   shell: |
       cd /home/ubuntu/backend
-      /usr/local/bin/pm2 stop lsm-node
-      /usr/local/bin/pm2 delete lsm-node
+      pm2 stop lsm-node
+      pm2 delete lsm-node
 
 - name: "Start PM2."
-  become: true
   shell: |
       cd /app/lsm/web/server
-      sudo /usr/local/bin/pm2 start --name "lsm-node" npm -- run start:prod
+      pm2 start --name "lsm-node" npm -- run start:prod

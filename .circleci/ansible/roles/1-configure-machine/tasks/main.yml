@@ -1,18 +1,15 @@
 ---
 - name: "Install python."
-  become: true
   dnf:
     name: ["python3"]
     state: latest
 
 - name: "Install rsync."
-  become: true
   dnf:
     name: ["rsync"]
     state: latest
 
 - name: "Install nodejs."
-  become: true
   dnf:
     name: ["@nodejs:14"]
     state: latest
