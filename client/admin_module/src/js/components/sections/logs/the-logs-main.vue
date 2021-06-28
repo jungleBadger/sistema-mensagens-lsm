@@ -6,7 +6,7 @@
 		<header class="min-h-12 mb-3 pl-2 pr-2 md:pl-0 md:pr-0">
 			<h3 class="text-2xl ">Log de operações</h3>
 			<h4 class="text-l">
-				Consulte e visualize todas operações registradas no Sistema LSM.
+				Consulte e visualize todas operações registradas no Sistema Livro Aberto.
 			</h4>
 		</header>
 

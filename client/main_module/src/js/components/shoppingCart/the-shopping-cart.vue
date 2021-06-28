@@ -106,7 +106,7 @@
 						id="sub_store"
 						name="sub_store"
 						type="hidden"
-						value="LSM/Livro Aberto">
+						value="Livro Aberto">
 
 					<input
 						id="customer_email"

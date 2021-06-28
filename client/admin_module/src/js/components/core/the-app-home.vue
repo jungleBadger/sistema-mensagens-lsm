@@ -7,7 +7,7 @@
 			<div class="flex flex-col gap-2 flex-1">
 				<h3 class="text-2xl">Início</h3>
 				<h4 class="text-l divide-y">
-					Area administrativa do Sistema de mensagens LSM.
+					Area administrativa do Sistema de mensagens Livro Aberto.
 				</h4>
 			</div>
 		</header>
