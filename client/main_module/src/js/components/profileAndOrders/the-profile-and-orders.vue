@@ -4,16 +4,17 @@
 		aria-label="Area do usuário"
 		class="w-full h-full overflow-auto flex flex-col relative ">
 
-		<section>
-			<header class="flex mb-3 pl-2 pr-2 pt-0 flex-col md:flex-row md:pl-0 md:pr-0 gap-2">
-				<div class="flex flex-col gap-0 flex-1">
-					<h3 class="text-2xl">Informações da conta</h3>
-					<h4 class="text-l">
-						Sua conta é pessoal e intransferível. Com ela você pode explorar o <router-link
-						class="text-blue-700"
-						:to="{'name': 'app.home'}">catalogo de eventos e mensagens</router-link>.
-					</h4>
-				</div>
+		<div class="w-full flex flex-col flex-1 relative p-1 md:p-4 gap-12">
+			<section>
+				<header class="flex mb-3 pl-2 pr-2 pt-0 flex-col md:flex-row md:pl-0 md:pr-0 gap-2">
+					<div class="flex flex-col gap-0 flex-1">
+						<h3 class="text-2xl">Informações da conta</h3>
+						<h4 class="text-l">
+							Sua conta é pessoal e intransferível. Com ela você pode explorar o <router-link
+							class="text-blue-700"
+							:to="{'name': 'app.home'}">catalogo de eventos e mensagens</router-link>.
+						</h4>
+					</div>
 
 				</header>
 
