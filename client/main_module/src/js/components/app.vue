@@ -46,7 +46,7 @@
 								:to="{'name': 'app.owned'}"
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
-								<font-awesome-icon :icon="['fas', 'user-music']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user-music']"/>
 								Minhas mensagens
 							</router-link>
 
@@ -54,7 +54,7 @@
 								:to="{'name': 'app.profile'}"
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
-								<font-awesome-icon :icon="['fas', 'user-gear']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user-gear']"/>
 								Meu perfil e pedidos
 							</router-link>
 
@@ -62,7 +62,7 @@
 								:to="{'name': 'app.checkout'}"
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
-								<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'cart-shopping']"/>
 								Carrinho ({{ cartItemsLength }})
 							</router-link>
 
@@ -71,7 +71,7 @@
 								class="p-2 hover:bg-gray-200 text-red-700 transition-colors flex items-center gap-4"
 								href="/auth/logout"
 								@click="closeOverflowMenu">
-								<font-awesome-icon :icon="['fas', 'arrow-up-left-from-circle']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'arrow-up-left-from-circle']"/>
 								Sair
 							</a>
 
@@ -82,7 +82,7 @@
 								:to="{'name': 'app.owned'}"
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
-								<font-awesome-icon :icon="['fas', 'user']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user']"/>
 								Entrar ou criar conta
 							</router-link>
 
@@ -116,7 +116,7 @@
 								:to="{'name': 'app.home'}"
 								:class="{'text-gray-500 font-bold': $route.name === 'app.home'}"
 								class="header-link text-gray-600 hidden md:flex transition-colors">
-								<font-awesome-icon :icon="['fas', 'house']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'house']"/>
 								Início
 							</router-link>
 
@@ -124,7 +124,7 @@
 								:to="{'name': 'app.owned'}"
 								:class="{'text-gray-500 font-bold': $route.name === 'app.owned'}"
 								class="header-link text-gray-600 hidden md:flex transition-colors">
-								<font-awesome-icon :icon="['fas', 'user-music']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user-music']"/>
 								Minhas mensagens
 							</router-link>
 
@@ -132,7 +132,7 @@
 								:to="{'name': 'app.profile'}"
 								:class="{'text-gray-500 font-bold': $route.name === 'app.profile'}"
 								class="header-link text-gray-600 hidden md:flex transition-colors">
-								<font-awesome-icon :icon="['fas', 'user-gear']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user-gear']"/>
 								Meu perfil e pedidos
 							</router-link>
 
@@ -140,7 +140,7 @@
 								:to="{'name': 'app.checkout'}"
 								:class="{'text-gray-500 font-bold': $route.name === 'app.checkout'}"
 								class="header-link text-gray-600 md:flex transition-colors">
-								<font-awesome-icon :icon="['fas', 'cart-shopping']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'cart-shopping']"/>
 								Carrinho ({{ cartItemsLength }})
 							</router-link>
 
@@ -156,7 +156,7 @@
 							<a
 								class="header-link text-gray-600"
 								href="/auth/login">
-								<font-awesome-icon :icon="['fas', 'user']"/>
+								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user']"/>
 								Entrar ou criar conta
 							</a>
 						</template>
