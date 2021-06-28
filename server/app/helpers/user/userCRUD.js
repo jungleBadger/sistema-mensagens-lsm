@@ -94,7 +94,7 @@ module.exports = {
 				"subject": welcomeEmailObject.subject,
 				"text": welcomeEmailObject.text,
 				"html": welcomeEmailObject.html(
-					"https://localhost:3030/api/common/user/confirm",
+					"https://sistema.igrejaemsumare.com.br/api/common/user/confirm",
 					await generateJWT(
 						{ userEmail },
 						process.env.APP_SECRET,
