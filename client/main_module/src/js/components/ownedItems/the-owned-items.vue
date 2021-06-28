@@ -5,7 +5,7 @@
 		class="w-full h-full overflow-auto flex flex-col relative gap-4"
 		style="background-color: #f9fafb;">
 
-		<header class="flex mb-1 flex-col md:flex-rowgap-2 p-1 md:p-4 ">
+		<header class="flex flex-col md:flex-row gap-2 p-1 md:p-4 pb-0">
 			<div class="flex flex-col gap-1 flex-1 pl-2 pr-2 pt-0  md:pl-0 md:pr-0 ">
 				<h3 class="text-2xl">Mensagens adquiridas</h3>
 				<h4 class="text-l">

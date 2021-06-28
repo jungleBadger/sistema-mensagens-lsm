@@ -14,7 +14,7 @@ export default class Message {
 
 		if (props.DATA_MINISTRADO) {
 			this.messageDate = new Date(props.DATA_MINISTRADO)
-			if(Number.isNaN(this.messageDate.getMonth())) {
+			if (Number.isNaN(this.messageDate.getMonth())) {
 				let arr = props.DATA_MINISTRADO.split(/[- :]/);
 				this.messageDate = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
 			}
