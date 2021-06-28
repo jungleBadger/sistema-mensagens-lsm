@@ -65,6 +65,8 @@
 
 		<the-event-list class="p-2"></the-event-list>
 
+		<the-app-footer></the-app-footer>
+
 	</div>
 </template>
 <script type="text/javascript">
@@ -76,6 +78,7 @@ import { useI18n } from "vue-i18n";
 import TheEventList from "./events/the-event-list";
 import LsmButton from "../../../../../_etc/shared_components/ui/lsm-button";
 import fade from "../../../../../_etc/shared_mixins/fade";
+import TheAppFooter from "../core/the-app-footer";
 
 // import gsap from "gsap";
 // import ScrollTrigger from "gsap/src/ScrollTrigger";
@@ -88,6 +91,7 @@ export default defineComponent({
 		fade
 	],
 	"components": {
+		TheAppFooter,
 		LsmButton,
 		TheEventList
 	},

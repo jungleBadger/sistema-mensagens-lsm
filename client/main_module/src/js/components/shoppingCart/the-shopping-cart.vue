@@ -1,9 +1,9 @@
 <template>
 	<div
-		class="w-full h-full px-1 md:px-8 overflow-auto"
+		class="w-full h-full overflow-auto flex flex-col"
 		style="background-color: #f9fafb;">
 
-		<main class="p-1 md:p-8">
+		<main class="p-1 flex-1 md:p-8">
 			<template v-if="orderId">
 				<div class="">
 					<div class="flex shadow-md rounded flex-wrap">
@@ -27,7 +27,7 @@
 							<div
 								v-for="item in cartItems"
 								:key="item.id"
-								class="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
+								class="flex items-baseline hover:bg-gray-100 -mx-8 px-6 py-5">
 
 								<div class="flex w-5/12"> <!-- product -->
 									<div class="flex flex-col justify-between ml-3 flex-grow">
@@ -171,9 +171,10 @@
 			</template>
 
 
+
 		</main>
 
-
+		<the-app-footer></the-app-footer>
 	</div>
 </template>
 <script type="text/javascript">
@@ -182,10 +183,11 @@
 "use strict";
 import { defineComponent } from "vue";
 import LsmButton from "../../../../../_etc/shared_components/ui/lsm-button";
+import TheAppFooter from "../core/the-app-footer";
 
 export default defineComponent({
 	"name": "TheShoppingCart",
-	"components": { LsmButton },
+	"components": { TheAppFooter, LsmButton },
 	setup () {
 		return {
 			"integrationURL": `${window.location.protocol || "https:"}//${window.location.host || "localhost:3030"}/`
