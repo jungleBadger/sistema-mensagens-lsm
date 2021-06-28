@@ -14,7 +14,7 @@
 				</h4>
 				<h5><span class="font-semibold">Para visualizar seus pedidos</span> acesse a <router-link
 					class="text-blue-700"
-					:to="{'name': 'app.owned'}">área de Perfil e Pedidos.</router-link></h5>
+					:to="{'name': 'app.profile'}">área de Perfil e Pedidos.</router-link></h5>
 			</div>
 
 		</header>
