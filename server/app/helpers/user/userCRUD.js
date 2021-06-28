@@ -94,7 +94,7 @@ module.exports = {
 				"subject": welcomeEmailObject.subject,
 				"text": welcomeEmailObject.text,
 				"html": welcomeEmailObject.html(
-					"https://localhost:3030/api/common/user/confirm",
+					"https://mensagens.restauradosabiblia.com.br/api/common/user/confirm",
 					await generateJWT(
 						{ userEmail },
 						process.env.APP_SECRET,
@@ -107,7 +107,7 @@ module.exports = {
 			});
 
 			//@TODO Remove this log statement later - demo purposes only.
-			console.log("Preview URL: %s", nodemailer.getTestMessageUrl(mailResult));
+			//console.log("Preview URL: %s", nodemailer.getTestMessageUrl(mailResult));
 
 			return {
 				"ID": result.ID,

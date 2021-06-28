@@ -53,6 +53,7 @@ import { faUserPlus } from "@fortawesome/pro-solid-svg-icons/faUserPlus";
 import { faSealExclamation } from "@fortawesome/pro-solid-svg-icons/faSealExclamation";
 
 import { faGoogle } from "@fortawesome/free-brands-svg-icons/faGoogle";
+import { faInstagram } from "@fortawesome/free-brands-svg-icons/faInstagram";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 
@@ -103,7 +104,8 @@ library.add(
 	faSpinnerThird,
 	faUserPlus,
 	faSealExclamation,
-	faGoogle
+	faGoogle,
+	faInstagram
 );
 
 export default FontAwesomeIcon;

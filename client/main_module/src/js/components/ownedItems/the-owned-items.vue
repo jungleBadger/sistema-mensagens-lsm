@@ -2,21 +2,26 @@
 	<section
 		ref="scroller"
 		aria-label="Area do usuário"
-		class="w-full h-full overflow-auto flex flex-col relative p-1 md:p-4 gap-4"
+		class="w-full h-full overflow-auto flex flex-col relative gap-4"
 		style="background-color: #f9fafb;">
 
-		<header class="flex mb-3 pl-2 pr-2 pt-0 flex-col md:flex-row md:pl-0 md:pr-0 gap-2">
-			<div class="flex flex-col gap-0 flex-1">
+		<header class="flex flex-col md:flex-row gap-2 p-1 md:p-4 pb-0">
+			<div class="flex flex-col gap-1 flex-1 pl-2 pr-2 pt-0  md:pl-0 md:pr-0 ">
 				<h3 class="text-2xl">Mensagens adquiridas</h3>
 				<h4 class="text-l">
 					Nesta área você pode navegar pelas suas mensagens adquiridas. Cada mensagem é agrupada em seu evento
 					para melhor organização.
 				</h4>
+				<h5><span class="font-semibold">Para visualizar seus pedidos</span> acesse a <router-link
+					class="text-blue-700"
+					:to="{'name': 'app.owned'}">área de Perfil e Pedidos.</router-link></h5>
 			</div>
 
 		</header>
 
-		<the-private-event-list></the-private-event-list>
+		<the-private-event-list class="p-1 md:p-4 "></the-private-event-list>
+
+		<the-app-footer></the-app-footer>
 
 		<transition
 			mode="out-in"
@@ -74,6 +79,7 @@ import LsmTable from "../../../../../_etc/shared_components/ui/lsm-table.vue";
 import fade from "../../../../../_etc/shared_mixins/fade";
 import LsmButton from "../../../../../_etc/shared_components/ui/lsm-button";
 import ThePrivateEventList from "./privateEvents/the-private-event-list";
+import TheAppFooter from "../core/the-app-footer";
 
 export default defineComponent({
 	"name": "TheOwnedItems",
@@ -81,6 +87,7 @@ export default defineComponent({
 		fade
 	],
 	"components": {
+		TheAppFooter,
 		ThePrivateEventList,
 		LsmButton,
 		LsmTable

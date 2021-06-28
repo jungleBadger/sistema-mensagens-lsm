@@ -15,7 +15,7 @@ export default class Event {
 			this.startDate = new Date(props.startDate);
 		} else if (props.DATA_INICIO) {
 			this.startDate = new Date(props.DATA_INICIO)
-			if(Number.isNaN(this.startDate.getMonth())) {
+			if (Number.isNaN(this.startDate.getMonth())) {
 				let arr = props.DATA_INICIO.split(/[- :]/);
 				this.startDate = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
 			}
@@ -27,7 +27,7 @@ export default class Event {
 			this.endDate = new Date(props.endDate);
 		} else if (props.DATA_FIM) {
 			this.endDate = new Date(props.DATA_FIM)
-			if(Number.isNaN(this.endDate.getMonth())) {
+			if (Number.isNaN(this.endDate.getMonth())) {
 				let arr = props.DATA_FIM.split(/[- :]/);
 				this.endDate = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
 			}
