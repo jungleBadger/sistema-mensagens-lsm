@@ -10,7 +10,6 @@ const connectionPool = new DBConnectionPool(
 	process.env.DB2_UID,
 	process.env.DB2_PASSWORD
 );
-const fs = require("fs").promises;
 const logger = require("../logger");
 const Transaction = require("../../models/yapay/Transaction");
 const shoppingCart = require("./shoppingCart");
@@ -277,20 +276,13 @@ module.exports = {
 		if (orderStatus === "aguardando pagamento" || orderStatus === "em monitoramento") {
 			await this.setOrderToAnalysis(orderId);
 		} else {
-			await Promise.all([
-				this.storeOrderTransaction({
-					"orderId": orderId,
-					"transactionId": yapayObject.transaction.transaction_id,
-					"transactionToken": yapayObject.token_transaction,
-					"transactionDate": yapayObject.transaction.date_transaction
-				}),
-				fs.writeFile(`./${Date.now()}_request.log`, JSON.stringify({
-					yapayObject,
-					orderId
-				}, null, 4))
-			]);
 
-
+			await this.storeOrderTransaction({
+				"orderId": orderId,
+				"transactionId": yapayObject.transaction.transaction_id,
+				"transactionToken": yapayObject.token_transaction,
+				"transactionDate": yapayObject.transaction.date_transaction
+			});
 
 			if (orderStatus === "aprovada") {
 				await this.setOrderToApproved(orderId);
