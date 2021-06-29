@@ -37,33 +37,33 @@
 							class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 							@click="closeOverflowMenu">
 							<font-awesome-icon
-								:icon="['fas', 'house']"/>
-							Inicio
-						</router-link>
+								style="width: 20px;"
+								class="text-blue-500"
+								:icon="['fas', 'house']"/>Inicio</router-link>
 
 						<template v-if="userInfo && userInfo.id">
 							<router-link
 								:to="{'name': 'app.owned'}"
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
-								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user-music']"/>
-								Minhas mensagens
+								<font-awesome-icon style="width: 20px;" class="text-blue-500" :icon="['fas', 'user-music']"/>
+								<span>Minhas mensagens</span>
 							</router-link>
 
 							<router-link
 								:to="{'name': 'app.profile'}"
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
-								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user-gear']"/>
-								Meu perfil e pedidos
+								<font-awesome-icon style="width: 20px;" class="text-blue-500" :icon="['fas', 'user-gear']"/>
+								<span>Meu perfil e pedidos</span>
 							</router-link>
 
 							<router-link
 								:to="{'name': 'app.checkout'}"
 								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
 								@click="closeOverflowMenu">
-								<font-awesome-icon class="text-blue-500" :icon="['fas', 'cart-shopping']"/>
-								Carrinho ({{ cartItemsLength }})
+								<font-awesome-icon style="width: 20px;" class="text-blue-500" :icon="['fas', 'cart-shopping']"/>
+								<span>Carrinho ({{ cartItemsLength }})</span>
 							</router-link>
 
 
@@ -71,20 +71,18 @@
 								class="p-2 hover:bg-gray-200 text-red-700 transition-colors flex items-center gap-4"
 								href="/auth/logout"
 								@click="closeOverflowMenu">
-								<font-awesome-icon class="text-blue-500" :icon="['fas', 'arrow-up-left-from-circle']"/>
-								Sair
+								<font-awesome-icon style="width: 20px;" :icon="['fas', 'arrow-up-left-from-circle']"/>
+								<span>Sair</span>
 							</a>
 
 						</template>
 
 						<template v-else>
 							<a
-								class="header-link text-gray-600"
-								href="/auth/login">
-								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user']"/>
+								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4" href="/auth/login">
+								<font-awesome-icon style="width: 20px;" class="text-blue-500" :icon="['fas', 'user']"/>
 								Entrar ou criar conta
 							</a>
-
 						</template>
 
 
@@ -153,7 +151,7 @@
 
 						<template v-else>
 							<a
-								class="header-link text-gray-600"
+								class="header-link text-gray-600 md:flex transition-colors"
 								href="/auth/login">
 								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user']"/>
 								Entrar ou criar conta
