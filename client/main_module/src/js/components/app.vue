@@ -78,13 +78,12 @@
 						</template>
 
 						<template v-else>
-							<router-link
-								:to="{'name': 'app.owned'}"
-								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
-								@click="closeOverflowMenu">
+							<a
+								class="header-link text-gray-600"
+								href="/auth/login">
 								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user']"/>
 								Entrar ou criar conta
-							</router-link>
+							</a>
 
 						</template>
 
