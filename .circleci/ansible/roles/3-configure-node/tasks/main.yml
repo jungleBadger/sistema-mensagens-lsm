@@ -1,5 +1,6 @@
 ---
 - name: "Update npm."
+  become: true
   npm:
       name: npm
       global: yes
