@@ -30,7 +30,8 @@
 		>
 			<aside
 				style="z-index: 53;"
-				class="fixed flex w-full bg-white bottom-0 left-0 p-2 shadow items-center gap-2">
+				v-if="selectedAudioPath"
+				class="absolute flex w-full bg-white bottom-0 left-0 p-2 shadow items-center gap-2">
 				<audio
 					:key="selectedAudioPath"
 					class="h-10 flex-1"
