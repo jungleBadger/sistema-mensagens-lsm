@@ -153,13 +153,13 @@
 
 					<input
 						id="url_process"
-						:value="`https://sistema.igrejaemsumare.com.br/app/minhas-mensagens`"
+						:value="`https://mensagens.restauradosabiblia.com.br/app/minhas-mensagens`"
 						name="url_process"
 						type="hidden">
 
 					<input
 						id="url_notification"
-						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`"
+						:value="`https://mensagens.restauradosabiblia.com.br/api/order/${orderId}/update`"
 						name="url_notification"
 						type="hidden">
 
