@@ -4,8 +4,8 @@
 	"description": "[Backend] - Aplicação para gerenciamento e consumo de mensagens atreladas a eventos.",
 	"engineStrict": true,
 	"engines": {
-		"node": "14.17.0",
-		"npm": "6.14.13"
+		"node": "14.17.4",
+		"npm": "6.14.14"
 	},
 	"main": "./app/dist/app.js",
 	"scripts": {
