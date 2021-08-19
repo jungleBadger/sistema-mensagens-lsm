@@ -109,6 +109,11 @@
 						value="Livro Aberto">
 
 					<input
+						id="available_payment_methods"
+						name="available_payment_methods"
+						type="hidden"
+						value="6,2,3,4,5,16,20,25">
+					<input
 						id="customer_email"
 						:value="loggedUserEmail"
 						name="customer[email]"
