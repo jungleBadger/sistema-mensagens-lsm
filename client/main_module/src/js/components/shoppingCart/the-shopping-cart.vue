@@ -109,6 +109,11 @@
 						value="Livro Aberto">
 
 					<input
+						id="available_payment_methods"
+						name="available_payment_methods"
+						type="hidden"
+						value="6,2,3,4,5,16,20,25">
+					<input
 						id="customer_email"
 						:value="loggedUserEmail"
 						name="customer[email]"
@@ -148,13 +153,13 @@
 
 					<input
 						id="url_process"
-						:value="`https://sistema.igrejaemsumare.com.br/app/minhas-mensagens`"
+						:value="`https://mensagens.restauradosabiblia.com.br/app/minhas-mensagens`"
 						name="url_process"
 						type="hidden">
 
 					<input
 						id="url_notification"
-						:value="`https://sistema.igrejaemsumare.com.br/api/order/${orderId}/update`"
+						:value="`https://mensagens.restauradosabiblia.com.br/api/order/${orderId}/update`"
 						name="url_notification"
 						type="hidden">
 
