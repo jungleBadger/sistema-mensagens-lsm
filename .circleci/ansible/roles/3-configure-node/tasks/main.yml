@@ -21,7 +21,6 @@
 - name: "Stop PM2."
   ignore_errors: yes
   shell: |
-      cd /home/ubuntu/backend
       pm2 stop lsm-node
       pm2 delete lsm-node
 
