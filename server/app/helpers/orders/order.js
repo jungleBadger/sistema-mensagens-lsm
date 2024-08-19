@@ -363,7 +363,7 @@ module.exports = {
 	},
 
 	/**
-	 * @method setOrderToApproved
+	 * @method setOrderToAnalysis
 	 * @desc Set an open order to pending status.
 	 * @param {string} orderId
 	 * @return {Promise<Object|Error>}
@@ -380,7 +380,7 @@ module.exports = {
 
 
 	/**
-	 * @method setOrderToApproved
+	 * @method setOrderToCancelled
 	 * @desc Set an open order to pending status.
 	 * @param {string} orderId
 	 * @return {Promise<Object|Error>}
