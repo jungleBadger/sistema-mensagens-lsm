@@ -40,7 +40,7 @@ import TheAppHeader from "./core/the-app-header.vue";
 import TheAppSideMenu from "./core/the-app-side-menu.vue";
 import fade from "../../../../_etc/shared_mixins/fade";
 import LsmToastNotificationContainer
-	from "../../../../_etc/shared_components/ui/notification/lsm-toast-notification-container";
+from "../../../../_etc/shared_components/ui/notification/lsm-toast-notification-container";
 
 export default defineComponent({
 	"name": "LsmAdminApp",

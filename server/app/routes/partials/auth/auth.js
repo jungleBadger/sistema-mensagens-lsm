@@ -13,7 +13,7 @@ router.post(
 		req.session.originalUrl = "";
 
 		return (
-			(req.query.hasOwnProperty("rest") ?
+			(req.query && req.query.rest ?
 				res.status(200).send({
 					redirectPath
 				}) :

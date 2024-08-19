@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.get(["", "/", "/*"],
+router.get(["", "/", "/login", "/signup", "/*"],
 	(req, res) => {
 		return res.status(200).render("./auth_module/dist/index.html");
 	}
