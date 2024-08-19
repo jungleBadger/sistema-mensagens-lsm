@@ -39,14 +39,10 @@
 							<div class="flex-1">
 								<lsm-input
 									v-model="messageValue"
-									aria-disabled="true"
-									aria-readonly="true"
 									data-number-to-fixed="2"
-									disabled
 									min="1.00"
 									placeholder="1.00"
-									readonly
-									step="0.01"
+									step="1.00"
 									type="number"></lsm-input>
 							</div>
 						</div>
