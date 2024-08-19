@@ -76,8 +76,8 @@ client/assets/TMP.csv
 #Bash Profile
 .bash_profile
 
-/client/**/dist/
-/client/**/index.html
+#/client/**/dist/
+#/client/**/index.html
 /client/service-worker-*.js
 /client/**/service-worker.js
 /client/workbox-*.js
