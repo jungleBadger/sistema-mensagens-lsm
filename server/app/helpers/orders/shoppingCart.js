@@ -83,13 +83,17 @@ module.exports = {
 	 * @return {Promise<Object|Error>}
 	 */
 	async addItemToCart (itemId, userId) {
-		let result = await connectionPool.executePreparedSqlInstruction(
+			let result = await connectionPool.executePreparedSqlInstruction(
 			[
-				"(SELECT ID, PEDIDO_ID, VALOR_APLICADO, CRIADO_EM FROM FINAL TABLE (INSERT INTO PEDIDO_ITEM (PEDIDO_ID, MENSAGEM_ID)",
-				"VALUES((SELECT ID FROM PEDIDO WHERE PEDIDO.USUARIO_ID = ? AND PEDIDO.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE PEDIDO_STATUS.NOME_EXIBICAO = ?)),",
-				"?)));"
+				"(SELECT ID, PEDIDO_ID, VALOR_APLICADO, CRIADO_EM FROM FINAL TABLE (",
+				"INSERT INTO PEDIDO_ITEM (PEDIDO_ID, MENSAGEM_ID, VALOR_APLICADO) ",
+				"VALUES (",
+				"(SELECT ID FROM PEDIDO WHERE PEDIDO.USUARIO_ID = ? AND PEDIDO.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE PEDIDO_STATUS.NOME_EXIBICAO = ?)),",
+				"?,",
+				"(SELECT VALOR FROM MENSAGEM WHERE MENSAGEM.ID = ?)",
+				")));"
 			].join(" "),
-			[Number(userId), 'ABERTO', Number(itemId)]
+			[Number(userId), 'ABERTO', Number(itemId), Number(itemId)]
 		);
 
 		if (result && result[0]) {
@@ -99,7 +103,7 @@ module.exports = {
 				"VALOR_APLICADO": result[0].VALOR_APLICADO,
 				"MENSAGEM_ID": itemId,
 				"CRIADO_EM": result[0].CRIADO_EM
-			}
+			};
 		} else {
 			throw raiseError(
 				500,
