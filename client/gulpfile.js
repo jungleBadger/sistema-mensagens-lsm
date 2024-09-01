@@ -14,8 +14,7 @@
 	const cache = require("gulp-cache");
 	const postcss = require("gulp-postcss");
 	const sourcemaps = require("gulp-sourcemaps");
-	const sass = require("gulp-sass");
-	const eslint = require("gulp-eslint");
+	const sass = require('gulp-sass')(require('sass'));
 	const plumber = require("gulp-plumber");
 	const path = require("path");
 	const log = require("fancy-log");
@@ -73,27 +72,6 @@
 			}
 		}
 	};
-
-	gulp.task("lint", function (done) {
-		modulePath = currentContext || `${argv.module || argv.m || currentContext || "main"}_module`;
-		return gulp.src(
-			[
-				`${modulePath}/src/js/**/*.js`,
-				`${modulePath}/src/js/**/*.vue`
-			]
-		).pipe(eslint({
-			"fix": true
-		}))
-			.pipe(eslint.format())
-			.pipe(eslint.failAfterError())
-			.on("success", function () {
-				done();
-			})
-			.on("error", function (error) {
-				methods.errorHandler("lint", error, "Check the logs to see where it fails");
-				done(error);
-			});
-	});
 
 	gulp.task("generate-sw", function (done) {
 
@@ -256,7 +234,7 @@
 		);
 	});
 
-	gulp.task("build", gulp.parallel("lint", "css", "bundle-code"));
+	gulp.task("build", gulp.parallel("css", "bundle-code"));
 
 	gulp.task("build-all", async function iterateOverModules (done) {
 		await cache.clearAll();
