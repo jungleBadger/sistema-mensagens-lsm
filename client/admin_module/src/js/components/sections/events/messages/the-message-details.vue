@@ -32,22 +32,6 @@
 						</lsm-input>
 					</div>
 
-					<div class="w-44 flex flex-col gap-1">
-						<label class="text-gray-700">Valor</label>
-						<div class="w-full flex">
-							<div class="block w-10 h-full bg-gray-300 p-1 flex items-center justify-center">R$</div>
-							<div class="flex-1">
-								<lsm-input
-									v-model="messageValue"
-									data-number-to-fixed="2"
-									min="1.00"
-									placeholder="1.00"
-									step="1.00"
-									type="number"></lsm-input>
-							</div>
-						</div>
-					</div>
-
 				</div>
 
 				<div class="flex md:w-80 flex-col gap-1">
@@ -271,7 +255,7 @@ export default defineComponent({
 
 			"title": "",
 			"messageDate": "",
-			"messageValue": "1.00",
+			"messageValue": "0.00",
 
 			"audioFile": "",
 			"pdfFile": "",
@@ -306,7 +290,7 @@ export default defineComponent({
 		},
 
 		"isFormInvalid": function () {
-			return this.messageValue <= 0 || !this.title || !this.currentOrder || !this.brotherId || !this.messageDate || (!this.audioFile && !this.audioFilePath);
+			return this.messageValue < 0 || !this.title || !this.currentOrder || !this.brotherId || !this.messageDate || (!this.audioFile && !this.audioFilePath);
 		},
 
 		"selectedEvent": function () {
