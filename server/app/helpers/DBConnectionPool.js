@@ -14,7 +14,7 @@ class DBConnectionPool {
 		connectionString = "",
 		poolSize = 5
 	) {
-		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};UID=${uid};PWD=${password}`;
+		this.connectionString = connectionString || `DATABASE=${db};HOSTNAME=${host};PORT=${port};UID=${uid};PWD=${password};CURRENTSCHEMA=${process.env.DB2_SCHEMA || "LSMAPP"}`;
 		this.pool = new ibm_db.Pool(
 			{
 				"systemNaming": true
