@@ -29,46 +29,32 @@ router.get("/self",
 	}
 );
 
-
-router.get(
-	"/self/count",
+router.get("/self/count",
 	isLoggedIn,
 	async (req, res) => {
-		res.status(200).send(
-			await order.countUserOrders(req.user.id),
-		);
+		res.status(200).send(await order.countUserOrders(req.user.id));
 	}
 );
 
-router.get(
-	"/self/search",
+router.get("/self/search",
 	isLoggedIn,
 	async (req, res) => {
-		res.status(
-			200
-		).send(
+		res.status(200).send(
 			await order.searchUserOrders(
 				req.user.id,
 				req.query.filterText,
-				req.query.extraFilterColumns ? req.query.extraFilterColumns.split(",") : [
-					"P.ID",
-					"PS.NOME_EXIBICAO",
-					"P.CRIADO_EM",
-					"P.ATUALIZADO_EM"
-				],
-
-				req.query.targetColumns ? req.query.targetColumns.split(",") : [
-					"P.ID AS PEDIDO_ID",
-					"PS.NOME_EXIBICAO AS PEDIDO_STATUS",
-					"P.CRIADO_EM",
-					"P.ATUALIZADO_EM"
-				],
+				req.query.extraFilterColumns
+					? req.query.extraFilterColumns.split(",")
+					: ["P.ID", "PS.NOME_EXIBICAO", "P.CRIADO_EM", "P.ATUALIZADO_EM"],
+				req.query.targetColumns
+					? req.query.targetColumns.split(",")
+					: ["P.ID AS PEDIDO_ID", "PS.NOME_EXIBICAO AS PEDIDO_STATUS", "P.CRIADO_EM", "P.ATUALIZADO_EM"],
 				Number(req.query.limit) || 20,
 				Number(req.query.skip) || 0,
 				req.query.orderBy || "ID",
 				req.query.orderDirection || "DESC"
 			)
-		)
+		);
 	}
 );
 
