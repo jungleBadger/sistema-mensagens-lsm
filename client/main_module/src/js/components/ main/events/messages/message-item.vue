@@ -29,10 +29,6 @@
 			<div class="text-sm text-gray-500">{{ message.brotherName }}</div>
 
 		</td>
-		<td
-			class="px-2 md:px-4 md:py-4 text-sm text-gray-500 hidden md:table-cell">
-			R$ {{ message.messageValue }}
-		</td>
 
 		<td v-if="isLoggedIn" class="px-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
 

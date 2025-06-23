@@ -64,10 +64,6 @@
 										scope="col">
 										Irmão
 									</th>
-									<th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-										scope="col">
-										Preço
-									</th>
 									<th v-if="isLoggedIn"
 										class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 										scope="col">
