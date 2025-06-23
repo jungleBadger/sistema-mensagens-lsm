@@ -29,11 +29,6 @@ export default {
 			"label": "Mensagens"
 		},
 		{
-			"originalId": "VALOR_TOTAL",
-			"key": "totalValue",
-			"label": "Valor"
-		},
-		{
 			"originalId": "CRIADO_EM",
 			"key": "createdAt",
 			"label": "Criado em",
