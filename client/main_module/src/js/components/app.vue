@@ -58,15 +58,6 @@
 								<span>Meu perfil e pedidos</span>
 							</router-link>
 
-							<router-link
-								:to="{'name': 'app.checkout'}"
-								class="p-2 hover:bg-gray-200 transition-colors flex items-center gap-4"
-								@click="closeOverflowMenu">
-								<font-awesome-icon style="width: 20px;" class="text-blue-500" :icon="['fas', 'cart-shopping']"/>
-								<span>Carrinho ({{ cartItemsLength }})</span>
-							</router-link>
-
-
 							<a
 								class="p-2 hover:bg-gray-200 text-red-700 transition-colors flex items-center gap-4"
 								href="/auth/logout"
@@ -130,15 +121,7 @@
 								:class="{'text-gray-500 font-bold': $route.name === 'app.profile'}"
 								class="header-link text-gray-600 hidden md:flex transition-colors">
 								<font-awesome-icon class="text-blue-500" :icon="['fas', 'user-gear']"/>
-								Meu perfil e pedidos
-							</router-link>
-
-							<router-link
-								:to="{'name': 'app.checkout'}"
-								:class="{'text-gray-500 font-bold': $route.name === 'app.checkout'}"
-								class="header-link text-gray-600 md:flex transition-colors">
-								<font-awesome-icon class="text-blue-500" :icon="['fas', 'cart-shopping']"/>
-								Carrinho ({{ cartItemsLength }})
+								Meu perfil
 							</router-link>
 
 							<a
