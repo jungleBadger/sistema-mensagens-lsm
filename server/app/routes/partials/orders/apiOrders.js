@@ -100,18 +100,12 @@ router.patch("/:orderId/validate",
 	}
 );
 
-router.post("/:orderId/update", async (req, res) => {
-	try {
-		return res.status(200).send(await order.processOrder(req.params.orderId, req.body));
-	} catch (e) {
-		console.log(e);
-		return res.status(200).send("ok");
+router.get("/self/owned",
+	isLoggedIn,
+	async (req, res) => {
+		return res.status(200).send(await order.fetchOwnedItems(req.user.id));
 	}
-});
-
-router.get("/self/owned", async (req, res) => {
-	return res.status(200).send(await order.fetchOwnedItems(req.user.id));
-});
+);
 
 router.post("/:orderId/test", async (req, res) => {
 	await fs.writeFile(`./${Date.now()}_request.log`, JSON.stringify({
