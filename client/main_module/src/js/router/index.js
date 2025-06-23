@@ -2,7 +2,6 @@
 
 import { createRouter, createWebHistory } from "vue-router";
 import TheAppHome from "../components/ main/the-app-home.vue";
-import TheShoppingCart from "../components/shoppingCart/the-shopping-cart.vue";
 import TheProfileAndOrders from "../components/profileAndOrders/the-profile-and-orders.vue";
 import TheOwnedItems from "../components/ownedItems/the-owned-items.vue";
 
@@ -17,14 +16,6 @@ export default createRouter({
 			"meta": {
 				"indexed": true,
 				"home": true
-			}
-		},
-		{
-			"name": "app.checkout",
-			"path": "/checkout",
-			"component": TheShoppingCart,
-			"meta": {
-				"indexed": true
 			}
 		},
 		{
