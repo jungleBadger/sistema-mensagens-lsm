@@ -19,6 +19,7 @@
 		"documentation:js": "gulp generate-js-doc"
 	},
 	"dependencies": {
+		"@sendgrid/mail": "^8.1.5",
 		"bcrypt": "^5.0.1",
 		"bent": "^7.3.12",
 		"body-parser": "^1.19.0",
