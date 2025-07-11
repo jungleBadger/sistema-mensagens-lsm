@@ -2,12 +2,12 @@
 	"name": "sistema-mensagens-lsm",
 	"version": "0.0.1",
 	"description": "[Backend] - Aplicação para gerenciamento e consumo de mensagens atreladas a eventos.",
-	"engineStrict": true,
+	"engineStrict": false,
 	"engines": {
 		"node": "14.17.4",
 		"npm": "6.14.14"
 	},
-	"main": "./app/dist/app.js",
+	"main": "./app/app.js",
 	"scripts": {
 		"start:dev": "nodemon --config ./nodemon.json",
 		"start": "cross-env NODE_ENV=development DEBUG=app:* node -r dotenv/config ./app/app.js",
@@ -19,6 +19,7 @@
 		"documentation:js": "gulp generate-js-doc"
 	},
 	"dependencies": {
+		"@sendgrid/mail": "^8.1.5",
 		"bcrypt": "^5.0.1",
 		"bent": "^7.3.12",
 		"body-parser": "^1.19.0",
