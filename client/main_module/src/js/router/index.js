@@ -20,7 +20,7 @@ export default createRouter({
 		},
 		{
 			"name": "app.profile",
-			"path": "/perfil-e-pedidos",
+			"path": "/perfil",
 			"component": TheProfileAndOrders,
 			"meta": {
 				"indexed": true
