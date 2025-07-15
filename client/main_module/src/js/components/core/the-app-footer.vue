@@ -5,14 +5,6 @@
 
 		<div class="flex flex-col gap-1 md:w-auto w-full">
 			<span class="font-semibold">{{new Date().getFullYear()}} - Livro Aberto Empreendimentos Culturais Ltda.</span>
-			<span>Rua Caramuru 757, Saúde, São Paulo-SP 04143-030</span>
-		</div>
-
-		<div class="flex flex-col gap-1 md:w-auto w-full">
-			<span>+55 (11) 2936-9006</span>
-		</div>
-		<div class="flex flex-col gap-1 md:w-auto w-full">
-			<span><a class="flex gap-2 items-center" href="https://www.instagram.com/livro_aberto12"><font-awesome-icon :icon="['fab', 'instagram']"></font-awesome-icon>livro_aberto12</a></span>
 		</div>
 	</footer>
 </template>
