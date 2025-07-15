@@ -61,7 +61,7 @@ module.exports = {
 			"subject": resetPasswordEmailObject.subject,
 			"text": resetPasswordEmailObject.text,
 			"html": resetPasswordEmailObject.html(
-				"https://sistema.igrejaemsumare.com.br/api/common/user/request-reset",
+				"https://mensagens.restauradosabiblia.com.br//api/common/user/request-reset",
 				await generateJWT(
 					{ userEmail },
 					process.env.APP_SECRET,
