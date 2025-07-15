@@ -57,10 +57,10 @@ module.exports = {
 		return await connectionPool.executePreparedSqlInstruction(
 			[
 				"DELETE FROM PEDIDO_ITEM WHERE PEDIDO_ITEM.ID = ? AND PEDIDO_ITEM.PEDIDO_ID =",
-				"(SELECT ID FROM PEDIDO WHERE STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE NOME_EXIBICAO = 'CONCLUIDO')",
-				"AND USUARIO_ID = ?);"
+				"(SELECT ID FROM PEDIDO WHERE PEDIDO.STATUS_ID = (SELECT ID FROM PEDIDO_STATUS WHERE PEDIDO_STATUS.NOME_EXIBICAO = ?)",
+				"AND PEDIDO.USUARIO_ID = ? FETCH FIRST 1 ROW ONLY);"
 			].join(" "),
-			[Number(cartItemId), Number(userId)]
+			[Number(cartItemId), "CONCLUIDO", Number(userId)]
 		);
 	},
 
