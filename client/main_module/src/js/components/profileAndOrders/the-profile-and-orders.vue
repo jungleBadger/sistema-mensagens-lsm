@@ -39,49 +39,6 @@
 				</main>
 			</section>
 
-			<section>
-				<header class="flex mb-3 pl-2 pr-2 pt-0 flex-col md:flex-row md:pl-0 md:pr-0 gap-2">
-					<div class="flex flex-col gap-0 flex-1">
-
-
-						<h3 class="text-2xl">Gerenciamento de Pedidos</h3>
-						<h4 class="text-l">
-							Mensagens adquiridas em Pedidos com status <span>concluído</span> podem ser acessadas em <router-link
-							class="text-blue-700"
-							:to="{'name': 'app.owned'}">suas mensagens</router-link>.
-						</h4>
-					</div>
-
-					<lsm-button
-
-						label="Atualizar dados"
-						kind="secondary"
-						@click="performRelevantQuery"
-						class="w-40 h-10 self-end"
-						icon-style="fas"
-						icon-id="rotate">
-					</lsm-button>
-
-				</header>
-				<main
-					class="w-full flex-1 overflow-hidden"
-					role="main"
-					aria-label="Tabela de Pedidos">
-					<lsm-table
-						:is-async-search-enabled="true"
-						:total-items-count="totalOrdersCount"
-						:items-per-page="pagination.limit"
-						:table-items="orderItems"
-						:columns-data="tableColumns"
-						:is-async-loading="isLoading"
-						order-by="CRIADO_EM"
-						order-direction="DESC"
-						@paginate="updatePagination"
-						@search="handleAsyncSearch">
-					</lsm-table>
-
-				</main>
-			</section>
 		</div>
 
 		<the-app-footer>
@@ -210,12 +167,6 @@ export default defineComponent({
 
 			return this.performRelevantQuery();
 		}
-	},
-
-	async created () {
-		this.isLoading = true;
-		await this.loadOrders();
-		this.isLoading = false;
 	}
 });
 </script>
