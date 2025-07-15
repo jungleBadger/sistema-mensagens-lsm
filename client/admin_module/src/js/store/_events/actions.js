@@ -206,7 +206,7 @@ export default {
 				{
 					"kind": "error",
 					"title": "Houve um erro excluindo o Evento.",
-					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+					"subtitle": e && e.message && e.message.indexOf("SQL0532N") > -1 ? "Evento possui mensagens e não pôde ser deletado." : "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{"root": true}
 			);

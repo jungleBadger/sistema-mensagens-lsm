@@ -289,7 +289,7 @@ export default {
 				{
 					"kind": "error",
 					"title": "Houve um erro excluindo a Mensagem.",
-					"subtitle": "Confira os dados, tente novamente e se o erro persistir contate o suporte."
+					"subtitle": e && e.message && e.message.indexOf("SQL0532N") > -1 ? "Usuários possuem essa mensagem. Contate o DBA para remoção manual." : "Confira os dados, tente novamente e se o erro persistir contate o suporte."
 				},
 				{ "root": true }
 			);
