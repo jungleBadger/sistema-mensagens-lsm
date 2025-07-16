@@ -4,7 +4,7 @@
 		class="w-full flex min-h-12 shadow p-4 text-white flex-wrap gap-2">
 
 		<div class="flex flex-col gap-1 md:w-auto w-full">
-			<span class="font-semibold">{{new Date().getFullYear()}} - Livro Aberto Empreendimentos Culturais Ltda.</span>
+			<span class="font-semibold">{{new Date().getFullYear()}} - Restaurados à Bíblia</span>
 		</div>
 	</footer>
 </template>
