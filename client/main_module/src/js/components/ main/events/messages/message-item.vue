@@ -30,6 +30,7 @@
 
 		</td>
 
+
 		<td v-if="isLoggedIn" class="px-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
 
 			<span
@@ -48,38 +49,17 @@
 
 		<td v-if="isLoggedIn" class="px-2 md:px-4 md:py-4 whitespace-nowrap text-sm font-medium">
 
-			<template v-if="isAlreadyInCart">
-				<div class="flex items-center gap-2">
-					<lsm-button
-						:is-loading="shoppingItemLoading"
-						class="h-8"
-						icon-id="trash-xmark"
-						icon-style="fas"
-						kind="danger-outline"
-						label="Remover"
-						style="min-width: 110px;"
-
-						@click="removeItemFromCart"
-					></lsm-button>
-					<a
-						:href="`${hostURL}/api/message/self/download/${message.id}`"
-						class="text-indigo-600 hover:text-indigo-900"
-						style="min-width: 110px;">Download
-					</a>
-				</div>
-
-			</template>
-
-			<template v-else>
-
+			<template v-if="isAlreadyInCart || isAlreadyOwned">
 				<a
-					v-if="isAlreadyOwned"
 					:href="`${hostURL}/api/message/self/download/${message.id}`"
 					class="text-indigo-600 hover:text-indigo-900"
 					style="min-width: 110px;">Download
 				</a>
+
+			</template>
+
+			<template v-else>
 				<lsm-button
-					v-else
 					:is-loading="shoppingItemLoading"
 					class="h-8"
 					icon-id="plus"
@@ -87,10 +67,10 @@
 					kind="primary-outline"
 					label="Adicionar"
 					style="min-width: 110px;"
-
 					@click="addItemToCart">
 
 				</lsm-button>
+
 			</template>
 
 
@@ -122,7 +102,8 @@ export default defineComponent({
 	"data": function () {
 		return {
 			"shoppingItemLoading": false,
-			"hostURL": `https://${window.location.host}`
+			"hostURL": `https://${window.location.host}`,
+			"removed": false
 		};
 	},
 	"computed": {
@@ -163,6 +144,7 @@ export default defineComponent({
 
 		}
 	}
+
 });
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>

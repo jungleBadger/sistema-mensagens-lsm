@@ -34,7 +34,7 @@
 			<span
 				style="min-width: 60px;"
 			>
-				<template v-if="message.pdfFilePath">
+				<template v-if="!isDeleted && message.pdfFilePath">
 				<a
 					:href="`${hostURL}/api/message/file/download?filePath=${message.pdfFilePath}&fileName=${messageIndex}_${message.title}_esboco.pdf`"
 					class="text-indigo-600 hover:text-indigo-900">Download
@@ -47,21 +47,54 @@
 		</td>
 
 		<td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm font-medium">
+			<template v-if="!isRemoved">
+				<a
+					:href="`${hostURL}/api/message/self/download/${message.id}`"
+					class="text-indigo-600 hover:text-indigo-900"
+					style="min-width: 140px;">Download
+				</a>
+				/
+				<a
+					href="#"
+					@click="setAudioPath"
+					class="text-indigo-600 hover:text-indigo-900"
+					style="min-width: 140px;">Ouvir
+				</a>
+			</template>
+			<template v-else>-</template>
 
-			<a
-				:href="`${hostURL}/api/message/self/download/${message.id}`"
-				class="text-indigo-600 hover:text-indigo-900"
-				style="min-width: 140px;">Download
-			</a>
-			/
-			<a
-				href="#"
-				@click="setAudioPath"
-				class="text-indigo-600 hover:text-indigo-900"
-				style="min-width: 140px;">Ouvir
-			</a>
 
 		</td>
+
+		<td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm font-medium">
+
+			<template v-if="isRemoved">
+				<lsm-button
+					:is-loading="shoppingItemLoading"
+					class="h-8"
+					icon-id="plus"
+					icon-style="fas"
+					kind="primary-outline"
+					label="Adicionar"
+					@click="addItemToCart">
+				</lsm-button>
+			</template>
+			<template v-else>
+				<lsm-button
+					:is-loading="shoppingItemLoading"
+					class="h-8"
+					icon-id="trash-xmark"
+					icon-style="fas"
+					kind="danger-outline"
+					label="Remover"
+
+					@click="removeItemFromCart"
+				></lsm-button>
+			</template>
+
+
+		</td>
+
 	</tr>
 
 </template>
@@ -80,6 +113,7 @@ export default defineComponent({
 			"type": Object,
 			"required": true
 		},
+
 		"messageIndex": {
 			"type": Number,
 			"required": true
@@ -87,12 +121,44 @@ export default defineComponent({
 	},
 	"data": function () {
 		return {
-			"hostURL": `https://${window.location.host}`
+			"shoppingItemLoading": false,
+			"hostURL": `https://${window.location.host}`,
+			"isRemoved": false
 		};
+	},
+	"computed": {
+		"ownedItems": function () {
+			return this.$store.getters["orders/ownedItems"];
+		}
 	},
 	"methods": {
 		setAudioPath() {
 			this.$store.commit("privateEvents/selectedAudioPath", `${this.hostURL}/api/message/self/download/${this.message.id}`)
+		},
+		async addItemToCart () {
+			if (this.shoppingItemLoading) {
+				return false;
+			}
+			this.shoppingItemLoading = true;
+			await this.$store.dispatch("shoppingCart/addItemToCart", this.message.id);
+			this.isRemoved = false;
+			this.shoppingItemLoading = false;
+		},
+		async removeItemFromCart () {
+			if (this.shoppingItemLoading) {
+				return false;
+			}
+			console.log(this.ownedItems)
+			this.shoppingItemLoading = true;
+			let targetEvent = this.ownedItems.find(ownedItem => ownedItem.messageId === this.message.id);
+			if (targetEvent && targetEvent.orderItemId) {
+				await this.$store.dispatch("shoppingCart/removeItemFromCart", targetEvent.orderItemId);
+			}
+			this.isRemoved = true;
+			this.shoppingItemLoading = false;
+
+
+
 		}
 	}
 });

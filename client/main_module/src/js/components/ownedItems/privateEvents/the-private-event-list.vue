@@ -319,6 +319,10 @@ export default defineComponent({
 		}
 	},
 
+	async created () {
+		await this.$store.dispatch("orders/retrieveOwnedItems");
+
+	},
 	unmounted () {
 		try {
 			this.$parent.$refs.scroller.removeEventListener("scroll", this.handleScroll);
