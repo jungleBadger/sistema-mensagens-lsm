@@ -4,5 +4,5 @@ const nodemailer = require("nodemailer");
 const mailConfigs = require("../configs/mail-configs");
 
 module.exports = nodemailer.createTransport(mailConfigs, {
-	"from": 'lsmadmin@igrejaemsumare.com.br', // sender address
+	"from": process.env.MAIL_SENDER_ADDRESS || 'lsmadmin@restauradosabiblia.com.br', // sender address
 });
